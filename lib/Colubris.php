@@ -7,7 +7,7 @@ class Colubris extends ApiFrontend {
 		parent::init();
 
 		// Keep this if you are going to use database
-		//$this->dbConnect();
+		$this->dbConnect();
 
 		// Keep this if you are going to use plug-ins
 		$this->addLocation('atk4-addons',array(
@@ -28,11 +28,10 @@ class Colubris extends ApiFrontend {
 			;
 
 		// Before going further you will need to verify access
-		$this->add('BasicAuth')
-			->allow('demo','demo')
-			// alternatively:
-			// setSource('user')  or
-			->check();
+		$auth=$this->add('SQLAuth');
+		$auth->setSource('user','email','password')->field('id,name');
+		$auth->usePasswordEncryption('md5');
+		$auth->check();
 
 		// Alternatively 
 		// $this->add('MVCAuth')->setController('Controller_User')->check();
@@ -60,11 +59,16 @@ class Colubris extends ApiFrontend {
 
 		// If you want to use ajax-ify your menu
 		// $m->js(true)->_load('ui.atk4_menu')->atk4_menu(array('content'=>'#Content'));
+
+		$this->template->trySet('name',
+
+				$this->api->auth->get('name').' @ '.
+				'Colubris Team Manager v'.$this->getVersion());
 	}
 
-	// There are 2 ways to add pages to your project. You can either keep a short
-	// functions here or you can create page/projects.php file
-	// Pages are used four routing and to add views on your page.
+	function getVersion(){
+		return '0.1';
+	}
 
 	function page_index($p){
 		// This is your index page
