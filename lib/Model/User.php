@@ -20,23 +20,26 @@ class Model_User extends Model_Table {
 		$this->newField('name')
 			;
 
-		$this->newField('surname')
+		$this->newField('password')
+			->visible(false)
+			->editable(false)
 			;
 
-		$this->newfield('gender')
-			->datatype('list')
-			->listData(array('M'=>'Male','F'=>'Female'))
-			;
+		$this->newField('client_id')
+			->refModel('Model_Client');
+
+		$this->newField('is_admin')->datatype('boolean');
+		$this->newField('is_manager')->datatype('boolean');
+		$this->newField('is_developer')->datatype('boolean');
+		$this->newField('is_client')->datatype('boolean')->calculated(true);
 
 		// You can define related tables through
 		// $this->addRelatedEntity()
 		// see function comments inside Model/Table
 
 
-		// You can also add relations between fileds
-		$this->newField('manager_id')
-			->datatype('reference')
-			->refModel('Model_User')
-			;
+	}
+	function calculate_is_client(){
+		return 'if(client_id is null,"N","Y")';
 	}
 }
