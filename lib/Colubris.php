@@ -40,7 +40,6 @@ class Colubris extends ApiFrontend {
 		$this->initLayout();
 	}
 	function initLayout(){
-		parent::initLayout();
 
 		// If you are using a complex menu, you can re-define
 		// it and place in a separate class
@@ -51,7 +50,8 @@ class Colubris extends ApiFrontend {
 		$m->addMenuItem('Planning','manager/planning');	// Manager is planning work here
 		$m->addMenuItem('Status','client/status');		// Clients can follow project status here
 
-		$m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
+		$m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
+		$m->addMenuItem('Clients','admin/clients');
 		$m->addMenuItem('Users','admin/users');
 
 		$m->addMenuItem('about');
@@ -64,6 +64,8 @@ class Colubris extends ApiFrontend {
 
 				$this->api->auth->get('name').' @ '.
 				'Colubris Team Manager v'.$this->getVersion());
+
+		parent::initLayout();
 	}
 
 	function getVersion(){
