@@ -6,6 +6,8 @@ class Colubris extends ApiFrontend {
 	function init(){
 		parent::init();
 
+		$this->showExecutionTime();
+
 		// Keep this if you are going to use database
 		$this->dbConnect();
 
