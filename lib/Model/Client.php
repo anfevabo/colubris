@@ -5,6 +5,7 @@
    */
 class Model_Client extends Model_Table {
 	public $entity_code='client';
+	public $table_alias='cl';
 
 	function defineFields(){
 		parent::defineFields();

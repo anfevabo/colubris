@@ -6,6 +6,7 @@
    */
 class Model_User extends Model_Table {
 	public $entity_code='user';
+	public $table_alias='u';
 
 	function defineFields(){
 		parent::defineFields();

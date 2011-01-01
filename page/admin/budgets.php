@@ -5,11 +5,21 @@ class page_admin_budgets extends Page_EntityManager {
 	function initMainPage(){
 		parent::initMainPage();
 
-		$this->grid->addColumnPlain('expander','team');
+		$this->grid->addColumnPlain('expander','team','Team Access');
+		$this->grid->addColumnPlain('expander','scope','Budget Scope');
 	}
 
 	function page_team(){
-		echo $_GET['id'];
+		$g=$this->add('MVCGrid');
+	}
 
+	function page_scope(){
+		$this->add('View_Hint')->set('Scope defines what works will be performed inside this budget');
+
+		$c=$this->add('Controller_Screen');$c->addCondition('budget_id',$_GET['id']);
+		$this->add('MVCGrid')->setController($c);
+
+		$c=$this->add('Controller_Task');$c->addCondition('budget_id',$_GET['id']);
+		$this->add('MVCGrid')->setController($c);
 	}
 }

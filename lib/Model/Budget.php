@@ -1,13 +1,10 @@
 <?
 class Model_Budget extends Model_Table {
 	public $entity_code='budget';
-	public $table_alias='B';
-
+	public $table_alias='bu';
 
 	function defineFields(){
 		parent::defineFields();
-
-		$this->debug();
 
 		$this->newField('name');
 		$this->newField('amount');
