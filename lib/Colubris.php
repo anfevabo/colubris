@@ -52,9 +52,12 @@ class Colubris extends ApiFrontend {
 		$m->addMenuItem('Planning','manager/planning');	// Manager is planning work here
 		$m->addMenuItem('Status','client/status');		// Clients can follow project status here
 
+		$m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
 		$m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
+		$m->addMenuItem('Screens','admin/screens');	//
 		$m->addMenuItem('Clients','admin/clients');
 		$m->addMenuItem('Users','admin/users');
+		$m->addMenuItem('Files','admin/filestore');
 
 		$m->addMenuItem('about');
 		$m->addMenuItem('logout');
