@@ -8,6 +8,17 @@ class Model_Task extends Model_Table {
 
 		$this->addField('name');
 
+		$this->addField('descr_original')->dataType('text');
+
+		$this->addField('estimate')->dataType('money');
+		$this->addField('cur_progress')->dataType('int');
+
+		$this->addField('deviation')->dataType('text');
+
 		$this->addField('budget_id')->refModel('Model_Budget');
+		$this->addField('screen_id')->refModel('Model_Screen');
+
+
+
 	}
 }

@@ -13,5 +13,8 @@ class Model_Screen extends Model_Table {
 
 		$this->addField('project_id')
 			->refModel('Model_Project');
+
+		$this->addField('filestore_file_id')
+			->datatype('image');
 	}
 }
