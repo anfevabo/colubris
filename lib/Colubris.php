@@ -76,6 +76,17 @@ class Colubris extends ApiFrontend {
 	function getVersion(){
 		return '0.1';
 	}
+	function getCurrentTask(){
+		$task_id=$this->api->recall('task',null);
+		if(!$task_id)return null;
+
+		$t=$this->add('Controller_Task')->loadData($task_id);
+		if(!$t->isInstanceLoaded()){
+			$this->forget('task');
+			return null;
+		}
+		return $t;
+	}
 
 	function page_pref($p){
 

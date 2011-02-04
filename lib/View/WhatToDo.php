@@ -4,7 +4,7 @@ class View_WhatToDo extends MVCGrid {
 		parent::init();
 
 		$c=$this->add('Controller_Task');
-		$c->setActualFields(array('name','estimate','cur_progress','budget_id'));
+		$c->setActualFields(array('name','status','estimate','screen_id','cur_progress'));
 		$this->setController($c);
 	}
 }
