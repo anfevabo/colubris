@@ -7,6 +7,8 @@ class Model_Budget extends Model_Table {
 		parent::defineFields();
 
 		$this->newField('name');
+		$this->newField('accepted')->datatype('boolean');
+		$this->newField('closed')->datatype('boolean');
 		$this->newField('amount');
 		$this->newField('amount_currency')
 			->datatype('list')

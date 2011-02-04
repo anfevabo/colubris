@@ -77,16 +77,6 @@ class Colubris extends ApiFrontend {
 		return '0.1';
 	}
 
-	function page_index($p){
-		// This is your index page
-		$p->add('Text')->set('<h1>Hello World</h1>');
-
-		// You can also use frames for your pages
-		// $p=$p->frame('Hello World');
-
-		$p->add('LoremIpsum');
-	}
-
 	function page_pref($p){
 
 		// This is example of how you can use form with MVC support
