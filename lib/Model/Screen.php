@@ -7,6 +7,8 @@ class Model_Screen extends Model_Table {
 		parent::defineFields();
 
 		$this->addField('name');
+		$this->addField('ref');
+		$this->addField('descr')->datatype('text');
 
 		$this->addField('budget_id')
 			->refModel('Model_Budget');

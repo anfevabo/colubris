@@ -11,7 +11,7 @@ class Model_Task extends Model_Table {
 		$this->addField('descr_original')->dataType('text');
 
 		$this->addField('estimate')->dataType('money');
-		$this->addField('cur_progress')->dataType('int');
+		$this->addField('cur_progress')->dataType('int')->calculated(true);
 
 		$this->addField('deviation')->dataType('text');
 
@@ -20,5 +20,12 @@ class Model_Task extends Model_Table {
 
 
 
+	}
+	function calculate_cur_progress(){
+		return $this->api->db->dsql()
+			->table('report')
+			->where('task_id=tsk.id')
+			->field('sum(amount)')
+			->select();
 	}
 }

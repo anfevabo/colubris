@@ -27,6 +27,10 @@ class Page_index extends Page {
 			$c_log->setMasterField('task_id',$task->get('id'));
 			$c_log->setActualFields(array('amount','date','result'));
 			$f=$c2->add('MVCForm')->setController($c_log);
+			if($f->isSubmitted()){
+				$f->update();
+				$f->js()->univ()->page($this->api->getDestinationURL())->execute();
+			}
 
 
 
