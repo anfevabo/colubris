@@ -48,8 +48,7 @@ class Colubris extends ApiFrontend {
 		$m=$this->add('Menu','Menu','Menu');
 		$m->addMenuItem('Dashboard','index');
 
-		$m->addMenuItem('Reports','team/report');		// Team members enter their reports here
-		$m->addMenuItem('Planning','manager/planning');	// Manager is planning work here
+		$m->addMenuItem('Timesheets','team/timesheets');		// Team members enter their reports here
 		$m->addMenuItem('Status','client/status');		// Clients can follow project status here
 
 		$m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
