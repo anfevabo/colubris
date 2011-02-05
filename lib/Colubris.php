@@ -33,7 +33,8 @@ class Colubris extends ApiFrontend {
 		$auth=$this->add('SQLAuth');
 		$auth->setSource('user','email','password')->field('id,name');
 		$auth->usePasswordEncryption('md5');
-		$auth->check();
+		$auth->allowPage('minco');
+		if(!$auth->isPageAllowed($this->api->page))$auth->check();
 
 		// Alternatively 
 		// $this->add('MVCAuth')->setController('Controller_User')->check();
