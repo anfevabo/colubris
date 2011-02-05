@@ -20,6 +20,8 @@ CREATE  TABLE IF NOT EXISTS `timesheet` (
 	REFERENCES `report` (`id` )
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION)
+	enigne = InnoDB
+
 
 ;
 

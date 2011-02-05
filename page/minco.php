@@ -7,8 +7,21 @@ class page_minco extends Page {
 
 		parent::init();
 		$v=$_GET;if($_POST)$v=$_POST;
+
+
+		// Figure out user
+		$u=$this->add('Controller_User')->getBy('hash',$v['hash']);
+		if(!$u['id']){
+			echo "Wrong user hash";
+			$this->logVar('wrong user hash: '.$v['hash']);
+			exit;
+		}
+
+
+
 		$d=explode('/',$v['date']);
 		$v['date']=join('-',array($d[2],$d[1],$d[0]));
+		$v['user_id']=$u['id'];
 
 		if(!$v['minutes']){
 			echo "Wrong format";

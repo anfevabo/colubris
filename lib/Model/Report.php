@@ -9,7 +9,7 @@ class Model_Report extends Model_Table {
 		$this->newField('task_id')->refModel('Model_Task');
 
 		$this->newField('budget_id')->refModel('Model_Budget');
-		$this->newField('project_id')->refModel('Model_Project');
+		//$this->newField('project_id')->refModel('Model_Project');
 
 		$this->newField('user_id')->refModel('Model_User');
 
@@ -18,5 +18,7 @@ class Model_Report extends Model_Table {
 		$this->newField('amount')->datatype('int')->mandatory(true);
 
 		$this->setMasterField('user_id',$this->api->auth->get('id'));
+	}
+	function toStringSQL(){
 	}
 }

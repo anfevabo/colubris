@@ -34,11 +34,18 @@ class Model_User extends Model_Table {
 		$this->newField('is_developer')->datatype('boolean');
 		$this->newField('is_client')->datatype('boolean')->calculated(true);
 
+		$this->newField('hash');//->visible(false);
+
 		// You can define related tables through
 		// $this->addRelatedEntity()
 		// see function comments inside Model/Table
 
 
+	}
+	function beforeInsert(&$d){
+		$d['hash']=md5(uniqid());
+
+		return parent::beforeInsert($d);
 	}
 	function calculate_is_client(){
 		return 'if(client_id is null,"N","Y")';
