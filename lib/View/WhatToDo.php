@@ -10,6 +10,8 @@ class View_WhatToDo extends MVCGrid {
 		$c->setActualFields(array('name','status','screen_id'));
 		$this->setController($c);
 
+		$c->enScope($this->dq);
+
 		$this->addColumnPlain('progress_txt','progress_txt','pr');
 		$this->addColumnPlain('progress','progress');
 	}

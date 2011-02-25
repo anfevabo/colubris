@@ -1,0 +1,48 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+
+ALTER TABLE `task` DROP FOREIGN KEY `fk_task_screen1` ;
+
+ALTER TABLE `task` DROP FOREIGN KEY `fk_task_project1` ;
+
+ALTER TABLE `task` 
+  ADD CONSTRAINT `fk_task_project1`
+  FOREIGN KEY (`project_id` )
+  REFERENCES `project` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION, 
+  ADD CONSTRAINT `fk_task_screen1`
+  FOREIGN KEY (`screen_id` )
+  REFERENCES `requirement` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `screen` ADD COLUMN `type` VARCHAR(20) NULL DEFAULT NULL  AFTER `name` , DROP FOREIGN KEY `fk_screen_project1` ;
+update screen set type='screen';
+
+ALTER TABLE `screen` 
+  rename `requirement`
+  ADD CONSTRAINT `fk_screen_project1`
+  FOREIGN KEY (`project_id` )
+  REFERENCES `project` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION, RENAME TO  `requirement` ;
+
+ALTER TABLE `timesheet` 
+  ADD CONSTRAINT `fk_timesheet_report1`
+  FOREIGN KEY (`report_id` )
+  REFERENCES `report` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION, 
+  ADD CONSTRAINT `fk_timesheet_user1`
+  FOREIGN KEY (`user_id` )
+  REFERENCES `user` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+

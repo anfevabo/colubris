@@ -7,6 +7,8 @@ class page_admin_budgets extends Page_EntityManager {
 
 		$this->grid->addColumnPlain('expander','team','Team Access');
 		$this->grid->addColumnPlain('expander','scope','Budget Scope');
+
+		$this->c->scopeFilter($this->grid->dq);
 	}
 
 	function page_team(){

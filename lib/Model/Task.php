@@ -7,6 +7,7 @@ class Model_Task extends Model_Table {
 		parent::defineFields();
 
 		$this->addField('name');
+		$this->addField('priority')->datatype('int');
 
 		$this->addField('descr_original')->dataType('text');
 
@@ -20,6 +21,11 @@ class Model_Task extends Model_Table {
 
 
 
+	}
+	function enScope($dsql){
+		if($sc=$this->api->recall('scope')){
+			if($sc['budget'])$dsql->where('budget_id',$sc['budget']);
+		}
 	}
 	function calculate_cur_progress(){
 		return $this->api->db->dsql()

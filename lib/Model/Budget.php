@@ -23,4 +23,9 @@ class Model_Budget extends Model_Table {
 			->refModel('Model_Client');
 
 	}
+	function scopeFilter($dsql){
+		if($sc=$this->api->recall('scope')){
+			if($sc['client'])$dsql->where('client_id',$sc['client']);
+		}
+	}
 }
