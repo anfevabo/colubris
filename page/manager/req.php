@@ -1,18 +1,34 @@
 <?
 class page_manager_req extends Page {
-	function init(){
-		parent::init();
+    public $pc,$bc;
+    function init(){
+        parent::init();
+
+		$sc=$this->api->recall('scope',array());
+
+		if(!$sc['budget']){
+			$this->add('View_Error')->set('You should choose budget before adding requirements');
+			return;
+		}
+
+		$this->bc=$bc=$this->add('Model_Budget')->loadData($sc['budget']);
+		$this->pc=$pc=$bc->getRef('project_id'); //$this->add('Model_Project')->loadData($sc['project']);
+
+
+
+    }
+	function initMainPage(){
 
 		// Use scope selector to make sure only a single 
 		$sc=$this->api->recall('scope',array());
 
-		if(!$sc['budget'] || !$sc['project']){
-			$this->add('View_Error')->set('You should choose both project and budget before adding requirements');
+		if(!$sc['budget']){
+			$this->add('View_Error')->set('You should choose budget before adding requirements');
 			return;
 		}
 
 		$bc=$this->add('Model_Budget')->loadData($sc['budget']);
-		$pc=$this->add('Model_Project')->loadData($sc['project']);
+		$pc=$bc->getRef('project_id'); //$this->add('Model_Project')->loadData($sc['project']);
 
 
 		$this->add('Hint')->set('You are now entering requirements for the project <b>'.$pc->get('name').'</b>. Those
@@ -41,11 +57,16 @@ class page_manager_req extends Page {
 
 		$m->scopeFilter($g->dq);
 
-		$g->addButton('New Screen');
-		$g->addButton('New Model');
-		$g->addButton('Service');
-		$g->addButton('Change Request');
-		$g->addButton('Bugfixes');
+		$g->addButton('New Screen')
+            ->js('click')->univ()->dialogURL('New Screen',$this->api->getDestinationURL('./add',array('new'=>'Screen')));
+		$g->addButton('New Model')
+            ->js('click')->univ()->dialogURL('New Screen',$this->api->getDestinationURL('./add',array('new'=>'Model')));
+		$g->addButton('Service')
+            ->js('click')->univ()->dialogURL('New Screen',$this->api->getDestinationURL('./add',array('new'=>'Service')));
+		$g->addButton('Change Request')
+            ->js('click')->univ()->dialogURL('New Screen',$this->api->getDestinationURL('./add',array('new'=>'ChangeRequest')));
+		$g->addButton('Bugfixes')
+            ->js('click')->univ()->dialogURL('New Screen',$this->api->getDestinationURL('./add',array('new'=>'Bugfix')));
 
 		// Highlight row
 		if($id=(int)$this->api->recall('req')){
@@ -55,15 +76,23 @@ class page_manager_req extends Page {
 
 		$id=$this->api->recall('req');
 		if($id){
-			$g=$c2->add('View_RequirementDetails')
-				->loadData($id);
-		}
-		/*
-		$m=$g->setModel('Task',array('name','estimate'));
-		$g->addTotals();
-		$g->addButton('Add Sub-Task');
-		*/
-
+            if($g=$c2->add('View_RequirementDetails')
+                    ->loadData($id,true)===false)
+                $this->forget('req');
+        }
 	}
+    function page_add(){
+        $this->api->stickyGET('new');
+        $f=$this->add('MVCForm');
+        $f->setModel($_GET['new']);
+        $f->set('budget_id',$this->bc->get('id'));
+        $f->set('project_id',$this->pc->get('id'));
+
+        if($f->isSubmitted()){
+            $f->update();
+            $f->js()->univ()->closeDialog()->page($this->api->getDestinationURL('..',array('new'=>null)))->execute();
+        }
+        
+    }
 }
 ?>

@@ -7,7 +7,7 @@ class Model_Requirement extends Model_Table {
 		parent::defineFields();
 
 		$this->addField('name');
-		$this->addField('type');
+		$this->addField('type')->system(true);
 		$this->addField('ref');
 		$this->addField('descr')->datatype('text');
 
