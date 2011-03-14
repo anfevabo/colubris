@@ -18,6 +18,7 @@ class Model_Budget extends Model_Table {
 				1=>'Requirements completed',
 				2=>'Mandays worked',
 				3=>'Budget depleted',
+				4=>'Deadline Reached',
 			))
             ;
 		$this->newField('mandays')
@@ -29,6 +30,11 @@ class Model_Budget extends Model_Table {
 
 		$this->newField('project_id')
 			->refModel('Model_Project');
+
+        $u=$this->api->getUser();
+        if($u->get('is_client')){
+            $this->addCondition('client_id',$u->get('client_id'));
+        }
 	}
 	function scopeFilter($dsql){
 		if($sc=$this->api->recall('scope')){

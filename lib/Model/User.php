@@ -40,6 +40,9 @@ class Model_User extends Model_Table {
 		// $this->addRelatedEntity()
 		// see function comments inside Model/Table
 
+        if($this->api->auth->get('is_admin')!='Y'){
+            $this->addCondition('id',$this->api->auth->get('id'));
+        }
 
 	}
 	function beforeInsert(&$d){

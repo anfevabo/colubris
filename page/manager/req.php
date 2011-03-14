@@ -31,9 +31,11 @@ class page_manager_req extends Page {
 		$pc=$bc->getRef('project_id'); //$this->add('Model_Project')->loadData($sc['project']);
 
 
+        /*
 		$this->add('Hint')->set('You are now entering requirements for the project <b>'.$pc->get('name').'</b>. Those
 				requirements will be implemented and funded from the budget <b>'.$bc->get('name').'</b>
 				');
+                */
 
 		// 2 columns layout
 

@@ -54,7 +54,7 @@ class View_RequirementDetails extends HtmlElement {
 					->addTotals();
 
 				$g
-					->setModel('Task',array('name','priority','estimate'))
+					->setModel('Task',array('name','priority','client_id','estimate'))
 					->addCondition('screen_id',$m->get('id'));
 				$g->addButton('New Task');
 				$g->addColumn('expander','edit');
