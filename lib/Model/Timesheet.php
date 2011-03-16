@@ -11,8 +11,13 @@ class Model_Timesheet extends Model_Table {
 		$this->newField('date')->datatype('date');
 		$this->newField('start');
 		$this->newField('end');
-		$this->newField('minutes');
+		$this->newField('minutes')->datatype('int');
 
-        $this->setMasterField('user_id',$this->api->getUserID());
+		if($this->api->page!='minco'){
+			$u=$this->api->getUser();
+			if(!$u->get('is_admin')){
+				$this->setMasterField('user_id',$this->api->getUserID());
+			}
+		}
 	}
 }

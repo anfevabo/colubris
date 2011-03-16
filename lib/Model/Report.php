@@ -19,7 +19,7 @@ class Model_Report extends Model_Table {
 
 		$this->newField('date')->datatype('date')->mandatory(true)->defaultValue(date('Y-m-d'));
 		$this->newField('result')->datatype('text');
-		$this->newField('amount')->datatype('int')->mandatory(true);
+		$this->newField('amount')->datatype('int')->mandatory(true)->caption('Total Minutes');
 
 	}
 	public function toStringSQL($source_field, $dest_fieldname, $expr = 'name') {

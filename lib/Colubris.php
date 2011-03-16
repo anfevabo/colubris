@@ -48,6 +48,7 @@ class Colubris extends ApiFrontend {
 		// it and place in a separate class
 
 
+		if($this->page=='minco')return parent::initLayout();
 
 		$m=$this->add('Menu','Menu','Menu');
 		$m->addMenuItem('Dashboard','index');
@@ -61,14 +62,25 @@ class Colubris extends ApiFrontend {
                 $this->api->redirect('index');
             }
 
-        }else{
+        }elseif(!$u->get('is_manager')){
+            $m->addMenuItem('Timesheets','team/timesheets');		// Team members enter their reports here
+            $pages=array('index','team','about','account','scope');
+            if(!in_array(preg_replace('/_.*/','',$this->page),$pages)){
+                $this->api->redirect('index');
+            }
+
+		}else{
             $m->addMenuItem('Timesheets','team/timesheets');		// Team members enter their reports here
             $m->addMenuItem('Status','client/status');		// Clients can follow project status here
 
             $m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
             $m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
-            $m->addMenuItem('Requiremnts','manager/req');	//
-            $m->addMenuItem('Clients','admin/clients');
+            $m->addMenuItem('Requiremnts','manager/req');	// PM can define project requirements here and view tasks
+            
+            $m->addMenuItem('Tasks','admin/tasks'); // review all tasks in system - temporary
+            $m->addMenuItem('Reports','admin/reports'); // review all reports in system - temporary
+
+            $m->addMenuItem('Clients','admin/clients'); 
             $m->addMenuItem('Users','admin/users');
             $m->addMenuItem('Files','admin/filestore');
 

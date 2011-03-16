@@ -82,8 +82,8 @@ class page_team_timesheets extends Page_EntityManager {
 
                 $f->getController()->set($f->getAllData())->addTimesheets(json_decode($f->get('ts')));
 
-                $f->js()->univ()->page($this->api->getDestinationURL())->execute();
                 $this->api->db->commit();
+                $f->js()->univ()->location($this->api->getDestinationURL())->execute();
             }catch(Exception $e){
                 $this->api->db->rollback();
                 throw $e;

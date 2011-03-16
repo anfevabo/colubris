@@ -18,28 +18,12 @@ ALTER TABLE `task`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `screen` ADD COLUMN `type` VARCHAR(20) NULL DEFAULT NULL  AFTER `name` , DROP FOREIGN KEY `fk_screen_project1` ;
+ALTER TABLE `screen` ADD COLUMN `type` VARCHAR(20) NULL DEFAULT NULL  AFTER `name` , DROP KEY `fk_screen_project1` ;
 update screen set type='screen';
 
 ALTER TABLE `screen` 
   rename `requirement`
-  ADD CONSTRAINT `fk_screen_project1`
-  FOREIGN KEY (`project_id` )
-  REFERENCES `project` (`id` )
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION, RENAME TO  `requirement` ;
-
-ALTER TABLE `timesheet` 
-  ADD CONSTRAINT `fk_timesheet_report1`
-  FOREIGN KEY (`report_id` )
-  REFERENCES `report` (`id` )
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION, 
-  ADD CONSTRAINT `fk_timesheet_user1`
-  FOREIGN KEY (`user_id` )
-  REFERENCES `user` (`id` )
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+  ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

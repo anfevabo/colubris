@@ -24,6 +24,10 @@ class Model_Budget extends Model_Table {
 		$this->newField('mandays')
 			->datatype('int')
             ;
+		$this->newField('cur_mandays')
+			->datatype('int')
+			->calculated(true)
+            ;
 
 		$this->newField('client_id')
 			->refModel('Model_Client');
@@ -40,5 +44,12 @@ class Model_Budget extends Model_Table {
 		if($sc=$this->api->recall('scope')){
 			if($sc['client'])$dsql->where('client_id',$sc['client']);
 		}
+	}
+	function calculate_cur_mandays(){
+		return $this->add('Model_Report')
+			->dsql()
+			->field('round(sum(R.amount/60/7),1)')
+			->where('R.budget_id=bu.id')
+			->select();
 	}
 }

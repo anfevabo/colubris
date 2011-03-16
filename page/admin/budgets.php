@@ -23,5 +23,8 @@ class page_admin_budgets extends Page_EntityManager {
 
 		$c=$this->add('Controller_Task');$c->addCondition('budget_id',$_GET['id']);
 		$this->add('MVCGrid')->setController($c);
+
+		$c=$this->add('Controller_Report');$c->addCondition('budget_id',$_GET['id']);
+		$this->add('MVCGrid')->setController($c);
 	}
 }
