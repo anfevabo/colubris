@@ -22,8 +22,7 @@ class Model_User extends Model_Table {
 			;
 
 		$this->newField('password')
-			->visible(false)
-			->editable(false)
+            ->system(true)
 			;
 
 		$this->newField('client_id')
