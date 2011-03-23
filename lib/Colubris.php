@@ -25,7 +25,7 @@ class Colubris extends ApiFrontend {
 		// Initialize any system-wide javascript libraries here
 		$this->js()
 			->_load('atk4_univ')
-			// ->_load('ui.atk4_expander')
+			->_load('ui.atk4_notify')
 
 			;
 
@@ -51,28 +51,32 @@ class Colubris extends ApiFrontend {
 		if($this->page=='minco')return parent::initLayout();
 
 		$m=$this->add('Menu','Menu','Menu');
-		$m->addMenuItem('Dashboard','index');
+
 
         $u=$this->getUser();
+        $mainpage=preg_replace('/_.*/','',$this->page);
+        $pages=array('index','about','account','scope');
+
         if($u->get('is_client')){
+            $pages[]='client';
+            $pages[]='playground';
+            $m->addMenuItem('Welcome','client/welcome');
+            $m->addMenuItem('Budgets','client/budgets');
+            $m->addMenuItem('Project Status','client/status');
+            $m->addMenuItem('Time Reports','client/timesheets');
+        }
 
-            // Client only have access to few pages
-            $pages=array('index','client/status','about','account','scope');
-            if(!in_array($this->page,$pages)){
-                $this->api->redirect('index');
-            }
+        if($u->get('is_developer')){
+            $pages[]='team';
+            $m->addMenuItem('Welcome','team/index');
+            //$m->addMenuItem('Development Priorities','team/timesheets');
+            // TODO:
+            $m->addMenuItem('Timesheets','team/timesheets');
+            $m->addMenuItem('Statistics','team/statistics');
+        }
 
-        }elseif(!$u->get('is_manager')){
-            $m->addMenuItem('Timesheets','team/timesheets');		// Team members enter their reports here
-            $pages=array('index','team','about','account','scope');
-            if(!in_array(preg_replace('/_.*/','',$this->page),$pages)){
-                $this->api->redirect('index');
-            }
-
-		}else{
-            $m->addMenuItem('Timesheets','team/timesheets');		// Team members enter their reports here
-            $m->addMenuItem('Status','client/status');		// Clients can follow project status here
-
+        if($u->get('is_manager')){
+            $pages[]='admin';
             $m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
             $m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
             $m->addMenuItem('Requiremnts','manager/req');	// PM can define project requirements here and view tasks
@@ -82,9 +86,18 @@ class Colubris extends ApiFrontend {
 
             $m->addMenuItem('Clients','admin/clients'); 
             $m->addMenuItem('Users','admin/users');
-            $m->addMenuItem('Files','admin/filestore');
-
         }
+        if($u->get('is_admin')){
+            $m->addMenuItem('Files','admin/filestore');
+        }
+
+            // Client only have access to few pages
+        if(!$u->get('is_admin')){
+            if(!in_array($mainpage,$pages)){
+                $this->api->redirect('index');
+            }
+        }
+
         $m->addMenuItem('About Colubris','about');
         $m->addMenuItem('account');
         $m->addMenuItem('logout');
@@ -118,6 +131,12 @@ class Colubris extends ApiFrontend {
 
 		parent::initLayout();
 	}
+    function page_index($p){
+        $u=$this->api->getUser();
+        if($u->get('is_client')){
+            $this->api->redirect('client/welcome');
+        }
+    }
 	function page_scope($p){
 		$f=$p->add('Form');
 
@@ -153,6 +172,12 @@ class Colubris extends ApiFrontend {
 
 		}
 	}
+    function setScope($key,$val=null){
+        $sc=$this->recall('scope',array());
+        if($val)$sc[$key]=$val;else unset($sc[$key]);
+        $this->memorize('scope',$sc);
+        return $this;
+    }
 	function getScope(){
 		$sc=$this->recall('scope',array());
         $u=$this->getUser();

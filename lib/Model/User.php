@@ -52,4 +52,7 @@ class Model_User extends Model_Table {
 	function calculate_is_client(){
 		return 'if(client_id is null,"N","Y")';
 	}
+    function resetPassword(){
+
+    }
 }
