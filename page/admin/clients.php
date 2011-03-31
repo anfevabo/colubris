@@ -8,46 +8,24 @@ class page_admin_clients extends Page_EntityManager {
 		$this->grid->addColumnPlain('expander','users','Users');
 	}
 	function page_users(){
-		// This implements a quite complete task editing solution. 
+        $this->api->stickyGET('client_id');
+        $m=$this->add('Model_User')
+            ->setMasterField('client_id',$_GET['client_id'])
+            ;
 
-		// Preserve screen_id throughout the whole thing
-		$this->api->stickyGET('id');
+        $cr=$this->add('CRUD');
+        $cr->setModel($m,array('email','name','hourly_cost','daily_cost'));
+        if($cr->grid){
+            $cr->grid->addColumn('button','reset','Reset Password');
 
-		$cc=$this->add('View_Columns');
-		$c1=$cc->addColumn();
-		$c2=$cc->addColumn();
+            if($_GET['reset']){
+                $m->loadData($_GET['reset']);
+                $m->resetPassword();
 
-		// Create form for editing user
-		$c=$this->add('Controller_User');
-		$c->setMasterField('client_id',$_GET['id']);
-		$c->setActualFields(array('email','name'));
-		$f=$c2->add('MVCForm')->setController($c);
+                $cr->grid->js()->univ()->successMessage('New password sent to email: "'.$m->get('email').'"')->execute();
 
-		$f->addSubmit($_GET['user_id']?'Update':'Add new');
-
-		if($_GET['user_id']){
-			$this->api->stickyGET('user_id');
-			$c->loadData($_GET['user_id']);
-		}
-
-		$g=$c1->add('MVCGrid')->setController($c);
-
-		// Add 2 extra columns for editing and deletion
-		$g->addColumnPlain('button','edit');
-		$g->addColumnPlain('delete','delete');
-
-		// If editing buton is clicked, reload form with task_id argument
-		if($_GET['edit']){
-			$cc->js()->reload(array('user_id'=>$_GET['edit']))->execute();
-		}
-
-		if($f->isSubmitted()){
-			// If our main form is submitted, then save data and relad both the grid and the form
-			$f->update();
-			$cc->js()->reload(array('user_id'=>null))->execute();
-			//$f->js(null,$g->js()->reload())->reload(array('task_id'=>null))->execute();
-
-		}
-
+            }
+        }
+        
 	}
 }

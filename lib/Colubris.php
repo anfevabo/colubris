@@ -25,13 +25,13 @@ class Colubris extends ApiFrontend {
 		// Initialize any system-wide javascript libraries here
 		$this->js()
 			->_load('atk4_univ')
-			// ->_load('ui.atk4_expander')
+			->_load('ui.atk4_notify')
 
 			;
 
 		// Before going further you will need to verify access
 		$auth=$this->add('SQLAuth');
-		$auth->setSource('user','email','password')->field('id,name');
+		$auth->setSource('user','email','password')->field('id,name,is_admin');
 		$auth->usePasswordEncryption('md5');
 		$auth->allowPage('minco');
 		if(!$auth->isPageAllowed($this->api->page))$auth->check();
@@ -46,21 +46,61 @@ class Colubris extends ApiFrontend {
 
 		// If you are using a complex menu, you can re-define
 		// it and place in a separate class
+
+
+		if($this->page=='minco')return parent::initLayout();
+
 		$m=$this->add('Menu','Menu','Menu');
-		$m->addMenuItem('Dashboard','index');
 
-		$m->addMenuItem('Timesheets','team/timesheets');		// Team members enter their reports here
-		$m->addMenuItem('Status','client/status');		// Clients can follow project status here
 
-		$m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
-		$m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
-		$m->addMenuItem('Requiremnts','manager/req');	//
-		$m->addMenuItem('Clients','admin/clients');
-		$m->addMenuItem('Users','admin/users');
-		$m->addMenuItem('Files','admin/filestore');
+        $u=$this->getUser();
+        $mainpage=preg_replace('/_.*/','',$this->page);
+        $pages=array('index','about','account','scope');
 
-		$m->addMenuItem('about');
-		$m->addMenuItem('logout');
+        if($u->get('is_client')){
+            $pages[]='client';
+            $pages[]='playground';
+            $m->addMenuItem('Welcome','client/welcome');
+            $m->addMenuItem('Budgets','client/budgets');
+            $m->addMenuItem('Project Status','client/status');
+            $m->addMenuItem('Time Reports','client/timesheets');
+        }
+
+        if($u->get('is_developer')){
+            $pages[]='team';
+            $m->addMenuItem('Welcome','team/index');
+            //$m->addMenuItem('Development Priorities','team/timesheets');
+            // TODO:
+            $m->addMenuItem('Timesheets','team/timesheets');
+            $m->addMenuItem('Statistics','team/statistics');
+        }
+
+        if($u->get('is_manager')){
+            $pages[]='admin';
+            $m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
+            $m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
+            $m->addMenuItem('Requiremnts','manager/req');	// PM can define project requirements here and view tasks
+            
+            $m->addMenuItem('Tasks','admin/tasks'); // review all tasks in system - temporary
+            $m->addMenuItem('Reports','admin/reports'); // review all reports in system - temporary
+
+            $m->addMenuItem('Clients','admin/clients'); 
+            $m->addMenuItem('Users','admin/users');
+        }
+        if($u->get('is_admin')){
+            $m->addMenuItem('Files','admin/filestore');
+        }
+
+            // Client only have access to few pages
+        if(!$u->get('is_admin')){
+            if(!in_array($mainpage,$pages)){
+                $this->api->redirect('index');
+            }
+        }
+
+        $m->addMenuItem('About Colubris','about');
+        $m->addMenuItem('account');
+        $m->addMenuItem('logout');
 
 		// If you want to use ajax-ify your menu
 		// $m->js(true)->_load('ui.atk4_menu')->atk4_menu(array('content'=>'#Content'));
@@ -91,25 +131,35 @@ class Colubris extends ApiFrontend {
 
 		parent::initLayout();
 	}
+    function page_index($p){
+        $u=$this->api->getUser();
+        if($u->get('is_client')){
+            $this->api->redirect('client/welcome');
+        }
+    }
 	function page_scope($p){
 		$f=$p->add('Form');
 
 
 		$f->addField('reference','project')
 			->emptyValue('All Projects')
-			->setValueList($f->add('Model_Project'));
+            ->setModel('Project');
+			//->setValueList($f->add('Model_Project'));
 
 		$f->addField('reference','budget')
 			->emptyValue('All Budgets')
-			->setValueList($f->add('Model_Budget'));
+            ->setModel('Budget');
+			//->setValueList($f->add('Model_Budget'));
 
 		$f->addField('reference','client')
 			->emptyValue('All Clients')
-			->setValueList($f->add('Model_Client'));
+            ->setModel('Client');
+			//->setValueList($f->add('Model_Client'));
 
 		$f->addField('reference','user')
 			->emptyValue('All Users')
-			->setValueList($f->add('Model_User'));
+            ->setModel('User');
+			//->setValueList($f->add('Model_User'));
 
 		$f->set($this->recall('scope',array()));
 
@@ -122,8 +172,18 @@ class Colubris extends ApiFrontend {
 
 		}
 	}
+    function setScope($key,$val=null){
+        $sc=$this->recall('scope',array());
+        if($val)$sc[$key]=$val;else unset($sc[$key]);
+        $this->memorize('scope',$sc);
+        return $this;
+    }
 	function getScope(){
 		$sc=$this->recall('scope',array());
+        $u=$this->getUser();
+        if($u->get('is_client')){
+            $sc['client']=$u->get('id');
+        }
 		$t=array();
 		foreach($sc as $key=>$val){
 			if(!$val)continue;
@@ -152,6 +212,12 @@ class Colubris extends ApiFrontend {
 		return join(', ',$t);
 	}
 
+    function getUser(){
+        return $this->add('Model_User')->loadData($this->getUserID());
+    }
+    function getUserID(){
+        return $this->api->auth->get('id');
+    }
 	function getVersion(){
 		return '0.1';
 	}

@@ -24,4 +24,9 @@ class page_admin_users extends Page_EntityManager {
 			}else $f->js()->univ()->alert('passwords don\'t match')->execute();
 		}
 	}
+    function page_projects(){
+        $this->api->stickyGET('user_id');
+        $m=$this->add('Model_Participant')->setMasterField('user_id',$_GET['user_id']);
+        $this->add('CRUD')->setModel($m,array('budget_id','hourly_cost','daily_cost'));
+    }
 }

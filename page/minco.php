@@ -10,7 +10,7 @@ class page_minco extends Page {
 
 
 		// Figure out user
-		$u=$this->add('Controller_User')->getBy('hash',$v['hash']);
+		$u=$this->add('Model_User')->getBy('hash',$v['hash']);
 		if(!$u['id']){
 			echo "Wrong user hash";
 			$this->logVar('wrong user hash: '.$v['hash']);
@@ -31,5 +31,7 @@ class page_minco extends Page {
 		$this->logVar($v['minutes'].' minutes logged');
 
 		$this->add('Controller_Timesheet_Minco')->update($v);
+		echo "success";
+		exit;
 	}
 }

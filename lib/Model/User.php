@@ -22,8 +22,7 @@ class Model_User extends Model_Table {
 			;
 
 		$this->newField('password')
-			->visible(false)
-			->editable(false)
+            ->system(true)
 			;
 
 		$this->newField('client_id')
@@ -40,6 +39,9 @@ class Model_User extends Model_Table {
 		// $this->addRelatedEntity()
 		// see function comments inside Model/Table
 
+        if($this->api->page!='minco' && $this->api->auth->get('is_admin')!='Y'){
+            $this->addCondition('id',$this->api->auth->get('id'));
+        }
 
 	}
 	function beforeInsert(&$d){
@@ -50,4 +52,7 @@ class Model_User extends Model_Table {
 	function calculate_is_client(){
 		return 'if(client_id is null,"N","Y")';
 	}
+    function resetPassword(){
+
+    }
 }
