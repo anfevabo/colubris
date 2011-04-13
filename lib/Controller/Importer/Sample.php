@@ -13,5 +13,6 @@ class Controller_Importer_Sample extends Controller_Importer {
 			->set('date',date('Y-m-d'))
 			->set('title',$text)
 			->update();
+        return 1;   // one record imported
 	}
 }

@@ -106,6 +106,7 @@ class page_team_timesheets extends Page_EntityManager {
 
 		$importers=array(
 				'Toggl'=>'Controller_Importer_Toggl',
+				'Agile CSV'=>'Controller_Importer_AgileCsv',
 				'Test Importer'=>'Controller_Importer_Sample',
 				);
 
@@ -120,9 +121,9 @@ class page_team_timesheets extends Page_EntityManager {
 
 			$imp_c=$this->add($importers[$key]);
 
-			$imp_c->importFromText($f->get('data'));
+			$count=$imp_c->importFromText($f->get('data'));
 
-			$f->js()->univ()->closeDialog()->page($this->api->getDestinationURL('..'))->execute();
+			$f->js()->univ()->successMessage('Imported '.$count.' records')->closeDialog()->page($this->api->getDestinationURL('..'))->execute();
 
 		}
 	}

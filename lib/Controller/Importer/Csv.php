@@ -3,25 +3,60 @@ class Controller_Importer_Csv extends Controller_Importer {
 	public $task;
 	public $field_sequence=array('user','date','project','descr','minutes');
 
+
+	function init(){
+		parent::init();
+		$this->task=$this->add('Controller_Timesheet');
+
+        if(!$this->api->isManager()){
+            $this->task->setMasterField('user_id',$this->api->auth->get('id'));
+        }
+
+        // TODO: only manager can use this importer
+	}
+
+
 	function set_user($val){
 		// admins only - check for user correspondence fist
 		//$this->task->set('user_id',
 	}
 	function set_date($val){
-		$this->task->set($val);
+		$this->task->set('date',$val);
 	}
+	function set_descr($val){
+		$this->task->set('title',$val);
+	}
+	function set_date_irl($val){
+        $date=explode('/',$val);
+        $date=implode('-',array($date[2],$date[1],$date[0]));
+		return $this->set_date($date);
+	}
+    function set_minutes($val){
+        $this->task->set('minutes',$val);
+    }
+    function set_user_id($val){
+        $this->task->set('user_id',$val);
+    }
 	function set_project($val){
 		$p_id=$this->add('Model_Project')->getBy('name',$val);
-		var_dump('project=',$p_id);
 		exit;
 	}
+    function set_($val){
+        // ignoring
+    }
 
 	function importFromText($text){
+        $cnt=0;
 
-		if(!($fs_count=count($this->field_sequence)))
+		if(!($fs_count=count($this->field_sequence))){
 			throw new Exception('Field sequence must contain fields');
+        }
+
 		$csv=explode("\n",$text);
 		foreach($csv as $row){
+            $row=trim($row);
+            if(!$row)continue;  // skip empty rows
+
 			$row=str_getcsv($row);
 
 			while(count($row)>$fs_count)array_pop($row);
@@ -34,17 +69,11 @@ class Controller_Importer_Csv extends Controller_Importer {
 				$fx='set_'.$key;
 				$this->$fx($val);
 
-				echo "combined!";
-				exit;
 			}
 
+            $this->task->update();
+            $cnt++;
 		}
-		/*
-		$this->task
-			->set('minutes','5')
-			->set('date',date('Y-m-d'))
-			->set('title',$text)
-			->update();
-			*/
+        return $cnt;
 	}
 }

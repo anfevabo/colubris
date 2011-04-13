@@ -18,10 +18,12 @@ class Model_Client extends Model_Table {
 
 			;
 
+            /*
         $u=$this->api->getUser();
         if($u->get('is_client')){
             $this->addCondition('id',$u->get('client_id'));
         }
+        */
 
 
 	}
