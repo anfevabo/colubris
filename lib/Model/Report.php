@@ -6,7 +6,7 @@ class Model_Report extends Model_Table {
 	function defineFields(){
 		parent::defineFields();
 
-		$this->newField('task_id')->refModel('Model_Task');
+		//$this->newField('task_id')->refModel('Model_Task');
 
 		$this->newField('budget_id')->refModel('Model_Budget');
 

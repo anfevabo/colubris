@@ -79,7 +79,7 @@ class Colubris extends ApiFrontend {
             $pages[]='admin';
             $m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
             $m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
-            $m->addMenuItem('Requiremnts','manager/req');	// PM can define project requirements here and view tasks
+            $m->addMenuItem('Requirements','manager/req');	// PM can define project requirements here and view tasks
             
             $m->addMenuItem('Tasks','admin/tasks'); // review all tasks in system - temporary
             $m->addMenuItem('Reports','admin/reports'); // review all reports in system - temporary
@@ -131,6 +131,8 @@ class Colubris extends ApiFrontend {
 
 		parent::initLayout();
 	}
+    function upgradeChecker(){
+    }
     function page_index($p){
         $u=$this->api->getUser();
         if($u->get('is_client')){
@@ -218,8 +220,16 @@ class Colubris extends ApiFrontend {
     function getUserID(){
         return $this->api->auth->get('id');
     }
+
+    function isManager(){
+        return $this->getUser()->get('is_manager');
+    }
+    function isDeveloper(){
+        return $this->getUser()->get('is_developer');
+    }
+
 	function getVersion(){
-		return '0.1';
+		return '0.2';
 	}
 	function getCurrentTask(){
 		$task_id=$this->api->recall('task',null);
