@@ -1,5 +1,6 @@
 <?
 class page_manager_budgets extends page {
+
 	//public $controller='Controller_Budget';
 
 	function initMainPage(){
