@@ -111,7 +111,7 @@ class Colubris extends ApiFrontend {
                     $m->addMenuItem('Manager','manager');
                 }
                 if($u->get('is_developer') || $u->get('is_admin')){
-                    $m->addMenuItem('Developer','developer');
+                    $m->addMenuItem('Developer','team');
                 }
                 if($u->get('is_client') || $u->get('is_admin')){
                     $m->addMenuItem('Client','client');
