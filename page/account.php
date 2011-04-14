@@ -8,7 +8,9 @@ class page_account extends Page {
         // Left side form
         $col=$l->addColumn('50%');
         $f=$col->add('MVCForm');
-        $f->setModel($this->api->getUser(),array('name','email'));
+        $f_hash=$f->addField('readonly','hash');
+        $user_model=$f->setModel($this->api->getUser(),array('name','email'));
+        $f_hash->set($user_model->get('hash'));
         if($f->isSubmitted()){
             $f->update();
             $f->js()->univ()->successMessage('Successfully updated your details')->execute();

@@ -87,13 +87,12 @@ class Colubris extends ApiFrontend {
                     $this->api->redirect('/');
                 }
                 $m->addMenuItem('Home','manager');
-                $m->addMenuItem('Projects','manager/projects');	// Admin can setup projects and users here
-                $m->addMenuItem('Budgets','manager/budgets');	// Admin can setup projects and users here
-                $m->addMenuItem('Requirements','manager/req');	// PM can define project requirements here and view tasks
+                $m->addMenuItem('Reports','manager/reports'); // review all reports in system - temporary
             
                 $m->addMenuItem('Tasks','manager/tasks'); // review all tasks in system - temporary
-                $m->addMenuItem('Reports','manager/reports'); // review all reports in system - temporary
-
+                $m->addMenuItem('Requirements','manager/req');	// PM can define project requirements here and view tasks
+                $m->addMenuItem('Budgets','manager/budgets');	// Admin can setup projects and users here
+                $m->addMenuItem('Projects','manager/projects');	// Admin can setup projects and users here
                 $m->addMenuItem('Clients','manager/clients'); 
                 break;
             case 'admin':
@@ -116,6 +115,9 @@ class Colubris extends ApiFrontend {
                 if($u->get('is_client') || $u->get('is_admin')){
                     $m->addMenuItem('Client','client');
                 }
+                if($u->get('is_admin')){
+                    $m->addMenuItem('Admin','admin');
+                }
 
                 $m->addMenuItem('About Colubris','about');
                 $m->addMenuItem('account');
@@ -123,15 +125,8 @@ class Colubris extends ApiFrontend {
                 break;
         }
 
-        if($u->get('is_admin')){
-            $m->addMenuItem('Main Menu','/');
-        }else{
-            $m->addMenuItem('logout');
-        }
-
-		// If you want to use ajax-ify your menu
-		// $m->js(true)->_load('ui.atk4_menu')->atk4_menu(array('content'=>'#Content'));
-
+        $m->addMenuItem('Main Menu','/');
+        $m->addMenuItem('logout');
 
 		// HTML element contains a button and a text
 		$sc=$this->add('HtmlElement',null,'name')
@@ -161,10 +156,7 @@ class Colubris extends ApiFrontend {
     function upgradeChecker(){
     }
     function page_index($p){
-        $u=$this->api->getUser();
-        if($u->get('is_client')){
-            $this->api->redirect('client/welcome');
-        }
+        $this->api->redirect('intro');
     }
 	function page_scope($p){
 		$f=$p->add('Form');

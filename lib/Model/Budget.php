@@ -29,11 +29,9 @@ class Model_Budget extends Model_Table {
 			->calculated(true)
             ;
 
-		$this->newField('client_id')
-			->refModel('Model_Client');
-
 		$this->newField('project_id')
-			->refModel('Model_Project');
+			->refModel('Model_Project')
+            ;
 
         $u=$this->api->getUser();
         if($u->get('is_client')){
