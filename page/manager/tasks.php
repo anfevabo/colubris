@@ -1,6 +1,6 @@
 <?php
 
-class page_manager_tasks extends page {
+class page_manager_tasks extends Page {
     function init(){
 
         parent::init();

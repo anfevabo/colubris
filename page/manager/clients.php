@@ -1,5 +1,5 @@
 <?
-class page_admin_clients extends Page_EntityManager {
+class page_manager_clients extends Page_EntityManager {
 	public $controller='Controller_Client';
 
 	function initMainPage(){

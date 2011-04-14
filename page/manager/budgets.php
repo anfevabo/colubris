@@ -1,5 +1,5 @@
 <?
-class page_manager_budgets extends page {
+class page_manager_budgets extends Page {
 
 	//public $controller='Controller_Budget';
 
