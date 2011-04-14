@@ -51,56 +51,83 @@ class Colubris extends ApiFrontend {
 		if($this->page=='minco')return parent::initLayout();
 
 		$m=$this->add('Menu','Menu','Menu');
-
-
         $u=$this->getUser();
-        $mainpage=preg_replace('/_.*/','',$this->page);
-        $pages=array('index','about','account','scope');
 
-        if($u->get('is_client')){
-            $pages[]='client';
-            $pages[]='playground';
-            $m->addMenuItem('Welcome','client/welcome');
-            $m->addMenuItem('Budgets','client/budgets');
-            $m->addMenuItem('Project Status','client/status');
-            $m->addMenuItem('Time Reports','client/timesheets');
-        }
+        // Determine page first
 
-        if($u->get('is_developer')){
-            $pages[]='team';
-            $m->addMenuItem('Welcome','team/index');
-            //$m->addMenuItem('Development Priorities','team/timesheets');
-            // TODO:
-            $m->addMenuItem('Timesheets','team/timesheets');
-            $m->addMenuItem('Statistics','team/statistics');
-        }
+        $p=explode('_',$this->page);
+        switch($p[0]){
+            case 'client':
+                if(!$u->get('is_client') || !$u->get('is_admin')){
+                    $this->api->redirect('/');
+                }
 
-        if($u->get('is_manager')){
-            $pages[]='admin';
-            $m->addMenuItem('Projects','admin/projects');	// Admin can setup projects and users here
-            $m->addMenuItem('Budgets','admin/budgets');	// Admin can setup projects and users here
-            $m->addMenuItem('Requirements','manager/req');	// PM can define project requirements here and view tasks
+
+                $m->addMenuItem('Welcome','client/welcome');
+                $m->addMenuItem('Budgets','client/budgets');
+                $m->addMenuItem('Project Status','client/status');
+                $m->addMenuItem('Time Reports','client/timesheets');
+
+                break;
+
+            case 'team':
+                if(!$u->get('is_developer') || !$u->get('is_admin')){
+                    $this->api->redirect('/');
+                }
+
+                $m->addMenuItem('Welcome','team/index');
+                //$m->addMenuItem('Development Priorities','team/timesheets');
+                // TODO:
+                $m->addMenuItem('Timesheets','team/timesheets');
+                $m->addMenuItem('Statistics','team/statistics');
+                break;
+
+            case 'manager':
+                if(!$u->get('is_manager') || !$u->get('is_admin')){
+                    $this->api->redirect('/');
+                }
+                $m->addMenuItem('Home','manager');
+                $m->addMenuItem('Projects','manager/projects');	// Admin can setup projects and users here
+                $m->addMenuItem('Budgets','manager/budgets');	// Admin can setup projects and users here
+                $m->addMenuItem('Requirements','manage/req');	// PM can define project requirements here and view tasks
             
-            $m->addMenuItem('Tasks','admin/tasks'); // review all tasks in system - temporary
-            $m->addMenuItem('Reports','admin/reports'); // review all reports in system - temporary
+                $m->addMenuItem('Tasks','manager/tasks'); // review all tasks in system - temporary
+                $m->addMenuItem('Reports','manager/reports'); // review all reports in system - temporary
 
-            $m->addMenuItem('Clients','admin/clients'); 
-            $m->addMenuItem('Users','admin/users');
+                $m->addMenuItem('Clients','manager/clients'); 
+                break;
+            case 'admin':
+                if(!$u->get('is_admin')){
+                    $this->api->redirect('/');
+                }
+                $m->addMenuItem('Users','admin/users');
+                $m->addMenuItem('Files','admin/filestore');
+                break;
+
+            default:
+                $m->addMenuItem('Introduction','intro');
+
+                if($u->get('is_manager') || $u->get('is_admin')){
+                    $m->addMenuItem('Manager','manager');
+                }
+                if($u->get('is_developer') || $u->get('is_admin')){
+                    $m->addMenuItem('Developer','developer');
+                }
+                if($u->get('is_client') || $u->get('is_admin')){
+                    $m->addMenuItem('Client','client');
+                }
+
+                $m->addMenuItem('About Colubris','about');
+                $m->addMenuItem('account');
+
+                break;
         }
+
         if($u->get('is_admin')){
-            $m->addMenuItem('Files','admin/filestore');
+            $m->addMenuItem('Main Menu','/');
+        }else{
+            $m->addMenuItem('logout');
         }
-
-            // Client only have access to few pages
-        if(!$u->get('is_admin')){
-            if(!in_array($mainpage,$pages)){
-                $this->api->redirect('index');
-            }
-        }
-
-        $m->addMenuItem('About Colubris','about');
-        $m->addMenuItem('account');
-        $m->addMenuItem('logout');
 
 		// If you want to use ajax-ify your menu
 		// $m->js(true)->_load('ui.atk4_menu')->atk4_menu(array('content'=>'#Content'));

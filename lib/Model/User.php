@@ -8,32 +8,32 @@ class Model_User extends Model_Table {
 	public $entity_code='user';
 	public $table_alias='u';
 
-	function defineFields(){
-		parent::defineFields();
+	function init(){
+		parent::init();
 
 		// Each field can have a varietty of properties. Please
 		// referr to FieldDefinition.php file for more information
 
-		$this->newField('email')
+		$this->addField('email')
 			->mandatory(true)
 			;
 
-		$this->newField('name')
+		$this->addField('name')
 			;
 
-		$this->newField('password')
+		$this->addField('password')
             ->system(true)
 			;
 
-		$this->newField('client_id')
+		$this->addField('client_id')
 			->refModel('Model_Client');
 
-		$this->newField('is_admin')->datatype('boolean');
-		$this->newField('is_manager')->datatype('boolean');
-		$this->newField('is_developer')->datatype('boolean');
-		$this->newField('is_client')->datatype('boolean')->calculated(true);
+		$this->addField('is_admin')->datatype('boolean');
+		$this->addField('is_manager')->datatype('boolean');
+		$this->addField('is_developer')->datatype('boolean');
+		$this->addField('is_client')->datatype('boolean')->calculated(true);
 
-		$this->newField('hash');//->visible(false);
+		$this->addField('hash');//->visible(false);
 
 		// You can define related tables through
 		// $this->addRelatedEntity()
