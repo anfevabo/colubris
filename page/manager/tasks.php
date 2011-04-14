@@ -1,5 +1,9 @@
 <?php
 
-class page_admin_tasks extends Page_EntityManager {
-    public $controller = "Controller_Task";
+class page_manager_tasks extends page {
+    function init(){
+
+        parent::init();
+        $this->add('CRUD')->setModel('Task');
+    }
 }

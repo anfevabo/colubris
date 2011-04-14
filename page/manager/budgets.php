@@ -1,14 +1,17 @@
 <?
-class page_admin_budgets extends Page_EntityManager {
-	public $controller='Controller_Budget';
+class page_manager_budgets extends page {
+	//public $controller='Controller_Budget';
 
 	function initMainPage(){
-		parent::initMainPage();
+        $c=$this->add('CRUD');
+        $c->setModel('Budget');
 
-		$this->grid->addColumnPlain('expander','team','Team Access');
-		$this->grid->addColumnPlain('expander','scope','Budget Scope');
+        if($c->grid){
+            $c->grid->addColumnPlain('expander','team','Team Access');
+            $c->grid->addColumnPlain('expander','scope','Budget Scope');
+            $c->grid->getController()->scopeFilter($c->grid->dq);
+        }
 
-		$this->c->scopeFilter($this->grid->dq);
 	}
 
 	function page_team(){

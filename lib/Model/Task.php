@@ -20,12 +20,14 @@ class Model_Task extends Model_Table {
 		$this->addField('screen_id')->refModel('Model_Screen');
 
 
+        /*
         $this->addRelatedEntity('bu2','budget','budget_id','left');
         $this->addField('client_id')
             ->readonly(true)
             ->relEntity('bu2')
             ->refModel('Model_Client')
             ;
+            */
 
 	}
 	function enScope($dsql){

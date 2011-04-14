@@ -89,7 +89,7 @@ class Colubris extends ApiFrontend {
                 $m->addMenuItem('Home','manager');
                 $m->addMenuItem('Projects','manager/projects');	// Admin can setup projects and users here
                 $m->addMenuItem('Budgets','manager/budgets');	// Admin can setup projects and users here
-                $m->addMenuItem('Requirements','manage/req');	// PM can define project requirements here and view tasks
+                $m->addMenuItem('Requirements','manager/req');	// PM can define project requirements here and view tasks
             
                 $m->addMenuItem('Tasks','manager/tasks'); // review all tasks in system - temporary
                 $m->addMenuItem('Reports','manager/reports'); // review all reports in system - temporary

@@ -1,12 +1,16 @@
 <?php
 
-class page_admin_reports extends Page{
+class page_manager_reports extends Page{
 
 	function initMainPage(){
 		$crud=$this->add('CRUD');
-		$m=$crud->setModel('Report');
+		$m=$crud->setModel('Timesheet');
 		if($crud->grid){
 			$crud->grid->addColumn('expander','tasks');
+            $crud->grid->addPaginator(50);
+            $crud->grid->dq->order('date,id');
+
+            $crud->grid->addQuickSearch(array('title'));
 		}
 	}
 	function page_tasks(){
