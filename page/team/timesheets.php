@@ -37,21 +37,23 @@ class page_team_timesheets extends Page_EntityManager {
 
         // Add form for converting results
         $f=$this->add('MVCForm');
-        $f_ts=$f->addField('line','ts');
+        $f_ts=$f->addField('text','ts');
 
         $f_cli=$f->addField('reference','client_id');
         $f_cli->setModel('Client');
-        $f->setModel('Report');
+        $f->setModel('Report',array('budget_id','result','amount'));
 
         if($_GET['client_id']){
             $f->getElement('budget_id')->dictionary()->addCondition('client_id',$_GET['client_id']);
-            $f->getElement('task_id')->dictionary()->addCondition('client_id',$_GET['client_id']);
+            //$f->getElement('task_id')->dictionary()->addCondition('client_id',$_GET['client_id']);
         }
 
         $f_cli->js('change',array(
+					/*
                 $f->js()->atk4_form('reloadField','task_id',array(
                         $this->api->getDestinationURL(),'client_id'=>$f_cli->js()->val()
                         )),
+						*/
                 $f->js()->atk4_form('reloadField','budget_id',array(
                         $this->api->getDestinationURL(),'client_id'=>$f_cli->js()->val()
                         )),
