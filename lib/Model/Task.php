@@ -17,7 +17,7 @@ class Model_Task extends Model_Table {
 		$this->addField('deviation')->dataType('text');
 
 		$this->addField('budget_id')->refModel('Model_Budget');
-		$this->addField('screen_id')->refModel('Model_Screen');
+		$this->addField('requirement_id')->refModel('Model_Requirement');
 
 
         /*
@@ -41,9 +41,9 @@ class Model_Task extends Model_Table {
 	}
 	function calculate_cur_progress(){
 		return $this->api->db->dsql()
-			->table('report')
+			->table('timesheet')
 			->where('task_id=tsk.id')
-			->field('sum(amount)')
+			->field('sum(minutes)')
 			->select();
 	}
 }

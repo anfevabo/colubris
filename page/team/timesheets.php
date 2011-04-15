@@ -27,6 +27,7 @@ class page_team_timesheets extends Page_EntityManager {
 		$g->addButton('Import')->js('click')->univ()->dialogURL('Import tasks',$this->api->getDestinationURL('./import'));
 
 		$g->addColumnPlain('expander','convert');
+        $g->addPaginator(25);
 
         $g->addButton('Define Filters')->js('click')->univ()->frameURL(
                 'Filters',$this->api->getDestinationURL('./filters'),array(

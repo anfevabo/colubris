@@ -5,12 +5,12 @@ class page_intro extends Page {
 
         $t=$this->add('Tabs');
 
-        $t->addTabURL('./concept','1. What is Budget?');
-        $t->addTabURL('./development','2. How Developers Work?');
-        $t->addTabURL('./tracking','3. Progress Tracking');
-        $t->addTabURL('./timesheets','4. Timesheets');
-        $t->addTabURL('./changereq','5. Change Requests');
-        $t->addTabURL('./tasks','6. Task Lists');
-        $t->addTabURL('./qa','7. Quality Assurance');
+        $t->addTabURL('./concept','What is Budget?');
+        $t->addTabURL('./development','How Developers Work?');
+        $t->addTabURL('./tracking','Progress Tracking');
+        $t->addTabURL('./timesheets','Timesheets');
+        $t->addTabURL('./changereq','Change Requests');
+        $t->addTabURL('./tasks','Task Lists');
+        $t->addTabURL('./qa','Quality Assurance');
     }
 }

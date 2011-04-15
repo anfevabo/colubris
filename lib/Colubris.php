@@ -44,6 +44,7 @@ class Colubris extends ApiFrontend {
 	}
 	function initLayout(){
 
+        $this->template->tryDel('fullscreen');
 		// If you are using a complex menu, you can re-define
 		// it and place in a separate class
 
@@ -62,12 +63,10 @@ class Colubris extends ApiFrontend {
                     $this->api->redirect('/');
                 }
 
-
                 $m->addMenuItem('Welcome','client/welcome');
                 $m->addMenuItem('Budgets','client/budgets');
                 $m->addMenuItem('Project Status','client/status');
                 $m->addMenuItem('Time Reports','client/timesheets');
-
                 break;
 
             case 'team':
@@ -75,7 +74,7 @@ class Colubris extends ApiFrontend {
                     $this->api->redirect('/');
                 }
 
-                $m->addMenuItem('Welcome','team/index');
+                $m->addMenuItem('Welcome','team');
                 //$m->addMenuItem('Development Priorities','team/timesheets');
                 // TODO:
                 $m->addMenuItem('Timesheets','team/timesheets');
@@ -88,6 +87,7 @@ class Colubris extends ApiFrontend {
                 }
                 $m->addMenuItem('Home','manager');
                 $m->addMenuItem('Reports','manager/reports'); // review all reports in system - temporary
+                $m->addMenuItem('Timesheets','manager/timesheets'); // review all reports in system - temporary
             
                 $m->addMenuItem('Tasks','manager/tasks'); // review all tasks in system - temporary
                 $m->addMenuItem('Requirements','manager/req');	// PM can define project requirements here and view tasks

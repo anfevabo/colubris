@@ -1,23 +1,45 @@
 <?php
 
-class page_manager_reports extends Page{
+class page_manager_timesheets extends Page{
 
 	function initMainPage(){
-        $f=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
-		$grid=$this->add('MVCGrid');
-		$m=$grid->setModel('Timesheet',array('title','user','budget','date'));
-        $grid->addColumn('money','amount')->makeSortable();
-        $grid->addPaginator(50);
+        $quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
+		$crud=$this->add('CRUD');
+		$m=$crud->setModel('Timesheet',array('title','user','budget','date','minutes'));
+        if($grid=$crud->grid){
+            $grid->addPaginator(50);
             $grid->addTotals();
             $grid->dq->order('date desc,id desc');
-            $f->useDQ($grid->dq);
+           // $f->useDQ($grid->dq);
 
             $grid->last_column='title';$grid->makeSortable();
             $grid->last_column='user';$grid->makeSortable('user');
             $grid->last_column='minutes';$grid->makeSortable();
 
             //$crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
-            //$crud->grid->dq->debug();
+            $quicksearch->useGrid($grid)->useFields(array('title'));
+
+            $this->add('H3')->set('Change Selected');
+            $f=$this->add('MVCForm')->setFormClass('horizontal');
+            $f_sel=$f->addField('line','sel');
+            $grid->addSelectable($f_sel);
+
+            $ts=$f->setModel('Timesheet',array('client_id','project_id','budget_id','requirement_id','task_id'));
+
+            if($f->isSubmitted()){
+                $q=$ts->dsql();
+                if($f->get('budget_id'))$q->set('budget_id',$f->get('budget_id'));
+                //if($f->get('budget_id')$q->set('budget_id',$f->get('budget_id'));
+
+                $ids=json_decode(stripslashes($f->get('sel')));
+
+                $q->where('id in',$ids);
+
+                $q->do_update();
+                $grid->js()->reload()->execute();
+
+            }
+        }
 	}
     /*
 	function page_tasks(){
@@ -33,32 +55,22 @@ class page_manager_reports extends Page{
 	}
     */
 }
-class ReportQuickSearch extends Filter {
+class ReportQuickSearch extends QuickSearch {
     function init(){
         parent::init();
 
         //$this->setFormClass('horizontal');
 
-        $this->addField('dropdown','group')->setValueList(array('none','user_id'=>'user','date(date)'=>'date','budget_id'=>'budget'));
         $this->addField('autocomplete','user_id')->setModel('Developer');
         $this->addField('autocomplete','budget_id')->setModel('Budget');
         $this->addField('DatePicker','from')->setAttr('style','width: 100px');
         $this->addField('DatePicker','to')->setAttr('style','width: 100px');
-        $this->addSubmit();
     }
     function applyDQ($q){
         if($this->get('from'))$q->where('date>=',$this->get('from'));
         if($this->get('to'))$q->where('date<=',$this->get('to'));
         if($this->get('user_id'))$q->where('user_id',$this->get('user_id'));
         if($this->get('budget_id'))$q->where('budget_id',$this->get('budget_id'));
-        if($this->get('group')){
-            $q->group($this->get('group'));
-            $q->field('sum(minutes) amount');
-        }else{
-            $q->field('minutes amount');
-        }
-        
-
-        //parent::applyDQ($q);
+        parent::applyDQ($q);
     }
 }
