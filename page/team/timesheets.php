@@ -1,157 +1,64 @@
 <?php
-class page_team_timesheets extends Page_EntityManager {
-	public $controller='Controller_Timesheet';
-    public $regexp=null;
+
+class page_team_timesheets extends Page{
+
 	function initMainPage(){
+        $quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
+		$crud=$this->add('CRUD');
+		$m=$crud->setModel('Timesheet',array('title','budget','date','minutes'));
+        $m->addCondition('user_id',$this->api->getUserID());
+        if($grid=$crud->grid){
+            $grid->addPaginator(50);
+            $grid->addTotals();
+            $grid->dq->order('date desc,id desc');
+           // $f->useDQ($grid->dq);
 
+            $grid->last_column='budget';$grid->makeSortable();
+            $grid->last_column='title';$grid->makeSortable();
+            $grid->last_column='minutes';$grid->makeSortable();
 
-        // Add filter to the right
-        $f=$this->add('HtmlElement')->addStyle('float','right')->add('Form',null,null,array('form_empty'));
-        $f_filter=$f->addField('reference','f','');
-        $m=$f_filter->setModel('TimesheetFilter');
-        $f_filter->includeDictionary(array('client_id'));
+            //$crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
+            $quicksearch->useGrid($grid)->useFields(array('title'));
 
+            $this->add('H3')->set('Change Selected');
+            $f=$this->add('MVCForm')->setFormClass('horizontal');
+            $f_sel=$f->addField('line','sel');
+            $grid->addSelectable($f_sel);
 
+            $ts=$f->setModel('Timesheet',array('client_id','project_id','budget_id','requirement_id','task_id'));
 
-		parent::initMainPage();
-		$g=$this->grid;
-        $this->c->addCondition('report_id', null);
+            if($f->isSubmitted()){
+                $q=$ts->dsql();
+                if($f->get('budget_id'))$q->set('budget_id',$f->get('budget_id'));
+                //if($f->get('budget_id')$q->set('budget_id',$f->get('budget_id'));
 
-        // Bind Grid and Form
-        $f_filter->js('change',$g->js()->reload(array('f'=>$f_filter->js()->val())));
-        if($_GET['f']){
-            $m->loadData($_GET['f']);
-            $g->dq->where('title regexp "'.$this->api->db->escape($m->get('regexp')).'"');
-        }
+                $ids=json_decode(stripslashes($f->get('sel')));
 
-		$g->addButton('Import')->js('click')->univ()->dialogURL('Import tasks',$this->api->getDestinationURL('./import'));
+                $q->where('id in',$ids);
 
-		$g->addColumnPlain('expander','convert');
-        $g->addPaginator(25);
+                $q->do_update();
+                $grid->js()->reload()->execute();
 
-        $g->addButton('Define Filters')->js('click')->univ()->frameURL(
-                'Filters',$this->api->getDestinationURL('./filters'),array(
-                    'close'=>$f_filter->js()->_enclose()->val('')->change()));
-
-        $this->add('H2')->set('Assign timeshetes with time');
-
-        // Add form for converting results
-        $f=$this->add('MVCForm');
-        $f_ts=$f->addField('text','ts');
-
-        $f_cli=$f->addField('reference','client_id');
-        $f_cli->setModel('Client');
-        $f->setModel('Report',array('budget_id','result','amount'));
-
-        if($_GET['client_id']){
-            $f->getElement('budget_id')->dictionary()->addCondition('client_id',$_GET['client_id']);
-            //$f->getElement('task_id')->dictionary()->addCondition('client_id',$_GET['client_id']);
-        }
-
-        $f_cli->js('change',array(
-					/*
-                $f->js()->atk4_form('reloadField','task_id',array(
-                        $this->api->getDestinationURL(),'client_id'=>$f_cli->js()->val()
-                        )),
-						*/
-                $f->js()->atk4_form('reloadField','budget_id',array(
-                        $this->api->getDestinationURL(),'client_id'=>$f_cli->js()->val()
-                        )),
-                ));
-
-        $f_sum=$f->getElement('amount')->setAttr('readonly','true');
-
-        // When Filter changes — autofill company
-        $f_filter->js(true)->univ()->bindFillInFields(array('client_id'=>$f->getElement('client_id')));
-
-        // When items are selected - call AJAX function to calculate sum of minutes
-        $f_ts->js('autochange_manual change')->univ()->ajaxec(array(
-                    $this->api->getDestinationURL(),
-                    'sum_ids'=>$f_ts->js()->val()
-                    ));
-        if($_GET['sum_ids']){
-            // AJAX will sum the minutes and place into the field
-            $ids=join(',',json_decode(stripslashes($_GET['sum_ids'])));
-
-            $q=clone $g->dq;
-            $v=$q->field('sum(minutes)')
-                ->where('id in',$ids)->do_getOne();
-            $f_sum->js()->val($v)->execute();
-        }
-
-        if($f->isSubmitted()){
-            $this->api->db->beginTransaction();
-            try{
-
-                $f->getController()->set($f->getAllData())->addTimesheets(json_decode($f->get('ts')));
-
-                $this->api->db->commit();
-                $f->js()->univ()->location($this->api->getDestinationURL())->execute();
-            }catch(Exception $e){
-                $this->api->db->rollback();
-                throw $e;
             }
         }
-
-
-
-
-        $g->addSelectable($f_ts);
-	}
-    function page_filters(){
-        $cr=$this->add('CRUD');
-        $cr->setModel('TimesheetFilter');
-    }
-	function page_import(){
-		$f=$this->add('Form');
-		$f->add('View_Hint',null,'hint')->set('Why not make your own importer? Fork us on github, then modify
-				page/team/timesheets.php file');
-
-		$importers=array(
-				'Toggl'=>'Controller_Importer_Toggl',
-				'Agile CSV'=>'Controller_Importer_AgileCsv',
-				'Test Importer'=>'Controller_Importer_Sample',
-				);
-
-
-		$importer_index=array_keys($importers);
-		$f->addField('dropdown','format')
-			->setValueList($importer_index);
-		$f->addField('text','data');
-
-		if($f->isSubmitted()){
-			$key=$importer_index[$f->get('format')];
-
-			$imp_c=$this->add($importers[$key]);
-
-			$count=$imp_c->importFromText($f->get('data'));
-
-			$f->js()->univ()->successMessage('Imported '.$count.' records')->closeDialog()->page($this->api->getDestinationURL('..'))->execute();
-
-		}
-	}
-	function page_convert(){
-		$c=$this->add('Controller_Timesheet_Minco');
-		$c->loadData($_GET['id']);
-		$this->api->stickyGET('id');
-
-
-		$rc=$this->add('Controller_Report');
-		$rc->getField('user_id')->editable(false);
-		$f=$this->add('MVCForm')->setController($rc);
-
-		$f->set('date',$c->get('date'));
-		$f->set('result',$c->get('title'));
-		$f->set('amount',round($c->get('minutes')/60,2));
-
-		if(!$c->get('user_id'))$rc->set('user_id',$this->api->auth->get('id'));
-
-		if($f->isSubmitted()){
-			$f->update();
-
-			$c->update(array('report_id'=>$rc->get('id')));
-
-			$f->js()->univ()->page($this->api->getDestinationURL('team/timesheets'))->execute();
-		}
 	}
 }
+class ReportQuickSearch extends QuickSearch {
+    function init(){
+        parent::init();
+
+        //$this->setFormClass('horizontal');
+        $this->addField('checkbox','no_budget','n/b');
+        $this->addField('autocomplete','budget_id','B: ')->setModel('Budget');
+        $this->addField('DatePicker','from','Date: ')->setAttr('style','width: 100px');
+        $this->addField('DatePicker','to','-')->setAttr('style','width: 100px');
+    }
+    function applyDQ($q){
+        if($this->get('no_budget'))$q->where('isnull(budget_id)');
+        if($this->get('from'))$q->where('date>=',$this->get('from'));
+        if($this->get('to'))$q->where('date<=',$this->get('to'));
+        if($this->get('budget_id'))$q->where('budget_id',$this->get('budget_id'));
+        parent::applyDQ($q);
+    }
+}
+

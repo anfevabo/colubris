@@ -8,57 +8,58 @@ class page_team extends Page {
 
 
         $g=$this->add('ReportGrid',null,'just_reported');
-        $m=$g->setModel('Timesheet',array('budget','title','date','minutes'));
-        $m->addCondition('user_id',$this->api->getUserID());
+        $m=$g->setModel('Timesheet',array('user','budget','title','date','minutes'));
+  //      $m->addCondition('user_id',$this->api->getUserID());
         $g->dq->order('date desc,id desc');
         $g->dq->where('date>now()-interval 1 week');
         $g->addPaginator(10);
 
-        /*
-        $this->add('Button',null,'just_reported_buttons')->set('Edit')
-            ->js('click')->univ()->frameURL('Manually add');
-        $this->add('Button',null,'just_reported_buttons')->set('Import');
-        $this->add('Button',null,'just_reported_buttons')->set('Integrate');
-        */
-        $f=$this->add('Form',null,'just_reported_buttons',array('form_empty'));
-        $f->add('Icon')->set('basic-question')
-            ->js('click')->univ()->message('<h4>Hint</h4><p>Select several items from your reports. Pick appropriate budget, and '.
-                    'task, then click on <i class="atk-icon atk-icons-orange atk-icon-office-pencil"></i> to update '.
-                    'entries.</p><p>Do this every day!!</p>');
-        $l=$f->addField('line','budget_id','');
-        $l->setModel('Budget');
-        $f->addField('autocomplete','budget_id','Budget:&nbsp;')->emptyValue('..budget')->setAttr('style','width: 100px')->setModel('Budget');
-        //$f->addField('autocomplete','task_id','')->emptyValue('..task')->setAttr('style','width: 100px')->setModel('Task');
-        $f->add('Icon')->set('office-pencil');
 
-        $g->addSelectable($l);
-
-        return;
-
-        $g=$this->add('ReportGrid',null,'weekly_reports');
-        $g->setModel('Report',array('user','budget','date','amount'));
-        $g->dq->order('date desc,id desc');
-        $g->dq->where('date>now()-interval 1 week');
-        $g->addPaginator(10);
-
-        $g->addFormatter('amount','flink');
-        if($_GET['amount']){
-            $this->js()->univ()->frameURL('Report Details',
-                    $this->api->getDestinationURL('./amount',array('id'=>$_GET['amount'])))->execute();
+        $m=$this->add('Model_Developer_Stats');
+        $m->setDateRange(date('Y-m-d',strtotime('last monday')),date('Y-m-d'));
+        $data=$m->getRows(array('id','name','hours_today'));
+        $result=array();
+        foreach($data as $row){
+            $row['name']=preg_replace('/ .*/','',$row['name']);
+            $result[$row['name']]=$row['hours_today']+0;
         }
 
-        $g=$this->add('ReportGrid',null,'open_budgets');
-        $m=$g->setModel('Budget',array('name','deadline','time_pct','money_pct','feature_pct','amount_eur'));
-        $m->addCondition('accepted',true);
-        $m->addCondition('closed',false);
-        $g->dq->order('coalesce(deadline,"2999-01-01") asc,id desc');
-        //$g->dq->where('date>now()-interval 1 week');
-        $g->addPaginator(10);
+        $d=$this->add('Model_Developer')->loadData($this->api->getUserID());
+        $data=$d->getTimesheets()->dsql()
+            ->field('unix_timestamp(date) d,minutes/60')
+            ->order('date')
+            ->where('week(date)-if(weekday(date)=6,1,0)=week(now())')
+            ->do_getAssoc();
 
-        $g=$this->add('MVCGrid',null,'developer_stats',array('grid_striped'));
-        $m=$g->setModel('Developer',array('name','timesheets_tw','reports_tw','last_timesheet'));
-        //$g->dq->where('date>now()-interval 1 week');
-        $g->addPaginator(10);
+        $min=strtotime('last monday')*1000;
+        $max=strtotime('-2 days',strtotime('sunday'))*1000;
+
+
+        $result=array(array($min,100));$target=$d->get('weekly_target');
+
+
+        foreach($data as $key=>$row){
+            $target-=$row;
+            $result[]=array(
+                    (int)$key*1000, // milis
+                    max(round($target/$d->get('weekly_target')*100),-50)
+                    );
+        }
+
+        $data=$result;
+
+
+        //array_walk($data,function(&$row){$row=array((int)$row;});
+        $ch=$this->add('Chart',null,'graph');
+        $ch->setDefaultType('line');
+        $ch->setHeight('200');
+        $ch->set('title',array('text'=>'Hours Per Day'));
+        $ch->set('xAxis',array('type'=>'datetime','dateTimeLabelFormats'=>array('day'=>'%e') ));
+        $ch->set('yAxis',array('max'=>100, 'min'=>0,'title'=>null,'labels'=>array()));
+        $ch->series(array('name'=>'Hours to target','data'=>$data));
+        $ch->series(array('name'=>'Baseline','data'=>array(array($min,100),array($max,0))));
+        $ch->series(array('name'=>'Today','data'=>array(array(time()*1000-100,100),array(time()*1000,0))));
+
     }
     function page_amount(){
 

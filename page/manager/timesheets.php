@@ -42,30 +42,17 @@ class page_manager_timesheets extends Page{
             }
         }
 	}
-    /*
-	function page_tasks(){
-		if(!$_GET['tasks'])$_GET['tasks']=$_GET['id'];
-		$this->api->stickyGET('tasks');
-
-		$crud=$this->add('CRUD','c2');
-		$m=$this->add('Model_Timesheet');
-		$crud->setModel($m);
-		$m->addCondition('report_id',$_GET['tasks']);
-		if($crud->grid)$crud->grid->addTotals();
-		return;
-	}
-    */
 }
 class ReportQuickSearch extends QuickSearch {
     function init(){
         parent::init();
 
         //$this->setFormClass('horizontal');
-        $this->addField('checkbox','no_budget');
-        $this->addField('autocomplete','user_id')->setModel('Developer');
-        $this->addField('autocomplete','budget_id')->setModel('Budget');
-        $this->addField('DatePicker','from')->setAttr('style','width: 100px');
-        $this->addField('DatePicker','to')->setAttr('style','width: 100px');
+        $this->addField('checkbox','no_budget','n/b');
+        $this->addField('autocomplete','user_id','U: ')->setModel('Developer');
+        $this->addField('autocomplete','budget_id','B: ')->setModel('Budget');
+        $this->addField('DatePicker','from','Date: ')->setAttr('style','width: 100px');
+        $this->addField('DatePicker','to','-')->setAttr('style','width: 100px');
     }
     function applyDQ($q){
         if($this->get('no_budget'))$q->where('isnull(budget_id)');

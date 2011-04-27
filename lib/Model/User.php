@@ -39,11 +39,14 @@ class Model_User extends Model_Table {
 		// $this->addRelatedEntity()
 		// see function comments inside Model/Table
 
-        if($this->api->page!='minco' && $this->api->auth->get('is_admin')!='Y'){
-            $this->addCondition('id',$this->api->auth->get('id'));
-        }
+       /* if($this->api->page!='minco' && $this->api->auth->get('is_admin')!='Y'){
+        }*/
 
 	}
+    function me(){
+        $this->addCondition('id',$this->api->auth->get('id'));
+        return $this;
+    }
 	function beforeInsert(&$d){
 		$d['hash']=md5(uniqid());
 

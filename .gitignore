@@ -2,5 +2,6 @@ uploads
 upload
 config.php
 .htaccess
+.svn
 .*swp
 *.bak

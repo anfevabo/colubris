@@ -59,7 +59,7 @@ class Colubris extends ApiFrontend {
         $p=explode('_',$this->page);
         switch($p[0]){
             case 'client':
-                if(!$u->get('is_client') || !$u->get('is_admin')){
+                if(!$u->get('is_client') && !$u->get('is_admin')){
                     $this->api->redirect('/');
                 }
 
@@ -70,7 +70,7 @@ class Colubris extends ApiFrontend {
                 break;
 
             case 'team':
-                if(!$u->get('is_developer') || !$u->get('is_admin')){
+                if(!$u->get('is_developer') && !$u->get('is_admin')){
                     $this->api->redirect('/');
                 }
 
@@ -82,7 +82,7 @@ class Colubris extends ApiFrontend {
                 break;
 
             case 'manager':
-                if(!$u->get('is_manager') || !$u->get('is_admin')){
+                if(!$u->get('is_manager') && !$u->get('is_admin')){
                     $this->api->redirect('/');
                 }
                 $m->addMenuItem('Home','manager');
