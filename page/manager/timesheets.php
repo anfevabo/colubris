@@ -12,6 +12,7 @@ class page_manager_timesheets extends Page{
             $grid->dq->order('date desc,id desc');
            // $f->useDQ($grid->dq);
 
+            $grid->last_column='budget';$grid->makeSortable();
             $grid->last_column='title';$grid->makeSortable();
             $grid->last_column='user';$grid->makeSortable('user');
             $grid->last_column='minutes';$grid->makeSortable();
@@ -60,13 +61,14 @@ class ReportQuickSearch extends QuickSearch {
         parent::init();
 
         //$this->setFormClass('horizontal');
-
+        $this->addField('checkbox','no_budget');
         $this->addField('autocomplete','user_id')->setModel('Developer');
         $this->addField('autocomplete','budget_id')->setModel('Budget');
         $this->addField('DatePicker','from')->setAttr('style','width: 100px');
         $this->addField('DatePicker','to')->setAttr('style','width: 100px');
     }
     function applyDQ($q){
+        if($this->get('no_budget'))$q->where('isnull(budget_id)');
         if($this->get('from'))$q->where('date>=',$this->get('from'));
         if($this->get('to'))$q->where('date<=',$this->get('to'));
         if($this->get('user_id'))$q->where('user_id',$this->get('user_id'));

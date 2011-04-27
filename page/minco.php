@@ -20,7 +20,7 @@ class page_minco extends Page {
 
 
 		$d=explode('/',$v['date']);
-		$v['date']=join('-',array($d[2],$d[1],$d[0]));
+		$v['date']=join('-',array($d[2],$d[1],$d[0])).' '.date('H:i:s');
 		$v['user_id']=$u['id'];
 
 		if(!$v['minutes']){
