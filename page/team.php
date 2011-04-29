@@ -33,6 +33,7 @@ class page_team extends Page {
 
         $min=strtotime('last monday')*1000;
         $max=strtotime('-2 days',strtotime('sunday'))*1000;
+        $max=strtotime('+20 hours',strtotime('-2 days',strtotime('sunday')))*1000;
 
 
         $result=array(array($min,100));$target=$d->get('weekly_target');

@@ -5,8 +5,10 @@ class page_team_timesheets extends Page{
 	function initMainPage(){
         $quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
 		$crud=$this->add('CRUD');
-		$m=$crud->setModel('Timesheet',array('title','budget','date','minutes'));
-        $m->addCondition('user_id',$this->api->getUserID());
+        $m=$this->add('Model_Timesheet');
+        $m->setMasterField('user_id',$this->api->getUserID());
+        $m->getField('date')->defaultValue(date('Y-m-d'));
+		$crud->setModel($m,array('title','budget_id','date','minutes'));
         if($grid=$crud->grid){
             $grid->addPaginator(50);
             $grid->addTotals();

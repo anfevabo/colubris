@@ -6,7 +6,6 @@ class Controller_Importer_Csv extends Controller_Importer {
 
 	function init(){
 		parent::init();
-		$this->task=$this->add('Controller_Timesheet');
 
         if(!$this->api->isManager()){
             $this->task->setMasterField('user_id',$this->api->auth->get('id'));
