@@ -7,6 +7,8 @@ class page_manager_timesheets extends Page{
 		$crud=$this->add('CRUD');
 		$m=$crud->setModel('Timesheet',array('title','user','budget','user_id','budget_id','date','minutes'));
         if($grid=$crud->grid){
+            $grid->addButton('Import')->js('click')->univ()->dialogURL('Import',
+                    $this->api->getDestinationURL('./import'));
             $grid->addPaginator(50);
             $grid->addTotals();
             $grid->dq->order('date desc,id desc');
@@ -52,6 +54,37 @@ class page_manager_timesheets extends Page{
 			$crud->form->set('budget_id',$crud->form->recall('budget_id',null));
 			$crud->form->set('user_id',$crud->form->recall('user_id',null));
 		}
+	}
+    function page_import(){
+        $f=$this->add('Form');
+        $f->add('View_Hint',null,'hint')->set('Why not make your own importer? Fork us on github, then modify
+                page/team/timesheets.php file');
+
+        $importers=$this->api->pathfinder->searchDir('php',
+                'Controller/Importer');
+        $importers=str_replace('.php','',$importers);
+        $importers=array_combine($importers,$importers);
+
+		$f->addField('dropdown','format')
+			->setValueList($importers);
+		$f->addField('text','data');
+        $f->addSubmit('Import');
+
+		$f->onSubmit(function($f) use($importers){
+
+			if(!in_array($f->get('format'),$importers)){
+                throw $f->exception('No Such Importer','ValidityCheck')->setField('format');
+            }
+                
+
+			$imp_c=$f->add('Controller_Importer_'.$f->get('format'));
+
+			$count=$imp_c->importFromText($f->get('data'));
+
+			return $f->js()->univ()->successMessage('Imported '.$count.' records')
+                ->closeDialog()->location($f->api->getDestinationURL('..'));
+
+		});
 	}
 }
 class ReportQuickSearch extends QuickSearch {

@@ -27,6 +27,3 @@ class FormAndSave extends MVCForm {
         return true;
     }
 }
-
-
-

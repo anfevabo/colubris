@@ -6,8 +6,6 @@ class Colubris extends ApiFrontend {
 	function init(){
 		parent::init();
 
-		$this->showExecutionTime();
-
 		// Keep this if you are going to use database
 		$this->dbConnect();
 
@@ -75,6 +73,7 @@ class Colubris extends ApiFrontend {
                 }
 
                 $m->addMenuItem('Welcome','team');
+                $m->addMenuItem('Time Entry','team/entry');
                 //$m->addMenuItem('Development Priorities','team/timesheets');
                 // TODO:
                 $m->addMenuItem('Timesheets','team/timesheets');

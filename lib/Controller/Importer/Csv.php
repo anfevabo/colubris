@@ -16,8 +16,9 @@ class Controller_Importer_Csv extends Controller_Importer {
 
 
 	function set_user($val){
-		// admins only - check for user correspondence fist
-		//$this->task->set('user_id',
+        if($this->api->isManager()){
+            $this->task->set('user_id',$val);
+        }
 	}
 	function set_date($val){
 		$this->task->set('date',$val);

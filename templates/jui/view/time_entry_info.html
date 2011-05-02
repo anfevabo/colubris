@@ -1,0 +1,35 @@
+<h1>Time Entry</h1>
+
+<p>All the members of the team enter time they have worked into the system on a regular basis. It is very improtant that you enter time as soon as possible. Colubris has many different ways of entering timesheets which fall into 3 categories: <ul>
+<li>1. Automated Time Entry — Time Tracking application uses URL to publish</li>
+<li>2. Manual entry of completed tasks</li>
+<li>3. Import data through several supported formats</li>
+</ul>
+</p>
+
+<h2>Automated Time Entry</h2>
+<p>Data should be sent either through GET or POST request to the following URL: </p>
+<pre><?$url?></pre>
+<p>Arguments and values:
+<ul>
+<li><b>title</b> (mandatory) — Title of the completed task</li>
+<li><b>date</b> (mandatory) — Date of the task</li>
+<li><b>minutes</b> (mandatory) — How many minutes have you worked</li>
+<li>start — Time when started work in format hh:mm</li>
+<li>end — Time when started work in format hh:mm</li>
+<li>budget_id - Automatically set budget, if you know ID</li>
+</ul>
+</p>
+
+<h2>Supported Software</h2>
+<p>Some time tracking software would already have ability to report time Live through URL pushing:</p>
+<li><a href="http://www.celmaro.com/minco/">Minco by Celmario</a> (Mac)  — Supports GET/POST push when task is completed. Use the following URL though:
+<pre>
+    <?$minco_url?>
+</pre>
+</li> 
+</ul>
+<h3>Adding support in your Time Tracking Software</h3>
+<p>If your software is not listed, but does provide GET/POST supoprt, please contribute the necessary code to Colubris on <a href="http://github.com/agiletech/colubris">GitHub Project Page</a> inside <a href="https://github.com/agiletech/colubris/blob/master/templates/jui/view/time_entry_info.html">this page</a>.</p>
+
+<?$Content?>
