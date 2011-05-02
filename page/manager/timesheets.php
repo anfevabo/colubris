@@ -45,6 +45,12 @@ class page_manager_timesheets extends Page{
 			/*$crud->onSubmit(function() use($crud){
 					});
 					*/
+			$crud->form->onSubmit(function($f) use ($crud){
+				$f->memorize('budget_id',$f->get('budget_id'));
+				$f->memorize('user_id',$f->get('user_id'));
+			});
+			$crud->form->set('budget_id',$crud->form->recall('budget_id',null));
+			$crud->form->set('user_id',$crud->form->recall('user_id',null));
 		}
 	}
 }

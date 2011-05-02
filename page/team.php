@@ -16,7 +16,7 @@ class page_team extends Page {
 
 
         $m=$this->add('Model_Developer_Stats');
-        $m->setDateRange(date('Y-m-d',strtotime('last monday')),date('Y-m-d'));
+        $m->setDateRange(date('Y-m-d',strtotime('last monday',strtotime('sunday'))),date('Y-m-d'));
         $data=$m->getRows(array('id','name','hours_today'));
         $result=array();
         foreach($data as $row){
@@ -31,7 +31,7 @@ class page_team extends Page {
             ->where('week(date)-if(weekday(date)=6,1,0)=week(now())')
             ->do_getAssoc();
 
-        $min=strtotime('last monday')*1000;
+        $min=strtotime('last monday',strtotime('sunday'))*1000;
         $max=strtotime('-2 days',strtotime('sunday'))*1000;
         $max=strtotime('+20 hours',strtotime('-2 days',strtotime('sunday')))*1000;
 

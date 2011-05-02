@@ -43,10 +43,10 @@ class page_team_timesheets extends Page{
 
             }
         }else{
-			$crud->form->onSubmit(function() use ($crud){
-				$crid->memorize('budget_id',$crud->form->get('budget_id'));
+			$crud->form->onSubmit(function($f) use ($crud){
+				$f->memorize('budget_id',$f->get('budget_id'));
 			});
-			$crud->form->set('budget_id',$crud->recall('budget_id',null));
+			$crud->form->set('budget_id',$crud->form->recall('budget_id',null));
 		}
 	}
 }
