@@ -100,6 +100,7 @@ class Colubris extends ApiFrontend {
                     $this->api->redirect('/');
                 }
                 $m->addMenuItem('Users','admin/users');
+                $m->addMenuItem('Developers','admin/developers');
                 $m->addMenuItem('Files','admin/filestore');
                 break;
 

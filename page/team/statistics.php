@@ -33,7 +33,12 @@ class DeveloperChart extends Chart {
         $d=$this->add('Model_Developer');
         $developers=$d->getRows();
 
-        $min=strtotime('last monday',strtotime('-'.$week_offset.' weeks'));
+		if(date('Y-m-d',strtotime('-'.$week_offset.' weeks'))==date('Y-m-d',strtotime('monday',strtotime('-'.$week_offset.
+							' weeks')))){
+			$min=strtotime(date('Y-m-d',strtotime('-'.$week_offset.' weeks')));
+		}else{
+			$min=strtotime('last monday',strtotime('-'.$week_offset.' weeks'));
+		}
         $max=strtotime('+20 hours',strtotime('-2 days',strtotime('sunday',strtotime('-'.$week_offset.' weeks'))));
         $sun=strtotime('+20 hours',strtotime('sunday',strtotime('-'.$week_offset.' weeks')));
 

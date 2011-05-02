@@ -5,7 +5,7 @@ class page_manager_timesheets extends Page{
 	function initMainPage(){
         $quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
 		$crud=$this->add('CRUD');
-		$m=$crud->setModel('Timesheet',array('title','user','budget','date','minutes'));
+		$m=$crud->setModel('Timesheet',array('title','user','budget','user_id','budget_id','date','minutes'));
         if($grid=$crud->grid){
             $grid->addPaginator(50);
             $grid->addTotals();
@@ -40,7 +40,12 @@ class page_manager_timesheets extends Page{
                 $grid->js()->reload()->execute();
 
             }
-        }
+        }else{
+			$crud->form->set('date',date('Y-m-d'));
+			/*$crud->onSubmit(function() use($crud){
+					});
+					*/
+		}
 	}
 }
 class ReportQuickSearch extends QuickSearch {

@@ -7,7 +7,7 @@ class Model_Developer extends Model_User {
 
         $this->addField('timesheets_tw')->calculated(true);
         $this->addField('reports_tw')->calculated(true);
-        $this->addField('weekly_target')->datatype('int')->calculated(true);
+        $this->addField('weekly_target')->datatype('int');
     }
 
     function reportsDQ(){
@@ -23,9 +23,6 @@ class Model_Developer extends Model_User {
         return $this->add('Model_Timesheet')->dsql()
             ->where('user_id=u.id')
             ;
-    }
-    function calculate_weekly_target(){
-        return 40;
     }
     function calculate_timesheets_tw(){
         return 

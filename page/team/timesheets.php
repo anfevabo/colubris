@@ -42,7 +42,12 @@ class page_team_timesheets extends Page{
                 $grid->js()->reload()->execute();
 
             }
-        }
+        }else{
+			$crud->form->onSubmit(function() use ($crud){
+				$crid->memorize('budget_id',$crud->form->get('budget_id'));
+			});
+			$crud->form->set('budget_id',$crud->recall('budget_id',null));
+		}
 	}
 }
 class ReportQuickSearch extends QuickSearch {
