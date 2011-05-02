@@ -1,5 +1,5 @@
 <?php
-class page_team_statistics extends Page {
+class page_manager_statistics extends Page {
     function init(){
         parent::init();
 

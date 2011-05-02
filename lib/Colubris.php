@@ -77,7 +77,6 @@ class Colubris extends ApiFrontend {
                 //$m->addMenuItem('Development Priorities','team/timesheets');
                 // TODO:
                 $m->addMenuItem('Timesheets','team/timesheets');
-                $m->addMenuItem('Statistics','team/statistics');
                 break;
 
             case 'manager':
@@ -85,6 +84,7 @@ class Colubris extends ApiFrontend {
                     $this->api->redirect('/');
                 }
                 $m->addMenuItem('Home','manager');
+                $m->addMenuItem('Statistics','manager/statistics');
                 $m->addMenuItem('Reports','manager/reports'); // review all reports in system - temporary
                 $m->addMenuItem('Timesheets','manager/timesheets'); // review all reports in system - temporary
             
