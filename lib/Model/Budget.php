@@ -34,7 +34,7 @@ class Model_Budget extends Model_Table {
             ;
 
         $u=$this->api->getUser();
-        if($u->get('is_client')){
+        if($u->isInstanceLoaded() && $u->get('is_client')){
             $this->addCondition('client_id',$u->get('client_id'));
         }
 	}

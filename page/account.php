@@ -3,7 +3,7 @@ class page_account extends Page {
     function init(){
         parent::init();
 
-        $l=$this->add('Columns');
+        $l=$this->api->add('Columns');
 
         // Left side form
         $col=$l->addColumn('50%');

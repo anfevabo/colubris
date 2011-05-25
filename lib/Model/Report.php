@@ -12,7 +12,13 @@ class Model_Report extends Model_Table {
 
 		$u=$this->newField('user_id')->refModel('Model_User');
         $u->defaultValue($this->api->getUserID());
-        if(!$this->api->getUser()->get('is_admin')){
+        $lu = $this->api->getUser();
+        if ($lu->isInstanceLoaded()){
+            $admin = $lu->get("is_admin");
+        } else {
+            $admin = false;
+        }
+        if(!$admin){
             $u->system(true);
             $this->setMasterField('user_id',$this->api->getUserID());
         }

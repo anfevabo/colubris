@@ -15,7 +15,4 @@ class ReportGrid extends MVCGrid {
 			array($field=>$this->current_row['id'],$this->name.'_'.$field=>$this->current_row['id'])).'\')">'.
 			$this->current_row[$field].'</a>';
 	}
-    function defaultTemplate(){
-        return array('grid_striped');
-    }
 }

@@ -28,7 +28,7 @@ class page_manager extends Page {
         //$g->dq->where('date>now()-interval 1 week');
         $g->addPaginator(10);
 
-        $g=$this->add('MVCGrid',null,'developer_stats',array('grid_striped'));
+        $g=$this->add('MVCGrid',null,'developer_stats');
         $m=$g->setModel('Developer',array('name','timesheets_tw','reports_tw','last_timesheet'));
         //$g->dq->where('date>now()-interval 1 week');
         $g->addPaginator(10);

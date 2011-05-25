@@ -5,6 +5,7 @@ class page_manager_clients extends Page_EntityManager {
 	function initMainPage(){
 		parent::initMainPage();
 
+		$this->grid->addFormatter('name','fullwidth');
 		$this->grid->addColumnPlain('expander','users','Users');
 	}
 	function page_users(){

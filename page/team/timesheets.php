@@ -3,13 +3,13 @@
 class page_team_timesheets extends Page{
 
 	function initMainPage(){
-        $quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
 		$crud=$this->add('CRUD');
         $m=$this->add('Model_Timesheet');
         $m->setMasterField('user_id',$this->api->getUserID());
         $m->getField('date')->defaultValue(date('Y-m-d'));
 		$crud->setModel($m,array('title','budget_id','date','minutes'));
         if($grid=$crud->grid){
+			$quicksearch=$grid->add('ReportQuickSearch',null,'quick_search',array('form/quicksearch'));
             $grid->addPaginator(50);
             $grid->addTotals();
             $grid->dq->order('date desc,id desc');
@@ -54,7 +54,7 @@ class ReportQuickSearch extends QuickSearch {
     function init(){
         parent::init();
 
-        //$this->setFormClass('horizontal');
+        $this->setFormClass('horizontal');
         $this->addField('checkbox','no_budget','n/b');
         $this->addField('autocomplete','budget_id','B: ')->setModel('Budget');
         $this->addField('DatePicker','from','Date: ')->setAttr('style','width: 100px');
@@ -67,5 +67,10 @@ class ReportQuickSearch extends QuickSearch {
         if($this->get('budget_id'))$q->where('budget_id',$this->get('budget_id'));
         parent::applyDQ($q);
     }
+	/*
+	function defaultTemplate(){
+		return array('form_empty');
+	}
+	*/
 }
 
