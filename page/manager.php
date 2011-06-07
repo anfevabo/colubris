@@ -15,10 +15,21 @@ class page_manager extends Page {
         //$g->dq->where('date>now()-interval 1 week');
         $g->addPaginator(10);
 
+//
+        $g = $this->add('Customlib_ManagerDeveloperStatsGrid', null, 'developer_stats');
+        $m = $g->setModel('Developer_Stats', array('name', 'hours_today', 'hours_lastday', 'hours_week', 'hours_lastweek', 'hours_month', 'hours_lastmonth','weekly_target'));
+//  $g->dq->where('date>now()-interval 1 week');
+        $g->addColumnPlain('expander', 'userprojects', 'View Projects');
+        $g->addPaginator(10);
+    }
 
-        $g = $this->add('MVCGrid', null, 'developer_stats');
-        $m = $g->setModel('Developer', array('name', 'timesheets_tw', 'reports_tw', 'last_timesheet'));
-        //$g->dq->where('date>now()-interval 1 week');
+    function page_userprojects() {
+        $this->api->stickyGET('id');
+        $g = $this->add('MVCGrid');
+        $m = $g->setModel('Timesheet', array( 'budget', 'title', 'date', 'minutes'));
+        $m->addCondition('user_id', $_GET['id']);
+        $g->dq->where('date>now()-interval 1 month');
+        $g->dq->order('date desc,id desc');
         $g->addPaginator(10);
     }
 
@@ -44,6 +55,7 @@ class page_manager extends Page {
 
     function defaultTemplate() {
         if ($this->api->page == 'manager'
+
             )return array('page/manager');
         return parent::defaultTemplate();
     }
