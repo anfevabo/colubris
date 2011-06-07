@@ -28,6 +28,10 @@ class Model_Budget extends Model_Table {
 			->datatype('int')
 			->calculated(true)
             ;
+    $this->newField('days_spent')
+			->datatype('int')
+			->calculated(true)
+            ;
 
 		$this->newField('project_id')
 			->refModel('Model_Project')
@@ -48,6 +52,13 @@ class Model_Budget extends Model_Table {
 			->dsql()
 			->field('round(sum(R.amount/60/7),1)')
 			->where('R.budget_id=bu.id')
+			->select();
+	}
+        function calculate_days_spent(){
+		return $this->add('Model_Timesheet')
+			->dsql()
+			->field('sum(T.minutes)/60/8')
+			->where('T.budget_id=bu.id')
 			->select();
 	}
 }
