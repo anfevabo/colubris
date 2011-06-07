@@ -4,7 +4,7 @@ class page_manager_timesheets extends Page{
 
 	function initMainPage(){
         $quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
-		$crud=$this->add('CRUD');
+		$crud=$this->add('CRUD_Export');
 		$m=$crud->setModel('Timesheet',array('title','user','budget','user_id','budget_id','date','minutes'));
         if($grid=$crud->grid){
             $grid->addButton('Import')->js('click')->univ()->dialogURL('Import',
@@ -21,6 +21,9 @@ class page_manager_timesheets extends Page{
 
             //$crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
             $quicksearch->useGrid($grid)->useFields(array('title'));
+            //$quicksearch = $grid->addQuickSearch(array('title'), 'ReportQuickSearch');//useGrid($grid)->useFields(array('title'));
+
+            //$quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
 
             $this->add('H3')->set('Change Selected');
             $f=$this->add('MVCForm')->setFormClass('horizontal');
