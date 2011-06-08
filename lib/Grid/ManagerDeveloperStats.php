@@ -60,7 +60,6 @@ class Grid_ManagerDeveloperStats extends MVCGrid {
         if ($month == '') {
             $month = date('m');
         }
-
         $startdate = strtotime($year . '-' . $month . '-01');
         $enddate = time();
         if ($last) {
@@ -77,12 +76,7 @@ class Grid_ManagerDeveloperStats extends MVCGrid {
                 $startdate = strtotime($year . '-' . $month . '-01');
             }
         }
-
-
-
-
         $currentdate = $startdate;
-
         $days = 0;
         while ($currentdate <= $enddate) {
 

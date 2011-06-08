@@ -9,7 +9,8 @@ class page_team_budgets extends Page {
         $model->addCondition('closed', 'N');
 
         $c = $this->add('CRUD_TeamBudgets');
-        $c->setModel($model, array('name', "deadline", 'accepted', 'mandays', 'cur_mandays', 'project_id'));
+        $model->getField('days_spent')->caption('Cur Mandays');
+        $c->setModel($model, array('name', "deadline", 'accepted', 'mandays', 'days_spent', 'project_id'));
         if ($c->grid) {
 
            $g=$c->grid;

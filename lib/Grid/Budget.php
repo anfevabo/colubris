@@ -10,9 +10,9 @@ class Grid_Budget extends MVCGrid {
         parent::formatRow();
         $days = '';
         $mandays = (float) $this->current_row['mandays'];
-        $cur_mandays = (float) $this->current_row['cur_mandays'];
-        if ($mandays && $cur_mandays) {
-            $days = $mandays/$cur_mandays;
+        $days_spent = (float) $this->current_row['days_spent'];
+        if ($mandays && $days_spent) {
+            $days = ($days_spent/$mandays)*100;
         }
         if ($days != '' && $days > 100) {
             $days = '<div style="background:red;">' . $days . '</div>';

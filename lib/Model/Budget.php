@@ -28,6 +28,10 @@ class Model_Budget extends Model_Table {
 			->datatype('int')
 			->calculated(true)
             ;
+//                $this->newField('cur_mandays_developer')
+//			->datatype('int')
+//			->calculated(true)
+//            ;
     $this->newField('days_spent')
 			->datatype('int')
 			->calculated(true)
@@ -50,7 +54,7 @@ class Model_Budget extends Model_Table {
 	function calculate_cur_mandays(){
 		return $this->add('Model_Report')
 			->dsql()
-			->field('round(sum(R.amount/60/7),1)')
+			->field('round(sum(R.amount/60/8),1)')
 			->where('R.budget_id=bu.id')
 			->select();
 	}
@@ -61,4 +65,5 @@ class Model_Budget extends Model_Table {
 			->where('T.budget_id=bu.id')
 			->select();
 	}
+         
 }
