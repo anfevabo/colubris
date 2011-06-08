@@ -20,12 +20,15 @@ class ReportGrid extends MVCGrid {
         $quoted = (float) $this->current_row['mandays'];
 
         if ($days_spent && $quoted) {
-           $difference = (float) ($quoted / $days_spent);
+           $difference = round((float) ( $days_spent/$quoted ) *100, 2);
 
            if($difference>100){
                 $difference = '<div style="background:red;">' . $difference . '</div>';
            }
                 $this->current_row['difference']=$difference;
+        }
+        if($days_spent){
+            $this->current_row['days_spent']=round($this->current_row['days_spent'],2);
         }
         $time = strtotime($this->current_row['deadline']);
 

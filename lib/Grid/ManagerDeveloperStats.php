@@ -15,7 +15,7 @@ class Grid_ManagerDeveloperStats extends MVCGrid {
         $hours_week = (float) $this->current_row['hours_week'];
         $hours_month = (float) $this->current_row['hours_month'];
         $hours_lastmonth = (float) $this->current_row['hours_lastmonth'];
-        if ($weekly_target) {
+         if ($weekly_target) {
             if ($hours_week) {
                 $day = date('w');
                 if ($day == 6 || $day == 0) {
@@ -26,12 +26,18 @@ class Grid_ManagerDeveloperStats extends MVCGrid {
                     $this->current_row['hours_week'] = '<div style="background:red;">' . $this->current_row['hours_week'] . '</div>';
                 }
             }
+            else{
+                $this->current_row['hours_week']=0;
+            }
             if ($hours_lastweek) {
 
                 $act_target = $weekly_target;
                 if ($act_target > $hours_lastweek) {
                     $this->current_row['hours_lastweek'] = '<div style="background:red;">' . $this->current_row['hours_lastweek'] . '</div>';
                 }
+            }
+            else{
+                 $this->current_row['hours_lastweek']=0;
             }
             if ($hours_month) {
                 $working_days = $this->calculateWorkingDaysInMonth();
@@ -41,6 +47,9 @@ class Grid_ManagerDeveloperStats extends MVCGrid {
                     $this->current_row['hours_month'] = '<div style="background:red;">' . $this->current_row['hours_month'] . '</div>';
                 }
             }
+            else{
+                 $this->current_row['hours_month']=0;
+            }
             if ($hours_lastmonth) {
                 $working_days = $this->calculateWorkingDaysInMonth('', '', true);
                 $act_target = $hours_lastmonth / ($weekly_target / 5);
@@ -48,6 +57,12 @@ class Grid_ManagerDeveloperStats extends MVCGrid {
                     $this->current_row['hours_lastmonth'] = '<div style="background:red;">' . $this->current_row['hours_lastmonth'] . '</div>';
                 }
             }
+            else{
+                $this->current_row['hours_lastmonth']=0;
+            }
+        }
+        else{
+            $this->current_row['weekly_target']=0;
         }
 
         return $this->current_row;

@@ -20,24 +20,39 @@ class page_team extends Page {
         $model = $this->add("Model_Timesheet");
         $d = $this->add('Model_Developer_Stats')->loadData($this->api->getUserID());
         $target = $d->get('weekly_target');
-        $htd=$d->get('hours_today');
-        $htw=$d->get('hours_week');
-        $htm=$d->get('hours_month');
+        $htd = $d->get('hours_today');
+        $htw = $d->get('hours_week');
+        $htm = $d->get('hours_month');
+        if ($htd == ''||!$htd) {
 
-         $this->template->trySet('htd', $htd);
-        
+            $htd = 0;
+        }
+
+        if ($htw == ''||!$htw) {
+
+            $htw = 0;
+        }
+        if ($htm == ''||!$htm) {
+
+            $htm = 0;
+        }
+
+        $htm_display = $htm - $htw;
+
+        $this->template->trySet('htd', $htd);
+
         $this->template->trySet('htw', $htw);
         $status = $model->status($htw, $target);
         $this->template->trySet('htw_status', $status);
 
 
-      //  $result = $model->getHoursMonthly($this->api->getUserID());
-        $this->template->trySet('htm', $htm);
+        //  $result = $model->getHoursMonthly($this->api->getUserID());
+        $this->template->trySet('htm', $htm_display);
         $status = $model->status($htm, $target, 'monthly');
         $this->template->trySet('htm_status', $status);
 
         /* end left column data */
-        
+
         $m = $this->add('Model_Developer_Stats');
         $m->setDateRange(date('Y-m-d', strtotime('last monday', strtotime('sunday'))), date('Y-m-d'));
         $data = $m->getRows(array('id', 'name', 'hours_today'));
