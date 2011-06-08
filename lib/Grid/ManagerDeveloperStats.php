@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-class Customlib_ManagerDeveloperStatsGrid extends MVCGrid {
+class Grid_ManagerDeveloperStats extends MVCGrid {
 
     function formatRow() {
         parent::formatRow();
@@ -43,21 +43,13 @@ class Customlib_ManagerDeveloperStatsGrid extends MVCGrid {
             }
             if ($hours_lastmonth) {
                 $working_days = $this->calculateWorkingDaysInMonth('', '', true);
-                
                 $act_target = $hours_lastmonth / ($weekly_target / 5);
-
                 if ($act_target < $working_days) {
                     $this->current_row['hours_lastmonth'] = '<div style="background:red;">' . $this->current_row['hours_lastmonth'] . '</div>';
                 }
             }
         }
-//        if ($mandays && $cur_mandays) {
-//            $days = $mandays/$cur_mandays;
-//        }
-//        if ($days != '' && $days > 100) {
-//            $days = '<div style="background:red;">' . $days . '</div>';
-//        }
-//        $this->current_row['depleted'] = $days;
+
         return $this->current_row;
     }
 
@@ -77,17 +69,17 @@ class Customlib_ManagerDeveloperStatsGrid extends MVCGrid {
             if ($month == 0) {
 
                 $month = 1;
-                
+
                 $year = $year - 1;
-                $startdate = strtotime($year  . '-' . $month . '-01');
+                $startdate = strtotime($year . '-' . $month . '-01');
             } else {
 
-                $startdate = strtotime($year . '-' . $month  . '-01');
+                $startdate = strtotime($year . '-' . $month . '-01');
             }
         }
 
 
-        
+
 
         $currentdate = $startdate;
 

@@ -16,7 +16,7 @@ class page_manager extends Page {
         $g->addPaginator(10);
 
 //
-        $g = $this->add('Customlib_ManagerDeveloperStatsGrid', null, 'developer_stats');
+        $g = $this->add('Grid_ManagerDeveloperStats', null, 'developer_stats');
         $m = $g->setModel('Developer_Stats', array('name', 'hours_today', 'hours_lastday', 'hours_week', 'hours_lastweek', 'hours_month', 'hours_lastmonth','weekly_target'));
 //  $g->dq->where('date>now()-interval 1 week');
         $g->addColumnPlain('expander', 'userprojects', 'View Projects');

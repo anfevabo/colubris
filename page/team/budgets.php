@@ -8,7 +8,7 @@ class page_team_budgets extends Page {
         $model = $this->add('Model_Budget');
         $model->addCondition('closed', 'N');
 
-        $c = $this->add('Customlib_CRUDTeamBudgets');
+        $c = $this->add('CRUD_TeamBudgets');
         $c->setModel($model, array('name', "deadline", 'accepted', 'mandays', 'cur_mandays', 'project_id'));
         if ($c->grid) {
 

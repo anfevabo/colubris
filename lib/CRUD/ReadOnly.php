@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-class Customlib_CRUDReadOnly extends CRUD {
+class CRUD_ReadOnly extends CRUD {
     //put your code here
     public $allow_edit=false;
    	public $allow_add=false;

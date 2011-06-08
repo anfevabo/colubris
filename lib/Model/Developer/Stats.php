@@ -6,14 +6,9 @@ class Model_Developer_Stats extends Model_Developer {
 
     function init() {
         parent::init();
-//
-//        $this->addField('hours_today')
-//                ->caption()
-//                ->calculated(true);
-//
-//        $this->addField('hours_lastday')
-//                ->calculated(true);
-
+        $this->addField('hours_today')
+                ->caption('Hours Spent Today')
+                ->calculated(true);
         $this->addField('hours_week')
                 ->caption('This Week')
                 ->calculated(true);
@@ -35,18 +30,23 @@ class Model_Developer_Stats extends Model_Developer {
 
     function applyDateRange($q) {
         if (!$this->dr
+
             )$this->dr = array(date('Y-m-d'), date('Y-m-d'));
         $q->where('date(date)>=', $this->dr[0]);
         $q->where('date(date)<=', $this->dr[1]);
     }
 
     function calculate_hours_today() {
-        return $this->add('Model_Timesheet')
-                ->dsql()
-                ->where('T.user_id=u.id')
-                ->field('sum(minutes)/60')
-                ->where('date>now() - interval 1 day')
-                ->select();
+     //   $date = date('Y-m-d');
+        $q = $this->add('Model_Timesheet')->dsql();
+        $q->where('T.user_id=u.id');
+        $q->field('round(sum(minutes)/60)');
+        $q->where('date(date)>=', date('Y-m-d'));
+        $q->where('date(date)<=', date('Y-m-d'));
+
+        //->where('date>now() - interval 1 day')
+        // ->where('date(date)>=', $date)
+        return $q->select();
     }
 
     function calculate_hours_lastday() {
@@ -58,12 +58,14 @@ class Model_Developer_Stats extends Model_Developer {
         $q->where('date>now() - interval 2 day');
         return $q->select();
     }
+
     function calculate_hours_week() {
         return $this->add('Model_Timesheet')
                 ->dsql()
                 ->where('T.user_id=u.id')
                 ->field('round(sum(minutes)/60)')
-                ->where('date>now() - interval 1 week')
+                //->where('date>now() - interval 1 week')
+                ->where("YEARWEEK(date) = YEARWEEK(CURRENT_DATE)")
                 ->select();
     }
 
@@ -72,17 +74,18 @@ class Model_Developer_Stats extends Model_Developer {
 
         $q->where('T.user_id=u.id')
                 ->field('round(sum(minutes)/60)');
-        $q->where('date<now() - interval 1 week');
-        $q->where('date>now() - interval 2 week');
+        //  $q->where('date<now() - interval 1 week');
+        $q->where(" YEARWEEK(date) = YEARWEEK(CURRENT_DATE - INTERVAL 7 DAY) ");
+
         return $q->select();
     }
 
-     function calculate_hours_month() {
+    function calculate_hours_month() {
         return $this->add('Model_Timesheet')
                 ->dsql()
                 ->where('T.user_id=u.id')
                 ->field('round(sum(minutes)/60)')
-                ->where('date>now() - interval 1 week')
+                ->where(' SUBSTRING(date FROM 1 FOR 7) =  SUBSTRING(CURRENT_DATE  FROM 1 FOR 7)')
                 ->select();
     }
 
@@ -91,8 +94,12 @@ class Model_Developer_Stats extends Model_Developer {
 
         $q->where('T.user_id=u.id')
                 ->field('round(sum(minutes)/60)');
-        $q->where('date<now() - interval 1 week');
-        $q->where('date>now() - interval 2 week');
+//        SUBSTRING(ODate FROM 1 FOR 7) =
+        //SUBSTRING(CURRENT_DATE - INTERVAL 1 MONTH FROM 1 FOR 7)
+
+
+        $q->where(' SUBSTRING(date FROM 1 FOR 7) =  SUBSTRING(CURRENT_DATE - INTERVAL 1 MONTH FROM 1 FOR 7)');
+        //$q->where('date>now() - interval 2 month');
         return $q->select();
     }
 

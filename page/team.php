@@ -18,22 +18,22 @@ class page_team extends Page {
 
         /* left column data */
         $model = $this->add("Model_Timesheet");
-        $result = $model->getHoursToday($this->api->getUserID());
-        $this->template->trySet('htd', $result);
-
-
-        $d = $this->add('Model_Developer')->loadData($this->api->getUserID());
+        $d = $this->add('Model_Developer_Stats')->loadData($this->api->getUserID());
         $target = $d->get('weekly_target');
+        $htd=$d->get('hours_today');
+        $htw=$d->get('hours_week');
+        $htm=$d->get('hours_month');
 
-        $result = $model->getHoursWeekly($this->api->getUserID());
-        $this->template->trySet('htw', $result);
-        $status = $model->status($result, $target);
+         $this->template->trySet('htd', $htd);
+        
+        $this->template->trySet('htw', $htw);
+        $status = $model->status($htw, $target);
         $this->template->trySet('htw_status', $status);
 
 
-        $result = $model->getHoursMonthly($this->api->getUserID());
-        $this->template->trySet('htm', $result);
-        $status = $model->status($result, $target, 'monthly');
+      //  $result = $model->getHoursMonthly($this->api->getUserID());
+        $this->template->trySet('htm', $htm);
+        $status = $model->status($htm, $target, 'monthly');
         $this->template->trySet('htm_status', $status);
 
         /* end left column data */

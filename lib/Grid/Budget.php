@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-class Customlib_BudgetGrid extends MVCGrid {
+class Grid_Budget extends MVCGrid {
     function formatRow() {
         parent::formatRow();
         $days = '';
