@@ -171,7 +171,15 @@ class Colubris extends ApiFrontend {
     }
 
     function page_index($p) {
-        $this->api->redirect('intro');
+        
+        $u = $this->getUser();
+
+        if($u->get('is_client')){
+            $this->api->redirect('client/budgets');
+        }
+        else{
+            $this->api->redirect('intro');
+        }
     }
 
     function page_scope($p) {
