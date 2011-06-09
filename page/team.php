@@ -37,7 +37,7 @@ class page_team extends Page {
             $htm = 0;
         }
 
-        $htm_display = $htm - $htw;
+        //$htm_display = $htm - $htw;
 
         $this->template->trySet('htd', $htd);
 
@@ -47,7 +47,7 @@ class page_team extends Page {
 
 
         //  $result = $model->getHoursMonthly($this->api->getUserID());
-        $this->template->trySet('htm', $htm_display);
+        $this->template->trySet('htm', $htm);
         $status = $model->status($htm, $target, 'monthly');
         $this->template->trySet('htm_status', $status);
 
