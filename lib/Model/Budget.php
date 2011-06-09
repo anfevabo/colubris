@@ -36,6 +36,11 @@ class Model_Budget extends Model_Table {
 			->datatype('int')
 			->calculated(true)
             ;
+    $this->newField('days_spent_lastweek')
+			->datatype('int')
+            ->caption('Days Spent Last Week')
+			->calculated(true)
+            ;
 
 		$this->newField('project_id')
 			->refModel('Model_Project')
@@ -63,6 +68,14 @@ class Model_Budget extends Model_Table {
 			->dsql()
 			->field('sum(T.minutes)/60/8')
 			->where('T.budget_id=bu.id')
+			->select();
+	}
+        function calculate_days_spent_lastweek(){
+		return $this->add('Model_Timesheet')
+			->dsql()
+			->field('sum(T.minutes)/60/8')
+			->where('T.budget_id=bu.id')
+                        ->where(" YEARWEEK(date) = YEARWEEK(CURRENT_DATE - INTERVAL 7 DAY) ")
 			->select();
 	}
          
