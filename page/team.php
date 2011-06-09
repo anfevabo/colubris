@@ -81,14 +81,14 @@ class page_team extends Page {
 
         foreach ($data as $key => $row) {
             $target-=$row;
-            $temp = 0;
-            $target_temp = $d->get('weekly_target');
-            if ($target && $target_temp) {
+            $temp = 0;//changed here
+            $target_temp = $d->get('weekly_target'); //changed here
+            if ($target && $target_temp) {//changed here
                 $temp = round($target / $target_temp * 100);
             }
             $result[] = array(
                 (int) $key * 1000, // milis
-                max(temp, -50)
+                max(temp, -50)// note changed here
             );
         }
 
