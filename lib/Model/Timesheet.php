@@ -18,7 +18,7 @@ class Model_Timesheet extends Model_Table {
 
         if ($this->api->page != 'minco') {
             $u = $this->api->getUser();
-            if (!$u->get('is_admin')) {
+            if (!$u->get('is_admin') && !$u->get('is_client')) {
                 $this->setMasterField('user_id', $this->api->getUserID());
             }
         }

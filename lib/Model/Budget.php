@@ -46,7 +46,7 @@ class Model_Budget extends Model_Table {
 			->refModel('Model_Project')
             ;
 
-        $u=$this->api->getUser();
+//        $u=$this->api->getUser();
 //        if($u->isInstanceLoaded() && $u->get('is_client')){
 //            $this->addCondition('client_id',$u->get('client_id'));
 //        }
