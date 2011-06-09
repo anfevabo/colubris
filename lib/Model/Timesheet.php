@@ -73,6 +73,7 @@ class Model_Timesheet extends Model_Table {
         $result = $dql->do_getOne();
         return $result;
     }
+
     function getHoursLastMonth($userid) {
         $dql = $this->dsql();
         $dql->field('round(sum(minutes)/(60))');
@@ -97,11 +98,13 @@ class Model_Timesheet extends Model_Table {
         if ($type == 'monthly') {
             $working_days = $this->calculateWorkingDaysInMonth();
 
-            $act_target = $hours / ($target / 5);
-            if ($act_target < $working_days) {
-                return 'BEHIND SCHEDULE';
-            } else {
-                return 'ON TIME';
+            if ($target) {
+                $act_target = $hours / ($target / 5);
+                if ($act_target < $working_days) {
+                    return 'BEHIND SCHEDULE';
+                } else {
+                    return 'ON TIME';
+                }
             }
         }
         return '';
