@@ -107,7 +107,7 @@ class Model_Timesheet extends Model_Table {
                 }
             }
         }
-        return '';
+        return 'ON TIME';
     }
 
     function calculateWorkingDaysInMonth($year = '', $month = '') {
