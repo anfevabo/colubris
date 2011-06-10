@@ -4,8 +4,8 @@ class page_client_timesheets extends Page {
 
     function initMainPage() {
         $quicksearch = $this->add('ReportQuickSearch', null, null, array('form/quicksearch'));
-        $crud = $this->add('CRUD_Export');
-        $m = $crud->setModel('Timesheet', array('title', 'user', 'budget', 'user_id', 'budget_id', 'date', 'minutes'));
+        $crud = $this->add('CRUD_ExportReadOnly');
+        $m = $crud->setModel('Timesheet', array('title', 'user', 'budget', 'user_id', 'budget_id', 'date', 'minutes','amount_spent'));
         if ($grid = $crud->grid) {
             $grid->addButton('Import')->js('click')->univ()->dialogURL('Import',
                     $this->api->getDestinationURL('./import'));
@@ -32,6 +32,8 @@ class page_client_timesheets extends Page {
             $grid->last_column = 'user';
             $grid->makeSortable('user');
             $grid->last_column = 'minutes';
+            $grid->makeSortable();
+            $grid->last_column = 'amount_spent';
             $grid->makeSortable();
 
             //$crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
@@ -105,7 +107,7 @@ class page_client_timesheets extends Page {
                 });
     }
 
-    
+
 
 }
 

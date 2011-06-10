@@ -147,7 +147,7 @@ class Model_Timesheet extends Model_Table {
         while ($currentdate <= $enddate) {
 
             if ((date('D', $currentdate) == 'Sat') || (date('D', $currentdate) == 'Sun')) {
-
+                
             } else {
                 $days = $days + 1;
             }

@@ -53,6 +53,31 @@ class Grid_ClientBudget extends MVCGrid {
         $this->current_row['amount_eur'] = '<div align="right">' . $this->current_row['amount_eur'] . '</div>';
         $this->current_row['days_spent'] = '<div align="center">' . $this->current_row['days_spent'] . '</div>';
         $this->current_row['days_spent_lastweek'] = '<div align="center">' . $this->current_row['days_spent_lastweek'] . '</div>';
+        $this->current_row['total_budget_spent'] = $this->calcluateBudgetSpent($this->current_row['id']);
+    }
+
+    function calcluateBudgetSpent($id){
+        $project = $this->add('Model_Timesheet');
+
+
+        $project->addCondition('budget_id', $id);
+        //$q->field('amount_spent');
+         $result = $project->getRows();
+
+        $amount = 0;
+        foreach ($result as $row) {
+            //var_dump($row);
+            //exit;
+            if($row['amount_spent']){
+                $amount+=$row['amount_spent'];
+            }
+//            if (is_array($row)) {
+//                foreach ($row as $column) {
+//                    $amount += $amount;
+//                }
+//            }
+        }
+        return $amount;
     }
 
 }

@@ -16,19 +16,23 @@ class Model_Timesheet extends Model_Table {
         $this->newField('minutes')->datatype('int');
         $this->addField('budget_id')->refModel('Model_Budget');
         $this->addField('is_closed')->calculated(true);;
-        $this->addField('amount_spent')->caption("Amount Spent")
-                ->datatype('int')
-                ->calculated(true);
         if ($this->api->page != 'minco') {
             $u = $this->api->getUser();
             if (!$u->get('is_admin') && !$u->get('is_client')) {
                 $this->setMasterField('user_id', $this->api->getUserID());
             }
         }
-//        $this->newField('hours_spent')
-//                ->datatype('int')
-//                ->calculated(true);
+        $this->newField('hours_spent')
+                ->datatype('int')
+                ->calculated(true);
     }
+	  function calculate_hours_spent(){
+		  // TODO: Prashant: please test minco import script. The lack of this function
+		  // was raising exception
+		  return 'minutes';
+
+	  }
+
     function calculate_is_closed(){
            $q = $this->add('Model_Budget')->dsql();
         $q->where('id=T.budget_id');
@@ -36,17 +40,6 @@ class Model_Timesheet extends Model_Table {
         return $q->select();
     }
 
-     function calculate_amount_spent(){
-           $q = $this->add('Model_Payment')->dsql();
-        $q->where('user_id=T.user_id');
-        $q->where('budget_id=T.budget_id');
-        $q->field('round(T.minutes * hourly_rate /60, 2)');
-        return $q->select();
-    }
-    function total_amount_spent(){
-//        $model=$this->add('Model_Budget');
-//        $model->addCondition()
-    }
     function getHoursToday($userid) {
         $dql = $this->dsql();
         $dql->field('round(sum(minutes)/60)');
@@ -147,7 +140,7 @@ class Model_Timesheet extends Model_Table {
         while ($currentdate <= $enddate) {
 
             if ((date('D', $currentdate) == 'Sat') || (date('D', $currentdate) == 'Sun')) {
-
+                
             } else {
                 $days = $days + 1;
             }

@@ -23,12 +23,17 @@ class page_manager_budgets extends Page {
              $c->grid->last_column = 'mandays';
             $c->grid->makeSortable();
         //     $c->grid->last_column = 'pr';
-            $c->grid->getColumn('project_id')->makeSortable();
+//            $c->grid->getColumn('project_id')->makeSortable();
         }
     }
 
     function page_team() {
-        $g = $this->add('MVCGrid');
+      //  $g = $this->add('MVCGrid');
+        $this->api->stickyGET('id');
+        $crud=$this->add('CRUD');
+        $model=  $this->add('Model_Payment');
+        $model->addCondition('budget_id',$_GET['id']);
+        $crud->setModel($model,array('id','user','user_id','hourly_rate'));
     }
 
     function page_scope() {
