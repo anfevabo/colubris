@@ -15,7 +15,7 @@ class Model_Timesheet extends Model_Table {
         $this->newField('end');
         $this->newField('minutes')->datatype('int');
         $this->addField('budget_id')->refModel('Model_Budget');
-
+        $this->addField('is_closed')->calculated(true);;
         if ($this->api->page != 'minco') {
             $u = $this->api->getUser();
             if (!$u->get('is_admin') && !$u->get('is_client')) {
@@ -25,6 +25,12 @@ class Model_Timesheet extends Model_Table {
         $this->newField('hours_spent')
                 ->datatype('int')
                 ->calculated(true);
+    }
+    function calculate_is_closed(){
+           $q = $this->add('Model_Budget')->dsql();
+        $q->where('id=T.budget_id');
+        $q->field('closed');
+        return $q->select();
     }
 
     function getHoursToday($userid) {

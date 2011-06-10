@@ -6,8 +6,9 @@ class page_team_timesheets extends Page{
 		$crud=$this->add('CRUD');
         $m=$this->add('Model_Timesheet');
         $m->setMasterField('user_id',$this->api->getUserID());
+         $m->addCondition('is_closed','N');
         $m->getField('date')->defaultValue(date('Y-m-d'));
-		$crud->setModel($m,array('title','budget_id','date','minutes'));
+		$crud->setModel($m,array('title','budget','budget_id','date','minutes','is_closed'));
         if($grid=$crud->grid){
 			$quicksearch=$grid->add('ReportQuickSearch',null,'quick_search',array('form/quicksearch'));
             $grid->addPaginator(50);
@@ -27,7 +28,9 @@ class page_team_timesheets extends Page{
             $f_sel=$f->addField('line','sel');
             $grid->addSelectable($f_sel);
 
-            $ts=$f->setModel('Timesheet',array('client_id','project_id','budget_id','requirement_id','task_id'));
+            $ts=$f->setModel('Timesheet',
+                    array('client_id','project_id','budget_id','requirement_id','task_id')
+                    );
 
             if($f->isSubmitted()){
                 $q=$ts->dsql();
@@ -56,7 +59,9 @@ class ReportQuickSearch extends QuickSearch {
 
         $this->setFormClass('horizontal');
         $this->addField('checkbox','no_budget','n/b');
-        $this->addField('autocomplete','budget_id','B: ')->setModel('Budget');
+         $budget=$this->add('Model_Budget');
+        $budget->addCondition('closed',false);
+        $this->addField('autocomplete','budget_id','B: ')->setModel($budget);
         $this->addField('DatePicker','from','Date: ')->setAttr('style','width: 100px');
         $this->addField('DatePicker','to','-')->setAttr('style','width: 100px');
     }

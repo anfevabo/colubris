@@ -5,7 +5,9 @@ class page_manager_timesheets extends Page {
     function initMainPage() {
         $quicksearch = $this->add('ReportQuickSearch', null, null, array('form/quicksearch'));
         $crud = $this->add('CRUD_Export');
-        $m = $crud->setModel('Timesheet', array('title', 'user', 'budget', 'user_id', 'budget_id', 'date', 'minutes'));
+        $timesheet=  $this->add('Model_Timesheet');
+        $timesheet->addCondition('is_closed','N');
+        $m = $crud->setModel($timesheet, array('title', 'user','budget', 'user_id', 'budget_id', 'date', 'minutes','is_closed'));
         if ($grid = $crud->grid) {
             $grid->addButton('Import')->js('click')->univ()->dialogURL('Import',
                     $this->api->getDestinationURL('./import'));
@@ -103,7 +105,9 @@ class ReportQuickSearch extends QuickSearch {
         //$this->setFormClass('horizontal');
         $this->addField('checkbox', 'no_budget', 'n/b');
         $this->addField('autocomplete', 'user_id', 'U: ')->setModel('Developer');
-        $this->addField('autocomplete', 'budget_id', 'B: ')->setModel('Budget');
+        $budget=$this->add('Model_Budget');
+        $budget->addCondition('closed',false);
+        $this->addField('autocomplete', 'budget_id', 'B: ')->setModel($budget);
         $this->addField('DatePicker', 'from', 'Date: ')->setAttr('style', 'width: 100px');
         $this->addField('DatePicker', 'to', '-')->setAttr('style', 'width: 100px');
     }
