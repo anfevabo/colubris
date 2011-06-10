@@ -5,7 +5,7 @@ class page_manager_budgets extends Page {
     //public $controller='Controller_Budget';
 
     function initMainPage() {
-        $c = $this->add('CRUD');
+        $c = $this->add('CRUD_ManagerBudgets');
         $c->setModel('Budget');
 
         if ($c->grid) {
