@@ -31,6 +31,7 @@ class Model_User extends Model_Table {
 		$this->addField('is_admin')->datatype('boolean');
 		$this->addField('is_manager')->datatype('boolean');
 		$this->addField('is_developer')->datatype('boolean');
+                $this->addField('is_timereport')->datatype('boolean')->caption('Is Time Reports');
 		$this->addField('is_client')->datatype('boolean')->calculated(true);
 
 		$this->addField('hash');//->visible(false);

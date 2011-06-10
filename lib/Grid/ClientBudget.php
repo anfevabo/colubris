@@ -40,6 +40,8 @@ class Grid_ClientBudget extends MVCGrid {
         if (!$quoted) {
 
             $this->current_row['mandays'] = 0;
+        } else {
+            $this->current_row['depleted'] = round(($this->current_row['days_spent'] / $this->current_row['mandays']) * 100, 2);
         }
         if (!(float) $this->current_row['amount_eur']) {
 

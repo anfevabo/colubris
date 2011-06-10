@@ -72,7 +72,9 @@ class Colubris extends ApiFrontend {
                 $m->addMenuItem('Welcome', 'client/welcome');
                 $m->addMenuItem('Budgets', 'client/budgets');
                 $m->addMenuItem('Project Status', 'client/status');
+                if($u->get('is_timereport')){
                 $m->addMenuItem('Time Reports', 'client/timesheets');
+                }
                 break;
 
             case 'team':

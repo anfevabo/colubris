@@ -17,6 +17,7 @@ class page_client_budgets extends Page {
 
         $g = $this->add('Grid_ClientBudget');
         $m = $g->setModel($budget, array('name', 'deadline', 'accepted','closed', 'amount_eur', 'mandays', 'days_spent', 'days_spent_lastweek', 'project'));
+      $g->addColumn('html', 'depleted', 'Depleted %');
         $g->last_column = 'deadline';
         $g->makeSortable();
         $g->last_column = 'accepted';

@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD `is_timereport` ENUM( 'Y', 'N' ) NOT NULL DEFAULT 'Y'
