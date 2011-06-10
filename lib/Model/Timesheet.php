@@ -26,6 +26,13 @@ class Model_Timesheet extends Model_Table {
                 ->datatype('int')
                 ->calculated(true);
     }
+	  function calculate_hours_spent(){
+		  // TODO: Prashant: please test minco import script. The lack of this function
+		  // was raising exception
+		  return 'minutes';
+
+	  }
+
     function calculate_is_closed(){
            $q = $this->add('Model_Budget')->dsql();
         $q->where('id=T.budget_id');
