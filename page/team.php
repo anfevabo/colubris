@@ -88,7 +88,7 @@ class page_team extends Page {
             }
             $result[] = array(
                 (int) $key * 1000, // milis
-                max(temp, -50)// note changed here
+                max($temp, -50)// note changed here
             );
         }
 

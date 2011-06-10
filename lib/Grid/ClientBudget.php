@@ -37,8 +37,17 @@ class Grid_ClientBudget extends MVCGrid {
         } else {
             $this->current_row['days_spent_lastweek'] = 0;
         }
+        if (!$quoted) {
+
+            $this->current_row['mandays'] = 0;
+        }
+        if (!(float) $this->current_row['amount_eur']) {
+
+            $this->current_row['amount_eur'] = 0;
+        }
         $this->current_row['mandays'] = '<div align="center">' . $this->current_row['mandays'] . '</div>';
         $this->current_row['accepted'] = '<div align="center">' . $this->current_row['accepted'] . '</div>';
+        $this->current_row['closed'] = '<div align="center">' . $this->current_row['closed'] . '</div>';
         $this->current_row['amount_eur'] = '<div align="right">' . $this->current_row['amount_eur'] . '</div>';
         $this->current_row['days_spent'] = '<div align="center">' . $this->current_row['days_spent'] . '</div>';
         $this->current_row['days_spent_lastweek'] = '<div align="center">' . $this->current_row['days_spent_lastweek'] . '</div>';

@@ -14,6 +14,12 @@ class page_team_budgets extends Page {
         if ($c->grid) {
 
            $g=$c->grid;
+           $c->grid->last_column = 'deadline';
+            $c->grid->makeSortable();
+             $c->grid->last_column = 'accepted';
+            $c->grid->makeSortable();
+             $c->grid->last_column = 'mandays';
+            $c->grid->makeSortable();
            //Depleted % = Cur Mandays / Mandays (Precentage). Red if its >100%
            //refer to http://agiletoolkit.org/doc/grid/columns
             $g->addColumn('html', 'depleted', 'Depleted %');
