@@ -3,7 +3,7 @@
 class Model_Payment extends Model_Table {
 
     public $entity_code = 'payment';
-    public $table_alias = 'p';
+    public $table_alias = 'pa';
 
     function defineFields() {
         parent::defineFields();

@@ -5,10 +5,21 @@ class page_manager_statistics extends Page {
     function init() {
         parent::init();
 
+<<<<<<< Updated upstream
         for ($x = 0; $x < 10; $x++) {
             $this->add('DeveloperChart')
                     ->draw($x);
+=======
+        $tabs=$this->add('Tabs');
+
+        $t=$tabs->addTab('Developer Productivity');
+        for($x=0;$x<10;$x++){
+            $t->add('DeveloperChart')
+                ->draw($x);
+>>>>>>> Stashed changes
         }
+
+        $t=$tabs->addTab('Developer Productivity');
     }
 
 }

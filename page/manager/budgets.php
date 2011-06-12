@@ -6,34 +6,29 @@ class page_manager_budgets extends Page {
 
     function initMainPage() {
         $c = $this->add('CRUD_ManagerBudgets');
-        $c->setModel('Budget');
+        $c->setModel('Budget_Active',array('id','name','project','client','deadline','amount_eur','amount_spent','team'));
 
         if ($c->grid) {
-            $c->grid->addColumnPlain('expander', 'team', 'Team Access');
+            $c->grid->addColumnPlain('template,expander', 'team', 'Team')->setTemplate('<?$team?> people');
             $c->grid->addColumnPlain('expander', 'scope', 'Budget Scope');
             $c->grid->getController()->scopeFilter($c->grid->dq);
-            $c->grid->last_column = 'deadline';
-            $c->grid->makeSortable();
-             $c->grid->last_column = 'accepted';
-            $c->grid->makeSortable();
-             $c->grid->last_column = 'closed';
-            $c->grid->makeSortable();
-             $c->grid->last_column = 'amount_eur';
-            $c->grid->makeSortable();
-             $c->grid->last_column = 'mandays';
-            $c->grid->makeSortable();
-        //     $c->grid->last_column = 'pr';
-//            $c->grid->getColumn('project_id')->makeSortable();
         }
     }
 
     function page_team() {
       //  $g = $this->add('MVCGrid');
-        $this->api->stickyGET('id');
+        $this->api->stickyGET('budget_id');
         $crud=$this->add('CRUD');
         $model=  $this->add('Model_Payment');
-        $model->addCondition('budget_id',$_GET['id']);
+        $model->setMasterField('budget_id',$_GET['budget_id']);
         $crud->setModel($model,array('id','user','user_id','hourly_rate'));
+
+        $this->add('H3')->set('Unaccountable:');
+        $m=$this->add('Model_Timesheet')
+            ->addCondition('budget_id',$_GET['budget_id']);
+        $g=$this->add('MVCGrid');
+        $g->setModel($m);
+        $g->dq->group('user_id');
     }
 
     function page_scope() {

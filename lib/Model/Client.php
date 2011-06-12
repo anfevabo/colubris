@@ -16,15 +16,49 @@ class Model_Client extends Model_Table {
 		$this->newField('name')
 			;
 
-			;
+        $this->newField('project_count')
+            ->caption('Projects')
+            ->calculated(true);
 
-            /*
-        $u=$this->api->getUser();
-        if($u->get('is_client')){
-            $this->addCondition('id',$u->get('client_id'));
-        }
-        */
+        $this->newField('total_budgets')
+            ->type('money')
+            ->calculated(true);
 
+        $this->newField('total_expense')
+            ->type('money')
+            ->calculated(true);
 
+        $this->newField('profitability')
+            ->calculated(true);
 	}
+    function calculate_project_count(){
+        return $this->add('Model_Project')
+            ->dsql()
+            ->field('count(*)')
+            ->where('pr.client_id=cl.id')
+            ->select()
+            ;
+    }
+    function calculate_total_budgets(){
+        return $this->add('Model_Budget')
+            ->addCondition('accepted',true)
+            ->dsql()
+            ->debug()
+            ->field('sum(amount_eur)')
+            ->join('project pr','pr.id=bu.project_id','left')
+            ->where('pr.client_id=cl.id')
+            ->select()
+            ;
+    }
+    function calculate_total_expense(){
+        return $this->add('Model_Timesheet')
+            ->addCondition('accepted',true)
+            ->dsql()
+            ->debug()
+            ->field('sum(amount_eur)')
+            ->join('project pr','pr.id=bu.project_id','left')
+            ->where('pr.client_id=cl.id')
+            ->select()
+            ;
+    }
 }

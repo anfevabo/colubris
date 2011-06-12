@@ -6,11 +6,14 @@ class Model_Budget extends Model_Table {
 	function defineFields(){
 		parent::defineFields();
 
-		$this->newField('name');
-		$this->newField('deadline')->datatype('date');
-		$this->newField('accepted')->datatype('boolean');
-		$this->newField('closed')->datatype('boolean');
-		$this->newField('amount_eur')->datatype('money');
+		$this->newField('name')->sortable(true);
+		$this->newField('deadline')->datatype('date')->sortable(true);
+		$this->newField('accepted')->datatype('boolean')->sortable(true);
+		$this->newField('closed')->datatype('boolean')->sortable(true);
+		$this->newField('amount_eur')->datatype('money')->sortable(true);
+        $this->newField('amount_spent')->datatype('money')->calculated(true)->sortable(true);
+
+
 		$this->newField('success_criteria')
 			->datatype('list')
 			->listData(array(
@@ -43,14 +46,39 @@ class Model_Budget extends Model_Table {
             ;
 
 		$this->newField('project_id')
+            ->sortable(true)
 			->refModel('Model_Project')
             ;
+        $this->addField('client')
+            ->sortable(true)
+            ->calculated(true);
+
+        $this->addField('team')
+            ->sortable(true)
+            ->calculated(true);
 
 //        $u=$this->api->getUser();
 //        if($u->isInstanceLoaded() && $u->get('is_client')){
 //            $this->addCondition('client_id',$u->get('client_id'));
 //        }
 	}
+    function calculate_client(){
+        return $this->add('Model_Client')
+            ->dsql()
+            ->join('project pr','cl.id=pr.client_id')
+            ->field('cl.name')
+            ->limit(1)
+            ->where('pr.id=bu.project_id')
+            ->select();
+    }
+    function calculate_team(){
+        return $this->add('Model_Payment')
+            ->dsql()
+            ->where('pa.budget_id=bu.id')
+            ->field('count(*)')
+            ->select();
+
+    }
 	function scopeFilter($dsql){
 		if($sc=$this->api->recall('scope')){
 			if($sc['client'])$dsql->where('client_id',$sc['client']);
@@ -63,6 +91,15 @@ class Model_Budget extends Model_Table {
 			->where('R.budget_id=bu.id')
 			->select();
 	}
+    function calculate_amount_spent(){
+		return $this->add('Model_Timesheet')
+			->dsql()
+            ->join('payment pa','pa.user_id=T.user_id')
+			->field('sum(T.minutes)/60*pa.hourly_rate')
+			->where('T.budget_id=bu.id')
+            ->where('pa.budget_id=bu.id')
+			->select();
+    }
         function calculate_days_spent(){
 		return $this->add('Model_Timesheet')
 			->dsql()
