@@ -1,5 +1,5 @@
 <?
-
+throw new Exception_Obsolete('Reports are no longer used, use Timesheet');
 class Model_Report extends Model_Table {
 
     public $entity_code = 'report';

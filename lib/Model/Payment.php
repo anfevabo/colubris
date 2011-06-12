@@ -12,25 +12,32 @@ class Model_Payment extends Model_Table {
         $this->newField('budget_id')->refModel('Model_Budget');
         $this->newField('hourly_rate');
 
+        $this->addField('total_reports')->calculated(true)->type('int');
+        $this->addField('total_hours')->calculated(true)->type('real');
+        $this->addField('total_spent')->calculated(true)->type('money');
+
 //        $u=$this->api->getUser();
 //        if($u->isInstanceLoaded() && $u->get('is_client')){
 //            $this->addCondition('client_id',$u->get('client_id'));
 //        }
     }
 
-    function calculate_cur_mandays() {
-        return $this->add('Model_Report')
-                ->dsql()
-                ->field('round(sum(R.amount/60/8),1)')
-                ->where('R.budget_id=bu.id')
-                ->select();
+    function getTimesheets(){
+        return $this->add('Model_Timesheet')
+            ->dsql()
+            ->where('T.budget_id=pa.budget_id and T.user_id=pa.user_id');
     }
-
-    public function beforeModify(&$data) {
-        if(isset($_GET['id'])){
-        $data['budget_id'] = $_GET['id'];
-        }
-        parent::beforeModify($data);
+    function calculate_total_reports(){
+        return $this->getTimesheets()->field('count(*)')->select();
     }
-
+    function calculate_total_hours(){
+        return $this->getTimesheets()
+            ->field('round(sum(T.minutes/60),1)')
+            ->select();
+    }
+    function calculate_total_spent(){
+        return $this->getTimesheets()
+            ->field('round(sum(T.minutes/60)*hourly_rate,2)')
+            ->select();
+    }
 }
