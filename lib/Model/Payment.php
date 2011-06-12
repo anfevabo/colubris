@@ -8,7 +8,7 @@ class Model_Payment extends Model_Table {
     function defineFields() {
         parent::defineFields();
 
-        $this->newField('user_id')->refModel('Model_User');
+        $this->newField('user_id')->refModel('Model_Developer');
         $this->newField('budget_id')->refModel('Model_Budget');
         $this->newField('hourly_rate');
 

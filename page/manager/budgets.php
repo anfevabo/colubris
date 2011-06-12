@@ -21,7 +21,7 @@ class page_manager_budgets extends Page {
         $crud=$this->add('CRUD','grid2');
         $model=  $this->add('Model_Payment');
         $model->setMasterField('budget_id',$_GET['budget_id']);
-        $crud->setModel($model,array('id','user','hourly_rate','total_reports','total_hours','total_spent'));
+        $crud->setModel($model,array('id','user','user_id','hourly_rate','total_reports','total_hours','total_spent'));
         if($crud->grid)$crud->grid->addTotals();
 
         $this->add('H3')->set('Unaccountable:');
