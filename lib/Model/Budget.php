@@ -95,7 +95,7 @@ class Model_Budget extends Model_Table {
 		return $this->add('Model_Timesheet')
 			->dsql()
             ->join('payment pa','pa.user_id=T.user_id')
-			->field('sum(T.minutes)/60*pa.hourly_rate')
+			->field('sum(T.minutes/60*pa.hourly_rate)')
 			->where('T.budget_id=bu.id')
             ->where('pa.budget_id=bu.id')
 			->select();
