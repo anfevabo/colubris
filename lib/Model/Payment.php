@@ -8,13 +8,13 @@ class Model_Payment extends Model_Table {
     function defineFields() {
         parent::defineFields();
 
-        $this->newField('user_id')->refModel('Model_Developer');
-        $this->newField('budget_id')->refModel('Model_Budget');
-        $this->newField('hourly_rate');
+        $this->newField('user_id')->sortable(true)->refModel('Model_Developer');
+        $this->newField('budget_id')->sortable(true)->refModel('Model_Budget');
+        $this->newField('hourly_rate')->sortable(true);
 
-        $this->addField('total_reports')->calculated(true)->type('int');
-        $this->addField('total_hours')->calculated(true)->type('real');
-        $this->addField('total_spent')->calculated(true)->type('money');
+        $this->addField('total_reports')->calculated(true)->type('int')->sortable(true);
+        $this->addField('total_hours')->calculated(true)->type('real')->sortable(true);
+        $this->addField('total_spent')->calculated(true)->type('money')->sortable(true);
 
 //        $u=$this->api->getUser();
 //        if($u->isInstanceLoaded() && $u->get('is_client')){
