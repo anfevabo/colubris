@@ -7,6 +7,8 @@ class Model_Budget extends Model_Table {
 		parent::defineFields();
 
 		$this->newField('name')->sortable(true);
+		$this->newField('start_date')->datatype('date')->sortable(true)
+            ->defaultValue(date('Y-m-d',strtotime('next monday')));
 		$this->newField('deadline')->datatype('date')->sortable(true);
 		$this->newField('accepted')->datatype('boolean')->sortable(true);
 		$this->newField('closed')->datatype('boolean')->sortable(true);
@@ -61,6 +63,7 @@ class Model_Budget extends Model_Table {
 //        if($u->isInstanceLoaded() && $u->get('is_client')){
 //            $this->addCondition('client_id',$u->get('client_id'));
 //        }
+        $this->scopeFilter();
 	}
     function calculate_client(){
         return $this->add('Model_Client')
@@ -79,16 +82,16 @@ class Model_Budget extends Model_Table {
             ->select();
 
     }
-	function scopeFilter($dsql){
+	function scopeFilter(){
 		if($sc=$this->api->recall('scope')){
-			if($sc['client'])$dsql->where('client_id',$sc['client']);
+			if($sc['budget'])$this->addCondition('id',$sc['budget']);
 		}
 	}
 	function calculate_cur_mandays(){
-		return $this->add('Model_Report')
+		return $this->add('Model_Timesheet')
 			->dsql()
-			->field('round(sum(R.amount/60/8),1)')
-			->where('R.budget_id=bu.id')
+			->field('round(sum(T.minutes/60/8),1)')
+			->where('T.budget_id=bu.id')
 			->select();
 	}
     function calculate_amount_spent(){

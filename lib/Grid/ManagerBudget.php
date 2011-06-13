@@ -22,5 +22,15 @@ class Grid_ManagerBudget extends MVCGrid {
         }
         return $this->current_row;
     }
+    function format_profit($field){
+        $this->current_row[$field]=$m=@round(
+            $this->current_row['amount_spent_original']/
+            $this->current_row['amount_eur_original']*100).'%';
 
+		if($m>100){
+			$this->setTDParam($field,'style/color','red');
+		}else{
+			$this->setTDParam($field,'style/color',null);
+		}
+    }
 }

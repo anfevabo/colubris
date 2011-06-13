@@ -9,7 +9,7 @@ class Model_Timesheet extends Model_Table {
         parent::defineFields();
         $this->newField('title');
         $this->newField('user_id')->refModel('Model_User');
-        $this->newField('report_id')->refModel('Model_Report');
+//        $this->newField('report_id')->refModel('Model_Report');
         $this->newField('date')->datatype('datetime')->defaultValue(date('Y-m-d'));
         $this->newField('start');
         $this->newField('end');

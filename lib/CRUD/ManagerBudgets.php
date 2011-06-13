@@ -6,6 +6,18 @@
  */
 
 class CRUD_ManagerBudgets extends CRUD {
- public $grid_class='Grid_ManagerBudget';
+    public $grid_class='Grid_ManagerBudget';
+    function setModel($a,$b,$c){
+        parent::setModel($a,$b,$c);
+        $c=$this;
+        if ($c->grid) {
+            $c->grid->addColumn('profit','profit');
+            $c->grid->addColumnPlain('template,expander', 'team', 'Team')->setTemplate('<?$team?> people');
+            $c->grid->addColumnPlain('expander', 'scope', 'Budget Scope');
+            $c->grid->getController()->scopeFilter($c->grid->dq);
+            $c->grid->addOrder()->move('profit','after','amount_spent')->now();
+        }
+
+    }
 }
 

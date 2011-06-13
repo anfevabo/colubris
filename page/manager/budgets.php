@@ -5,14 +5,27 @@ class page_manager_budgets extends Page {
     //public $controller='Controller_Budget';
 
     function initMainPage() {
-        $c = $this->add('CRUD_ManagerBudgets');
-        $c->setModel('Budget_Active',array('id','name','project','client','deadline','amount_eur','amount_spent','team'));
 
-        if ($c->grid) {
-            $c->grid->addColumnPlain('template,expander', 'team', 'Team')->setTemplate('<?$team?> people');
-            $c->grid->addColumnPlain('expander', 'scope', 'Budget Scope');
-            $c->grid->getController()->scopeFilter($c->grid->dq);
-        }
+        $t=$this->add('Tabs');
+
+        $t
+            ->addTab('Active')
+            ->add('CRUD_ManagerBudgets')
+            ->setModel('Budget_Active',null,
+                    array('id','name','project','client','deadline','amount_eur','amount_spent','team'));
+
+        $t
+            ->addTab('Unconfirmed')
+            ->add('CRUD_ManagerBudgets')
+            ->setModel('Budget_Unconfirmed',null,
+                    array('id','name','project','client','deadline','amount_eur','amount_spent','team'));
+
+        $t
+            ->addTab('Old')
+            ->add('CRUD_ManagerBudgets')
+            ->setModel('Budget_Old',null,
+                    array('id','name','project','client','deadline','amount_eur','amount_spent','team'));
+
     }
 
     function page_team() {

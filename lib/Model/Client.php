@@ -28,8 +28,10 @@ class Model_Client extends Model_Table {
             ->type('money')
             ->calculated(true);
 
+        /*
         $this->newField('profitability')
             ->calculated(true);
+            */
 	}
     function calculate_project_count(){
         return $this->add('Model_Project')
@@ -43,7 +45,6 @@ class Model_Client extends Model_Table {
         return $this->add('Model_Budget')
             ->addCondition('accepted',true)
             ->dsql()
-            ->debug()
             ->field('sum(amount_eur)')
             ->join('project pr','pr.id=bu.project_id','left')
             ->where('pr.client_id=cl.id')
@@ -51,14 +52,26 @@ class Model_Client extends Model_Table {
             ;
     }
     function calculate_total_expense(){
+		return $this->add('Model_Timesheet')
+			->dsql()
+            ->join('payment pa','pa.user_id=T.user_id and pa.budget_id=T.budget_id')
+            ->join('budget bu','bu.id=T.budget_id')
+            ->join('project pr','pr.id=bu.project_id')
+			->field('sum(T.minutes/60*pa.hourly_rate)')
+            ->where('cl.id=pr.client_id')
+			->select();
+
+
+        return 1;
+        /*
         return $this->add('Model_Timesheet')
-            ->addCondition('accepted',true)
+            //->addCondition('accepted',true)
             ->dsql()
-            ->debug()
             ->field('sum(amount_eur)')
             ->join('project pr','pr.id=bu.project_id','left')
             ->where('pr.client_id=cl.id')
             ->select()
             ;
+            */
     }
 }

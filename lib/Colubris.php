@@ -220,12 +220,16 @@ class Colubris extends ApiFrontend {
     }
 
     function setScope($key, $val=null) {
+        var_Dump($key);
         $sc = $this->recall('scope', array());
         if ($val
 
             )$sc[$key] = $val;else
             unset($sc[$key]);
         $this->memorize('scope', $sc);
+        if($key=='client'){
+            var_dump($key);
+        }
         return $this;
     }
 
