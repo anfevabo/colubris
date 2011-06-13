@@ -6,11 +6,9 @@ class page_client_budgets extends Page {
         $u = $this->api->getUser();
         $project = $this->add('Model_Project');
         $q = $project->dsql();
-        /*
         if (!$u->get('is_admin')) {
             $q->where('client_id', $u->get('client_id'));
         }
-        */
         $q->field('id');
         $result = $q->do_getAll();
         $budget = $this->add('Model_Budget');
