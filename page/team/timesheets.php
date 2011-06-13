@@ -10,7 +10,8 @@ class page_team_timesheets extends Page{
         $m->getField('date')->defaultValue(date('Y-m-d'));
 		$crud->setModel($m,array('title','budget','budget_id','date','minutes','is_closed'));
         if($grid=$crud->grid){
-			$quicksearch=$grid->add('ReportQuickSearch',null,'quick_search',array('form/quicksearch'));
+			$quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
+            $this->add('Order')->move($quicksearch,'first')->now();
             $grid->addPaginator(50);
             $grid->addTotals();
             $grid->dq->order('date desc,id desc');
@@ -23,8 +24,8 @@ class page_team_timesheets extends Page{
             //$crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
             $quicksearch->useGrid($grid)->useFields(array('title'));
 
-            $this->add('H3')->set('Change Selected');
-            $f=$this->add('MVCForm')->setFormClass('horizontal');
+            $this->add('H3')->set('Set Budget to Selected');
+            $f=$this->add('Columns')->addColumn(4)->add('MVCForm')->setFormClass('compact');
             $f_sel=$f->addField('line','sel');
             $grid->addSelectable($f_sel);
 

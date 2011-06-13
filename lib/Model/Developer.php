@@ -11,8 +11,8 @@ class Model_Developer extends Model_User {
     }
 
     function reportsDQ(){
-        return $this->add('Model_Report')->dsql()
-            ->where('user_id=u.id')
+        return $this->add('Model_Timesheet')->dsql()
+            ->where('T.user_id=u.id')
             ;
     }
     function getTimesheets(){
@@ -39,7 +39,7 @@ class Model_Developer extends Model_User {
 
             'round(('.
                         $this->reportsDQ()
-                        ->field('sum(amount)')
+                        ->field('sum(minutes)')
                         ->where('date>date(DATE_ADD(now(), INTERVAL(2-DAYOFWEEK(now())) DAY))')
                         ->select()
                         .')/60,2)';
