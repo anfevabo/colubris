@@ -22,38 +22,35 @@ class Grid_ClientBudget extends MVCGrid {
     }
 
     function formatRow() {
-        $days_spent = (float) $this->current_row['days_spent'];
-        $days_spent_lastweek = (float) $this->current_row['days_spent_lastweek'];
-        $quoted = (float) $this->current_row['mandays'];
-
-
-        if ($days_spent) {
-            $this->current_row['days_spent'] = round($this->current_row['days_spent'], 2);
-        } else {
-            $this->current_row['days_spent'] = 0;
+        $s=$this->current_row['amount_spent'];
+        $e=$this->current_row['amount_eur'];
+        @$p=$s/$e*100;
+        parent::formatRow();
+        if($p>95){
+            $this->setTDParam('amount_spent','style/color','red');
+        }else{
+            $this->setTDParam('amount_spent','style/color',null);
         }
-        if ($days_spent_lastweek) {
-            $this->current_row['days_spent_lastweek'] = round($this->current_row['days_spent_lastweek'], 2);
-        } else {
-            $this->current_row['days_spent_lastweek'] = 0;
-        }
-        if (!$quoted) {
 
-            $this->current_row['mandays'] = 0;
-        } else {
-            $this->current_row['depleted'] = round(($this->current_row['days_spent'] / $this->current_row['mandays']) * 100, 2);
+        switch($this->current_row['success_criteria']){
+            case 0: $this->current_row['amount_spent']='';break;
+            case 1: 
+                    if($p){
+                        if($p>95){
+                            $p=round($p-100);
+                            $p=$p.'% over budget';
+                        }else{
+                            $p='on budget';
+                        }
+                    }else{
+                        $p='-';
+                    }
+                    $this->current_row['amount_spent']=$p;
+                    break;
         }
-        if (!(float) $this->current_row['amount_eur']) {
-
-            $this->current_row['amount_eur'] = 0;
-        }
-        $this->current_row['mandays'] = '<div align="center">' . $this->current_row['mandays'] . '</div>';
-        $this->current_row['accepted'] = '<div align="center">' . $this->current_row['accepted'] . '</div>';
-        $this->current_row['closed'] = '<div align="center">' . $this->current_row['closed'] . '</div>';
-        $this->current_row['amount_eur'] = '<div align="right">' . $this->current_row['amount_eur'] . '</div>';
-        $this->current_row['days_spent'] = '<div align="center">' . $this->current_row['days_spent'] . '</div>';
-        $this->current_row['days_spent_lastweek'] = '<div align="center">' . $this->current_row['days_spent_lastweek'] . '</div>';
-        $this->current_row['total_budget_spent'] = $this->calcluateBudgetSpent($this->current_row['id']);
+        $f=$this->getModel()->getField('success_criteria')->listData();
+        $this->current_row['success_criteria']=$f[$this->current_row['success_criteria']];
+            $this->setTDParam('name','style/color','red');
     }
 
     function calcluateBudgetSpent($id){

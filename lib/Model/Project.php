@@ -16,6 +16,10 @@ class Model_Project extends Model_Table {
         $u=$this->api->getUser();
         if($u->get('is_client')){
             $this->addCondition('client_id',$u->get('client_id'));
+        }else{
+            if($sc=$this->api->recall('scope')){
+                if($sc['client'])$this->addCondition('client_id',$sc['client']);
+            }
         }
 	}
     function calculate_budgets(){

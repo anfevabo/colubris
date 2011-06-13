@@ -212,7 +212,25 @@ class Colubris extends ApiFrontend {
 
         if ($f->isSubmitted()) {
 
+
             $this->memorize('scope', $f->getAllData());
+
+            /*
+            if($f->get('client')){
+                // calculate budgets and projects
+                $pr=$this->add('Model_Project')->addCondition('client_id',$f->get('client'))
+                    ->dsql()->field('id')->do_getColumn();
+
+                $this->setScope('project',$pr);
+
+                $bu=$this->add('Model_Budget')->addCondition('project_id',$pr)
+                    ->dsql()->field('id')->do_getColumn();
+                $this->setScope('budget',$bu);
+
+
+            }
+
+            */
 
 
             $f->js()->univ()->closeDialog()->getjQuery()->trigger('my_reload')->execute();
@@ -220,16 +238,12 @@ class Colubris extends ApiFrontend {
     }
 
     function setScope($key, $val=null) {
-        var_Dump($key);
         $sc = $this->recall('scope', array());
         if ($val
 
             )$sc[$key] = $val;else
             unset($sc[$key]);
         $this->memorize('scope', $sc);
-        if($key=='client'){
-            var_dump($key);
-        }
         return $this;
     }
 

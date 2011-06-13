@@ -25,6 +25,11 @@ class Model_Timesheet extends Model_Table {
                 $this->setMasterField('user_id', $this->api->getUserID());
             }
         }
+
+        if($sc=$this->api->recall('scope')){
+            //if($sc['budget'])$this->addCondition('budget_id',$sc['budget']);
+        }
+
 //        $this->newField('hours_spent')
 //                ->datatype('int')
 //                ->calculated(true);
