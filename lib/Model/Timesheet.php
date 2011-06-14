@@ -35,7 +35,7 @@ class Model_Timesheet extends Model_Table {
 //                ->calculated(true);
     }
     function calculate_is_closed(){
-           $q = $this->add('Model_Budget')->dsql();
+        $q = $this->add('Model_Budget')->dsql();
         $q->where('id=T.budget_id');
         $q->field('closed');
         return $q->select();

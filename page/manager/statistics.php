@@ -2,26 +2,27 @@
 
 class page_manager_statistics extends Page {
 
-    function init() {
-        parent::init();
-
-<<<<<<< Updated upstream
-        for ($x = 0; $x < 10; $x++) {
-            $this->add('DeveloperChart')
-                    ->draw($x);
-=======
+    function initMainPage() {
         $tabs=$this->add('Tabs');
 
-        $t=$tabs->addTab('Developer Productivity');
-        for($x=0;$x<10;$x++){
-            $t->add('DeveloperChart')
-                ->draw($x);
->>>>>>> Stashed changes
-        }
-
-        $t=$tabs->addTab('Developer Productivity');
+        $t=$tabs->addTabURL('./daily','Daily');
+        $t=$tabs->addTabURL('./productivity','Productivity');
     }
 
+    function page_productivity(){
+        $t=$this;
+        for ($x = 0; $x < 10; $x++) {
+            $t->add('DeveloperChart')
+                    ->draw($x);
+        }
+
+    }
+    function page_daily(){
+        $g=$this->add('MVCGrid');
+        $g->setModel('Timesheet');
+        $g->addPaginator(50);
+        $g->dq->where('date(`date`)=date(now())');
+    }
 }
 
 class DeveloperChart extends Chart {
