@@ -6,7 +6,7 @@ class page_team_timesheets extends Page{
 		$crud=$this->add('CRUD');
         $m=$this->add('Model_Timesheet');
         $m->setMasterField('user_id',$this->api->getUserID());
-         $m->addCondition('is_closed','N');
+         //$m->addCondition('is_closed','N');
         $m->getField('date')->defaultValue(date('Y-m-d'));
 		$crud->setModel($m,array('title','budget','budget_id','date','minutes','is_closed'));
         if($grid=$crud->grid){

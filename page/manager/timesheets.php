@@ -6,7 +6,7 @@ class page_manager_timesheets extends Page {
         $quicksearch = $this->add('ReportQuickSearch', null, null, array('form/quicksearch'));
         $crud = $this->add('CRUD_Export');
         $timesheet=  $this->add('Model_Timesheet');
-        $timesheet->addCondition('is_closed','N');
+        //$timesheet->addCondition('is_closed','N');
         $m = $crud->setModel($timesheet, array('title', 'user','budget', 'user_id', 'budget_id', 'date', 'minutes','is_closed'));
         if ($grid = $crud->grid) {
             $grid->addButton('Import')->js('click')->univ()->dialogURL('Import',
