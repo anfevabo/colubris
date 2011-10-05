@@ -10,6 +10,7 @@ class Model_Budget extends Model_Table {
 
         $this->addField('priority')->type('list')->listData(array(
                     'Select...',
+                    '0-none'=>'0 - Waiting on action from client',
                     '1-low'=>'1 - Work on project in free time',
                     '2-schedule'=>'2 - Work according to schedule',
                     '3-normal'=>'3 - Work to complete at earliest',
@@ -39,6 +40,7 @@ class Model_Budget extends Model_Table {
                     '14-deployment'=>'14 - Waiting for installation instrucitons',
                     '15-launced'=>'15 - Deployed. 30-day warranty',
                     '16-support'=>'16 - On-going support',
+                    '99-completed'=>'99 - Completed. More work? Allocate new budget',
                     ))
                     ;
 
