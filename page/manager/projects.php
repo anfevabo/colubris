@@ -1,6 +1,6 @@
 <?
 class page_manager_projects extends Page {
-    function initMainPage(){
+    function page_index(){
         $cr=$this->add('CRUD');
         $cr->setModel('Project');
         if($cr->grid){

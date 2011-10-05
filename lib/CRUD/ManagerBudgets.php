@@ -17,6 +17,13 @@ class CRUD_ManagerBudgets extends CRUD {
             $c->grid->getController()->scopeFilter($c->grid->dq);
             $c->grid->addOrder()->move('profit','after','amount_spent')->now();
         }
+        if($c->form){
+            $c->form->setFormClass('basic atk-form-basic-2col');
+            $c->form->add('Order')
+                ->move($c->form->addSeparator(),'before','amount')
+                ->now();
+        }
+
 
     }
 }
