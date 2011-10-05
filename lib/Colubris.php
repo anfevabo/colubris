@@ -41,9 +41,6 @@ class Colubris extends ApiFrontend {
 
         // Alternatively
         // $this->add('MVCAuth')->setController('Controller_User')->check();
-
-
-        $this->initLayout();
     }
 
     function initLayout() {

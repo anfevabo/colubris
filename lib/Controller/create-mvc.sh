@@ -1,1 +1,0 @@
-../../atk4/tools/create-mvc.sh

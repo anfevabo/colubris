@@ -4,7 +4,7 @@ class page_manager_budgets extends Page {
 
     //public $controller='Controller_Budget';
 
-    function initMainPage() {
+    function page_index() {
 
         $t=$this->add('Tabs');
 

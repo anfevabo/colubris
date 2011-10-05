@@ -1,1 +1,0 @@
-../../../atk4-addons/misc/docs/misc.001.sql

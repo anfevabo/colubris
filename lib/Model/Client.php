@@ -16,6 +16,14 @@ class Model_Client extends Model_Table {
 		$this->newField('name')
 			;
 
+        $this->addField('smbo_id')->type('int');
+        $this->addField('email');
+        $this->addField('is_archive')->type('boolean');
+
+        $this->addField('total_sales')->type('money');
+        $this->addField('ebalance')->type('int');
+        $this->addField('day_credit')->type('int');
+
         $this->newField('project_count')
             ->caption('Projects')
             ->calculated(true);
