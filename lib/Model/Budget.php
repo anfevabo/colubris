@@ -17,7 +17,7 @@ class Model_Budget extends Model_Table {
                     '4-urgent'=>'4 - Urgent, work fast, call if blockers',
                     '5-overtime'=>'5 - Critical, working over-time, possible penalties',
                     '6-nosleep'=>'6 - Not going to sleep until finished'
-                    ))
+                    ))->defaultValue('0-none')
                     ;
                         
 
@@ -41,7 +41,7 @@ class Model_Budget extends Model_Table {
                     '15-launced'=>'15 - Deployed. 30-day warranty',
                     '16-support'=>'16 - On-going support',
                     '99-completed'=>'99 - Completed. More work? Allocate new budget',
-                    ))
+                    ))->defaultValue('0-irrelevant')
                     ;
 
         /*
@@ -81,7 +81,7 @@ class Model_Budget extends Model_Table {
                     'EUR'=>'Euros',
                     'GBP'=>'UK Pounds',
                     'USD'=>'US Dollars'
-                    ))
+                    ))->defaultValue('EUR')
             ;
 
 
