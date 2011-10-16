@@ -12,7 +12,6 @@
    */
 class Model_Bug extends Model_Table {
 	public $entity_code='acceptance';
-	public $table_alias='acc';
 
 	function defineFields(){
 		parent::defineFields();

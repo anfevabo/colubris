@@ -2,9 +2,31 @@
 
 class page_manager extends Page {
 
-    function initMainPage() {
+    function page_index() {
+
+        $cc=$this->add('Columns');
+        $left=$cc->addColumn();
+        $right=$cc->addColumn();
+
+        $left->add('H2')->set('High-priority tasks');
+        $right->add('H2')->set('Active Projects');
+
+        $pr=$left->add('Manager_Projects');
+        $pr->acceptance->addFormatter('bugs','expander');
+        $pr->acceptance->addFormatter('tasks','expander');
+        $left->add('Manager_Tasks');
+
+        $right->add('Manager_Deadlines');
+
+        return;
+        $right->add('Manager_Reports');
+
+
+
+
         $budget = $this->add('Model_Budget');
         $budget->getField('mandays')->caption('Quoted');
+        return;
         $g = $this->add('ReportGrid', null, 'open_budgets');
         $m = $g->setModel($budget, array('name', 'days_spent', 'mandays', 'deadline'));
         $m->addCondition('accepted', true);
@@ -21,6 +43,55 @@ class page_manager extends Page {
 //  $g->dq->where('date>now()-interval 1 week');
         $g->addColumnPlain('expander', 'userprojects', 'View Projects');
         $g->addPaginator(10);
+    }
+
+    function page_tasks(){
+        $this->api->redirect(
+                $this->api->getDestinationURL('../bugs',
+                    array(
+                        'type'=>'bugs',
+                        'cut_page'=>true,
+                        'budget_id'=>$_GET['budget_id']
+                        )));
+    }
+
+    function page_bugs(){
+        $this->api->stickyGET('budget_id');
+        $g=$this->add('MVCGrid');
+        $m=$g->setModel('Task_Bug',array('name','priority','estimate','status'));
+        $g->addColumn('button','info');
+        $m->addCondition('budget_id',$_GET['budget_id']);
+
+        if($_GET['info']){
+            $this->js()->univ()->dialogURL('Task Information',
+                    $this->api->getDestinationURL('./info',
+                        array('id'=>$_GET['info'])))
+                ->execute();
+        }
+    }
+    function page_bugs_info(){
+        $cc=$this->add('Columns');
+        $left=$cc->addColumn();
+        $right=$cc->addColumn();
+
+        $left->add('H3')->set('Information');
+        $right->add('H3')->set('Client Interaction');
+
+
+        $form=$left->add('MVCForm');
+        $form->setModel('Task')->loadData($_GET['id']);
+
+
+
+        $form=$right->add('Form');
+        $form->addField('radio','type','')
+            ->setValueList(array('upadate'=>'update','question'=>'question (Requires Client\'s feedback)'));
+        $form->addField('text','note','');
+        $form->addField('checkbox','urgent');
+        $form->setFormClass('vertical');
+
+        $right->add('H3')->set('History');
+
     }
 
     function page_userprojects() {
@@ -53,6 +124,7 @@ class page_manager extends Page {
         ;
     }
 
+    /*
     function defaultTemplate() {
         if ($this->api->page == 'manager'
 
@@ -60,4 +132,5 @@ class page_manager extends Page {
         return parent::defaultTemplate();
     }
 
+    */
 }
