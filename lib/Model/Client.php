@@ -53,7 +53,7 @@ class Model_Client extends Model_Table {
         return $this->add('Model_Budget')
             ->addCondition('accepted',true)
             ->dsql()
-            ->field('sum(amount_eur)')
+            ->field('sum(amount)')
             ->join('project pr','pr.id=bu.project_id','left')
             ->where('pr.client_id=cl.id')
             ->select()

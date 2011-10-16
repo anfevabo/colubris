@@ -12,7 +12,7 @@ class page_manager_budgets extends Page {
             ->addTab('Active')
             ->add('CRUD_ManagerBudgets')
             ->setModel('Budget_Active',null,
-                    array('id','name','project','client','deadline','amount_eur','amount_spent','team'));
+                    array('id','name','project','client','deadline','state','priority','amount','amount_spent','team'));
 
         $t
             ->addTab('Unconfirmed')
