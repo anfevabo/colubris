@@ -92,6 +92,7 @@ class Colubris extends ApiFrontend {
                     $this->api->redirect('/');
                 }
                 $m->addMenuItem('Home', 'manager');
+                $m->addMenuItem('Request For Quotation', 'manager/rfq');
                 $m->addMenuItem('Statistics', 'manager/statistics');
                 $m->addMenuItem('Reports', 'manager/reports'); // review all reports in system - temporary
                 $m->addMenuItem('Timesheets', 'manager/timesheets'); // review all reports in system - temporary
