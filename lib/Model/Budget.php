@@ -17,7 +17,7 @@ class Model_Budget extends Model_Table {
                     '4-urgent'=>'4 - Urgent, work fast, call if blockers',
                     '5-overtime'=>'5 - Critical, working over-time, possible penalties',
                     '6-nosleep'=>'6 - Not going to sleep until finished'
-                    ))->defaultValue('0-none')
+                    ))->defaultValue('3-normal')
                     ;
                         
 
@@ -43,7 +43,7 @@ class Model_Budget extends Model_Table {
                     'launced'=>'30 - Deployed. 30-day warranty',
                     'support'=>'31 - On-going support',
                     'completed'=>'99 - SUCCESS! More work? Let us know!',
-                    ))->defaultValue('irrelevant')
+                    ))->defaultValue('lead')
                     ;
 
         /*
@@ -70,10 +70,19 @@ class Model_Budget extends Model_Table {
 
 
 
-		$this->newField('amount')->datatype('money')->sortable(true);
+		$this->newField('amount')
+            ->caption('Sell Price')
+            ->datatype('money')->sortable(true);
 
-		$this->newField('expenses')->datatype('money')->sortable(true);
-		$this->newField('expenses_descr')->datatype('text');
+        $this->addField('quote_id')
+            ->refModel('Model_Quote');
+
+		$this->newField('expenses')
+            ->caption('Development Cost')
+            ->datatype('money')->sortable(true);
+
+		$this->newField('expenses_descr')->datatype('text')
+            ->caption('Notes');
 
 
         $this->newField('amount_spent')->datatype('money')->calculated(true)->sortable(true);
@@ -90,7 +99,6 @@ class Model_Budget extends Model_Table {
 		$this->newField('success_criteria')
 			->datatype('list')
 			->listData(array(
-                0=>'Unconfirmed',
 				1=>'Requirements completed',
 				2=>'Mandays worked',
 				3=>'Budget depleted',

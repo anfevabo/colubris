@@ -12,6 +12,7 @@ class Model_Project extends Model_Table {
 		$this->addField('client_id')->refModel('Model_Client');
 
         $this->addField('budgets')->calculated(true)->type('int');
+        $this->addField('quotations')->calculated(true)->type('int');
 
 
         $u=$this->api->getUser();
@@ -28,6 +29,13 @@ class Model_Project extends Model_Table {
             ->dsql()
             ->field('count(*)')
             ->where('bu.project_id=pr.id')
+            ->select();
+    }
+    function calculate_quotations(){
+        return $this->add('Model_Quote')
+            ->dsql()
+            ->field('count(*)')
+            ->where('quote.project_id=pr.id')
             ->select();
     }
 }

@@ -31,10 +31,23 @@ class page_manager_budgets extends Page {
     function page_team() {
       //  $g = $this->add('MVCGrid');
         $this->api->stickyGET('budget_id');
-        $crud=$this->add('CRUD','grid2');
+        $crud=$this->add('CRUD_Payment','grid2');
         $model=  $this->add('Model_Payment');
         $model->setMasterField('budget_id',$_GET['budget_id']);
-        $crud->setModel($model,array('id','user','user_id','hourly_rate','total_reports','total_hours','total_spent'));
+        $crud->setModel($model,array('id',
+                    'user','role','user_id',
+
+                    'total_reports','total_hours','total_spent','total_client_pays','estimated_hours',
+
+                    // Stats for our expense
+                    'hourly_rate', 'expense',
+
+                    // Client stats
+                    'client_pays', 'service_name', 'sell_rate', 'sell_total',
+                    
+                    
+                    
+                    ));
         if($crud->grid)$crud->grid->addTotals();
 
         $this->add('H3')->set('Unaccountable:');
@@ -55,7 +68,10 @@ class page_manager_budgets extends Page {
     }
 
     function page_scope() {
-        $this->add('View_Hint')->set('Scope defines what works will be performed inside this budget');
+        $this->add('H3')->set('Quotations');
+        $this->add('CRUD')->setModel('Quote');
+        /*
+        $m=$this->add('Model_Wireframe');
 
         $c = $this->add('Controller_Screen');
         $c->addCondition('budget_id', $_GET['id']);
@@ -65,9 +81,37 @@ class page_manager_budgets extends Page {
         $c->addCondition('budget_id', $_GET['id']);
         $this->add('MVCGrid')->setController($c);
 
+        /*
         $c = $this->add('Controller_Report');
         $c->addCondition('budget_id', $_GET['id']);
         $this->add('MVCGrid')->setController($c);
+        */
     }
 
+}
+class CRUD_Payment extends CRUD {
+    public $grid_class='Grid_Payment';
+    function initComponents(){
+        parent::initComponents();
+
+        if($this->form){
+            $this->form->setFormClass('basic atk-form-basic-2col');
+            $h=$this->form->add('Hint')
+                ->set('Estimated fields are generated and auto-filled from the "Specs" section. Use rate for pay-per-reports only.');
+
+            $h1=$this->form->add('H3')->set('Expenses');
+            $s=$this->form->addSeparator();
+
+            $this->form->add('Order')
+                ->move($h1,'before','user_id')
+                ->move($s,'after','expense')
+                ->move($h,'after',$s)
+                ->now();
+
+            $this->form->getElement('estimated_hours')->setFieldHint('This number is imported from "Specs" section. It is used here to compare actual hours reported with estimate');
+            $this->form->getElement('hourly_rate')->setFieldHint('For fixed-price agreement, use 0 here');
+            $this->form->getElement('expense')->setFieldHint('Fixed price agreement amount');
+        }
+        
+    }
 }

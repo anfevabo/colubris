@@ -30,6 +30,9 @@ class Colubris extends ApiFrontend {
 
         ;
 
+
+        $this->formatter=$this->add('Controller_Formatter');
+
         // Before going further you will need to verify access
         $auth = $this->add('SQLAuth');
         $auth->setSource('user', 'email', 'password')->field('id,name,is_admin');
@@ -313,6 +316,15 @@ class Colubris extends ApiFrontend {
             return null;
         }
         return $t;
+    }
+
+    function getClient(){
+        // returns model for currently logged in client. If user is manager, he can select which client he's willing to be
+
+        $c=$this->add('Model_Client');
+        return $c;
+
+
     }
 
     function page_pref($p) {

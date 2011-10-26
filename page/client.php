@@ -6,5 +6,9 @@ class page_client extends Page {
         $t=$this->add('H1');
         $t->set('Welcome Client');
 
+
+        $c=$this->api->getClient();
+
+        $this->add('CRUD')->setModel($c);
     }
 }

@@ -7,7 +7,17 @@
 
 class Grid_ManagerBudget extends MVCGrid {
     function formatRow() {
+
+        $deadline=$this->current_row['deadline'];
+
         parent::formatRow();
+
+        // Deadline
+        $interval=$this->api->formatter->formatDeadline($deadline,$this->current_row['state']);
+        if(!is_null($interval))$this->current_row['deadline'].='<br/><small>'.$interval.'</small>';
+
+        $this->current_row['priority']=$this->api->formatter->formatPriority($this->current_row['priority']);
+
           $days_spent = (float) $this->current_row['days_spent'];
         $days_spent_lastweek = (float) $this->current_row['days_spent_lastweek'];
         if ($days_spent) {
@@ -20,6 +30,10 @@ class Grid_ManagerBudget extends MVCGrid {
         } else {
             $this->current_row['days_spent_lastweek'] = 0;
         }
+        $this->current_row['name']=
+            $this->current_row['name'].' ('.$this->current_row['project'].')<br/><small>'.
+            $this->current_row['client'].'</small>';
+
         return $this->current_row;
     }
     function format_profit($field){

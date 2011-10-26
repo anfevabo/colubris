@@ -16,10 +16,15 @@ class Model_Participant extends Model_Table {
             ->refModel('Model_Budget')
 			;
 
-		$this->newField('daily_cost')
-			;
-		$this->newField('hourly_cost')
-			;
+        $this->addfield('role')
+            ->type('list')->listData(array(
+                    'Select...',
+                    'manager'=>'Manager',
+                    'developer'=>'Developer',
+                    'qa'=>'Quality Assurance',
+                    'design'=>'Designer',
+                    ));
+
 
 	}
 }
