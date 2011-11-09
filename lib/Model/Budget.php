@@ -34,7 +34,7 @@ class Model_Budget extends Model_Table {
                     'gotdeposit'=>'11 - Deposit confirmed, preparing contract',
                     'papers'=>'12 - Contract signed, timeline and spec agreed',
                     'devel'=>'13 - Development started',
-                    'devel'=>'14 - Development suspended',
+                    'develstop'=>'14 - Development suspended',
                     'qa'=>'15 - Internal Q/A',
                     'clientqa'=>'20 - Functionality Completed. Client Q/A',
                     'bugfixes'=>'21 - Feedback received, working/fixing',
