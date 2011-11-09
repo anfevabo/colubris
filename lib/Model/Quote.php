@@ -10,6 +10,5 @@ class Model_Quote extends Model_Table {
 
         $this->addField('html')->type('text')->allowHtml(true);
         $this->addField('attachment_id')->refModel('Model_Filestore_File')->displaytype('file');
-
     }
 }

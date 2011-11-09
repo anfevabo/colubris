@@ -37,6 +37,20 @@ class page_project extends Page {
         }
 
         if(!$budgets)$this->template->trySet('Completed','No Jobs');
+
+
+        // Quotes
+        $this->b=$this->add('Model_Quote');
+        $quotes=$this->b->addCondition('project_id',$p->get('id'))->getRows();
+        foreach($quotes as $quote){
+            $b=$this->add('Quote',null,'Quote',array('page/project','Quote'));
+            $b->set($quote);
+        }
+
+        if(!$quotes)$this->template->trySet('Quote','No Quotes');
+
+
+
     }
     function defaultTemplate(){
         return array("page/project");
@@ -50,4 +64,31 @@ class Budget extends View {
 
         $this->template->set($f);
     }
+}
+class Link extends HtmlElement {
+    function init(){
+        parent::init();
+        $this->href('#');
+        $this->setElement('a');
+    }
+    function href($url){
+        $this->setAttr('href',$url);
+        return $this;
+    }
+}
+class Quote extends View {
+    function set($f){
+        $this->template->set($f);
+
+        $this->add('Link',null,'Details')->set('Hello World')
+            ->js('click')->univ()->dialogURL('Details',$this->api->getDestinationURL(null,array($this->name=>'details')));
+
+        if($_GET[$this->name]=='details'){
+            $m=$this->add('Model_Quote')->loadData($f['id']);
+            echo $m->get('html');
+            exit;
+        }
+        //$this->template->set('details',$this->api->getDestinationURL());
+    }
+
 }

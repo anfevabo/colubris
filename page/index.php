@@ -3,6 +3,8 @@ class Page_index extends Page {
     function init(){
         parent::init();
 
+        if($this->api->auth->isLoggedIn())$this->api->redirect('home');
+
         $form=$this->add('Frame')->setTitle('Client Log-in')->add('Form');
         $form->addField('line','email')->js(true)->focus();
         $form->addField('password','password');

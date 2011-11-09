@@ -26,7 +26,7 @@ class page_home extends Page {
         $grid=$this->add('MVCGrid',null,'Todo');
         $grid ->setModel('Task',array('name','descr'));
 
-        $grid->addColumn('button','details_todo','Deal with it');
+        $grid->addColumn('button','details_todo');
         /*
         $grid->addColumn('button','details_payment','Details');
         if($_GET['details_payment']){

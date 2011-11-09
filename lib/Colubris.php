@@ -38,11 +38,25 @@ class Colubris extends ApiFrontend {
         $auth->setSource('user', 'email', 'password')->field('id,name,is_admin');
         $auth->usePasswordEncryption('md5');
         $auth->allowPage('minco');
-        if(substr($this->page,0,3)=='api')$auth->allowPage($this->page);
-        $auth->allowPage('index');
-        if (!$auth->isPageAllowed($this->api->page)
 
-            )$auth->check();
+
+        if(isset($_REQUEST['hash'])){
+            $u=$this->add('Model_User')->getBy('hash',$_REQUEST['hash']);
+            if(!$u['id']){
+                echo json_encode("Wrong user hash");
+                $this->logVar('wrong user hash: '.$v['hash']);
+                exit;
+            }
+
+            unset($u['password']);
+            $this->api->auth->addInfo($u);
+            $this->api->auth->login($u['email']);
+		}
+
+
+
+        $auth->allowPage('index');
+        if (!$auth->isPageAllowed($this->api->page))$auth->check();
 
         // Alternatively
         // $this->add('MVCAuth')->setController('Controller_User')->check();

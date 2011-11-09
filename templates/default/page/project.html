@@ -42,19 +42,23 @@
 
     <div class="g-row">
 
-      <div class="g-5" style="padding-bottom: 20px">
-        <h4>Reference: #10023 (Total £700.00)</h4>
+      <?Quote?>
+      <div class="g-5" style="padding-bottom: 20px" id="<?$_name?>">
+        <h4><?name?>Reference: #10023<?/?> (Total £<?amount?>700.00<?/?>)</h4>
         <div style="border-left: 1px dashed gray; padding-left: 10px">
+        <!--
           <table width="100%">
             <tr><th>Seciton</th><th>Cost</th></tr>
             <tr><td>Design of 25 pages</td><td>£500.00</td></tr>
             <tr><td>Installation</td><td>£100.00</td></tr>
             <tr><td>Q/A</td><td>£100.00</td></tr>
           </table>
-          <a href="<?$demo_url?>">Show Feature Breakdown</a><br/>
+          -->
+          <?$Details?><br/>
           <b>Quote Expries</b>: 04/01/2012
         </div>
       </div>
+      <?/Quote?>
 
 
     </div>
