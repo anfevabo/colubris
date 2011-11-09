@@ -46,10 +46,8 @@ class Model_Budget extends Model_Table {
                     ))->defaultValue('lead')
                     ;
 
-        /*
 		$this->newField('start_date')->datatype('date')->sortable(true)
             ->defaultValue(date('Y-m-d',strtotime('next monday')));
-            */
 
 		$this->newField('deadline')->datatype('date')->sortable(true);
 
@@ -73,6 +71,8 @@ class Model_Budget extends Model_Table {
 		$this->newField('amount')
             ->caption('Sell Price')
             ->datatype('money')->sortable(true);
+
+        $this->addField('amount_paid')->type('money')->caption('Paid to date');
 
         $this->addField('quote_id')
             ->refModel('Model_Quote');
