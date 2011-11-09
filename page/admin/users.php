@@ -4,7 +4,14 @@ class page_admin_users extends Page_EntityManager {
 	function initMainPage(){
 		parent::initMainPage();
 
-		$this->grid->addColumnPlain('expander','projects');
+		$this->grid->addColumn('expander','projects');
+        $this->grid->addColumn('button','login');
+        if($_GET['login']){
+            // load user data
+            $m=$this->grid->getController();
+            $m->loadData($_GET['login']);
+            $this->js()->univ()->alert($m->get('email'))->execute();
+        }
 	}
 	function page_edit(){
 		parent::page_edit();

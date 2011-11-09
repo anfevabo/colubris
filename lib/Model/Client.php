@@ -7,8 +7,8 @@ class Model_Client extends Model_Table {
 	public $entity_code='client';
 	public $table_alias='cl';
 
-	function defineFields(){
-		parent::defineFields();
+	function init(){
+		parent::init();
 
 		// Each field can have a varietty of properties. Please
 		// referr to FieldDefinition.php file for more information
@@ -56,7 +56,6 @@ class Model_Client extends Model_Table {
             ->field('sum(amount)')
             ->join('project pr','pr.id=bu.project_id','left')
             ->where('pr.client_id=cl.id')
-            ->select()
             ;
     }
     function calculate_total_expense(){

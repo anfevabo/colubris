@@ -14,6 +14,9 @@ class Model_Project extends Model_Table {
         $this->addField('budgets')->calculated(true)->type('int');
         $this->addField('quotations')->calculated(true)->type('int');
 
+        $this->addField('demo_url');
+        $this->addField('prod_url');
+
 
         $u=$this->api->getUser();
         if($u->get('is_client')){

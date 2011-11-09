@@ -1,0 +1,2 @@
+ALTER TABLE `project` ADD COLUMN `demo_url` VARCHAR(255) NULL DEFAULT NULL  AFTER `client_id` , ADD COLUMN `prod_url` VARCHAR(255) NULL DEFAULT NULL  AFTER `demo_url` ;
+

@@ -3,8 +3,8 @@ class Model_Task extends Model_Table {
 	public $entity_code='task';
 	public $table_alias='tsk';
 
-	function defineFields(){
-		parent::defineFields();
+	function init(){
+		parent::init();
 
 		$this->addField('name');
 		$this->addField('priority')->datatype('int');
@@ -31,6 +31,7 @@ class Model_Task extends Model_Table {
 
 	}
 	function enScope($dsql){
+        return;
 		if($sc=$this->api->recall('scope')){
 			if($sc['budget'])$dsql->where('budget_id',$sc['budget']);
 		}

@@ -5,8 +5,8 @@ class Model_Payment extends Model_Table {
     public $entity_code = 'payment';
     public $table_alias = 'pa';
 
-    function defineFields() {
-        parent::defineFields();
+    function init() {
+        parent::init();
 
         $this->newField('user_id')->sortable(true)->refModel('Model_Developer')
             ->caption('Implemented By');

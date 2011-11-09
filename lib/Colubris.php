@@ -38,6 +38,7 @@ class Colubris extends ApiFrontend {
         $auth->setSource('user', 'email', 'password')->field('id,name,is_admin');
         $auth->usePasswordEncryption('md5');
         $auth->allowPage('minco');
+        $auth->allowPage('index');
         if (!$auth->isPageAllowed($this->api->page)
 
             )$auth->check();
@@ -52,6 +53,8 @@ class Colubris extends ApiFrontend {
         // If you are using a complex menu, you can re-define
         // it and place in a separate class
 
+
+        $this->template->append('logo','<h2 style="float: left">Beta</h2>');
 
         if ($this->page == 'minco'
 
@@ -118,6 +121,10 @@ class Colubris extends ApiFrontend {
             default:
                 $m->addMenuItem('Introduction', 'intro');
 
+                if(!$this->auth->isLoggedIn()){
+                    break;
+                }
+
                 if ($u->get('is_manager') || $u->get('is_admin')) {
                     $m->addMenuItem('Manager', 'manager');
                 }
@@ -138,7 +145,7 @@ class Colubris extends ApiFrontend {
 
                 break;
         }
-        if (!$u->get('is_client')) {
+        if ($this->auth->isLoggedIn() && !$u->get('is_client')) {
             $m->addMenuItem('Main Menu', '/');
         }
         $m->addMenuItem('logout');
@@ -149,20 +156,12 @@ class Colubris extends ApiFrontend {
                         ->setStyle('width', '700px')
                         ->setStyle('text-align', 'right');
 
-        // Button have 2 events. Click event opens the frame, reload event is a custom event
-        // which would reload parent
-        $b = $sc->add('Button')
-                        ->setStyle('float', 'right')
-                        ->setStyle('margin-left', '1em')
-                        ->set('Change Scope');
-        $b->js('click')->univ()->dialogURL('Change Scope', $this->api->getDestinationURL('/scope'));
-        $b->js('my_reload', $sc->js()->univ()->page($this->api->getDestinationURL()));
 
 
         $sc->add('Text')
                 ->set(
                         $this->api->auth->get('name') . ' @ ' .
-                        'Colubris Team Manager v' . $this->getVersion() . '<br/>' . $this->getScope());
+                        'Colubris Team Manager v' . $this->getVersion() . '<br/>');// . $this->getScope());
 
 
 
@@ -173,6 +172,7 @@ class Colubris extends ApiFrontend {
 
     }
 
+    /*
     function page_index($p) {
         
         $u = $this->getUser();
@@ -184,6 +184,7 @@ class Colubris extends ApiFrontend {
             $this->api->redirect('intro');
         }
     }
+     */
 
     function page_scope($p) {
         $f = $p->add('Form');

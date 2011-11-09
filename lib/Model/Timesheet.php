@@ -5,8 +5,8 @@ class Model_Timesheet extends Model_Table {
     public $entity_code = 'timesheet';
     public $table_alias = 'T';
 
-    function defineFields() {
-        parent::defineFields();
+    function init() {
+        parent::init();
         $this->newField('title');
         $this->newField('user_id')->refModel('Model_User');
 //        $this->newField('report_id')->refModel('Model_Report');

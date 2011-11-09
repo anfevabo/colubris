@@ -12,8 +12,8 @@ class page_manager extends Page {
         $right->add('H2')->set('Active Projects');
 
         $pr=$left->add('Manager_Projects');
-        if($pr->acceptance)$pr->acceptance->addFormatter('bugs','expander');
-        if($pr->acceptance)$pr->acceptance->addFormatter('tasks','expander');
+       // if($pr->acceptance)$pr->acceptance->addFormatter('bugs','expander');
+      //  if($pr->acceptance)$pr->acceptance->addFormatter('tasks','expander');
         $left->add('Manager_Tasks');
 
         $right->add('Manager_Deadlines');

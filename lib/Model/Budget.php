@@ -3,10 +3,10 @@ class Model_Budget extends Model_Table {
 	public $entity_code='budget';
 	public $table_alias='bu';
 
-	function defineFields(){
-		parent::defineFields();
+	function init(){
+		parent::init();
 
-		$this->newField('name')->sortable(true);
+		$this->addField('name')->sortable(true);
 
         $this->addField('priority')->type('list')->listData(array(
                     'Select...',
