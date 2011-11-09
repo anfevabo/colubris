@@ -56,6 +56,7 @@ class Model_Client extends Model_Table {
             ->field('sum(amount)')
             ->join('project pr','pr.id=bu.project_id','left')
             ->where('pr.client_id=cl.id')
+            ->select()
             ;
     }
     function calculate_total_expense(){
