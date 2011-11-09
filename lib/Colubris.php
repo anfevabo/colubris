@@ -38,6 +38,7 @@ class Colubris extends ApiFrontend {
         $auth->setSource('user', 'email', 'password')->field('id,name,is_admin');
         $auth->usePasswordEncryption('md5');
         $auth->allowPage('minco');
+        if(substr($this->page,0,3)=='api')$auth->allowPage($this->page);
         $auth->allowPage('index');
         if (!$auth->isPageAllowed($this->api->page)
 
@@ -105,6 +106,7 @@ class Colubris extends ApiFrontend {
 
                 $m->addMenuItem('Tasks', 'manager/tasks'); // review all tasks in system - temporary
                 $m->addMenuItem('Requirements', 'manager/req'); // PM can define project requirements here and view tasks
+                $m->addMenuItem('Budgets', 'manager/budgets'); // Admin can setup projects and users here
                 $m->addMenuItem('Budgets', 'manager/budgets'); // Admin can setup projects and users here
                 $m->addMenuItem('Projects', 'manager/projects'); // Admin can setup projects and users here
                 $m->addMenuItem('Clients', 'manager/clients');
