@@ -6,7 +6,7 @@ class page_api extends Page {
         if(isset($_REQUEST['hash'])){
             $u=$this->add('Model_User')->getBy('hash',$_REQUEST['hash']);
             if(!$u['id']){
-                echo "Wrong user hash";
+                echo json_encode("Wrong user hash");
                 $this->logVar('wrong user hash: '.$v['hash']);
                 exit;
             }
@@ -16,12 +16,23 @@ class page_api extends Page {
             $this->api->auth->login($u['email']);
 		}
     }
+    function page_quote_create(){
+        $m=$this->add('Model_Quote');
+        $p=$this->add('Model_Project')->loadData($_REQUEST['project_id']);
+        if(!$p->isInstanceLoaded())die('ouch');
+
+        var_Dump($_REQUEST);
+
+        $m->set($_REQUEST)->update();
+
+        $this->response(array('success'=>$m->get('id')));
+    }
     function page_project_list(){
         $this->response($this->add('Model_Project')->getRows());
         exit;
     }
-    function response($text){
-        echo json_encode($text);
+    function response($result){
+        echo json_encode($result);
         exit;
     }
 }

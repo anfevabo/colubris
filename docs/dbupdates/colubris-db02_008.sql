@@ -1,0 +1,1 @@
+ALTER TABLE `quote` ADD COLUMN `html` TEXT NULL DEFAULT NULL  AFTER `issued` ;

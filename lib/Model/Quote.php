@@ -5,8 +5,10 @@ class Model_Quote extends Model_Table {
         parent::init();
         $this->addField('project_id')->refModel('Model_Project');
         $this->addField('name')->caption('Reference');
-        $this->addField('amount')->type('money');
+        $this->addField('amount')->type('money')->mandatory(true);
         $this->addField('issued')->type('date');
+
+        $this->addField('html')->type('text')->allowHtml(true);
 
     }
 }
