@@ -80,12 +80,13 @@ class Quote extends View {
     function set($f){
         $this->template->set($f);
 
-        $this->add('Link',null,'Details')->set('Detailed Breakdown');
-            ->js('click')->univ()->dialogURL('Details',$this->api->getDestinationURL(null,array($this->name=>'details')));
+        $this->add('Link',null,'Details')->set('Detailed Breakdown')
+            ->js('click')->univ()->newWindow($this->api->getDestinationURL(null,array($this->name=>'details')),null,"width=800,height=600");
 
         if($_GET[$this->name]=='details'){
             $m=$this->add('Model_Quote')->loadData($f['id']);
             echo $m->get('html');
+            echo '<center><input type=button onclick="window.close()" value="Close"/></center>';
             exit;
         }
         //$this->template->set('details',$this->api->getDestinationURL());

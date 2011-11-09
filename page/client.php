@@ -1,4 +1,5 @@
 <?php
+exit;
 class page_client extends Page {
     function init(){
         parent::init();
