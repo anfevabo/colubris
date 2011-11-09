@@ -138,6 +138,9 @@ class Model_Budget extends Model_Table {
             ->sortable(true)
             ->calculated(true);
 
+        $this->addField('total_pct')->type('int');
+        $this->addField('timeline_html')->type('text');
+
 //        $u=$this->api->getUser();
 //        if($u->isInstanceLoaded() && $u->get('is_client')){
 //            $this->addCondition('client_id',$u->get('client_id'));
