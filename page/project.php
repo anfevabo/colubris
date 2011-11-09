@@ -80,7 +80,7 @@ class Quote extends View {
     function set($f){
         $this->template->set($f);
 
-        $this->add('Link',null,'Details')->set('Hello World')
+        $this->add('Link',null,'Details')->set('Detailed Breakdown');
             ->js('click')->univ()->dialogURL('Details',$this->api->getDestinationURL(null,array($this->name=>'details')));
 
         if($_GET[$this->name]=='details'){
