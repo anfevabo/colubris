@@ -13,13 +13,13 @@ class CRUD_ManagerBudgets extends CRUD {
         if ($c->grid) {
             $c->grid->addColumn('profit','profit');
 
-            $c->grid->addColumnPlain('template,expander', 'team', 'Team')->setTemplate('<?$team?> people');
+            $c->grid->addColumn('template,expander', 'team', 'Team')->setTemplate('<?$team?> people');
 
-            $c->grid->addColumnPlain('expander', 'scope', 'Specs');
-            $c->grid->addColumnPlain('expander', 'timeline', 'Timeline');
-            $c->grid->addColumnPlain('expander', 'finances', 'Finances');
+            $c->grid->addColumn('expander', 'scope', 'Specs');
+            $c->grid->addColumn('expander', 'timeline', 'Timeline');
+            $c->grid->addColumn('expander', 'finances', 'Finances');
 
-            $c->grid->getController()->scopeFilter($c->grid->dq);
+            $c->grid->model->scopeFilter($c->grid->dq);
             $c->grid->addOrder()->move('profit','after','amount_spent')->now();
 
             unset($c->grid->columns['project']);

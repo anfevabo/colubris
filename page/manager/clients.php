@@ -1,13 +1,17 @@
 <?
-class page_manager_clients extends Page_EntityManager {
-	public $controller='Controller_Client';
+class page_manager_clients extends Page {
 
 	function page_index(){
-		$this->grid->addFormatter('name','fullwidth');
-		$this->grid->addColumnPlain('expander','users','Users');
-        $this->grid->addButton('Import from SortMyBooks')->js('click')
-            ->univ()->frameURL('Import from SortMyBooks...',$this->api->getDestinationURL('./smboimport'));
-	}
+        $crud=$this->add('CRUD');
+        $crud->setModel('Client');
+
+        if($crud->grid){
+            $crud->grid->addFormatter('name','fullwidth');
+            $crud->grid->addColumn('expander','users','Users');
+            $crud->grid->addButton('Import from SortMyBooks')->js('click')
+                ->univ()->frameURL('Import from SortMyBooks...',$this->api->getDestinationURL('./smboimport'));
+        }
+    }
     function page_smboimport(){
         $data=(array)$this->add('Controller_SMBO')->get('client');
 
@@ -45,7 +49,7 @@ class page_manager_clients extends Page_EntityManager {
         //$g->addColumn('text','name');
         //$g->addColumn('text','name');
     }
-	function page_users(){
+    function page_users(){
         $this->api->stickyGET('client_id');
         $m=$this->add('Model_User')
             ->setMasterField('client_id',$_GET['client_id'])
@@ -64,8 +68,8 @@ class page_manager_clients extends Page_EntityManager {
 
             }
         }
-        
-	}
+
+    }
 }
 class Controller_SMBO extends AbstractController {
     function call($ctl,$command,$args=array()){
@@ -83,8 +87,8 @@ class Controller_SMBO extends AbstractController {
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_POST, count($args));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
-        
-        
+
+
         $res=curl_exec($ch);
         curl_close($ch);
         if(is_null(json_decode($res))){
