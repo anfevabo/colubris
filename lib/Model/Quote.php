@@ -9,8 +9,7 @@ class Model_Quote extends Model_Table {
         $this->addField('issued')->type('date');
 
         $this->addField('html')->type('text')->allowHtml(true);
-        $this->addField('attachment_id')->display('upload');
-            //->refModel('Model_Filestore_File');//->displaytype('upload');
+        $this->addField('attachment_id')->refModel('Model_Filestore_File')->displaytype('file');
 
     }
 }
