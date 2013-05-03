@@ -9,40 +9,40 @@ class Colubris extends ApiFrontend {
     function init() {
         parent::init();
 
-        // Keep this if you are going to use database
+        $this->pathfinder->addLocation('.',array(
+            'addons'=>array('atk4-addons','addons'),
+            'php'=>array('atk4-addons/misc/lib'),
+        ))->setParent($this->pathfinder->base_location);
+
         $this->dbConnect();
 
-        // Keep this if you are going to use plug-ins
-        $this->addLocation('atk4-addons', array(
-                    'php' => array('mvc',
-                        'misc/lib',
-                    )
-                ))
-                ->setParent($this->pathfinder->base_location);
-
-        // Keep this if you will use jQuery UI in your project
         $this->add('jUI');
-
+        
         // Initialize any system-wide javascript libraries here
+        
         $this->js()
                 ->_load('atk4_univ')
                 ->_load('ui.atk4_notify')
-
         ;
 
 
         $this->formatter=$this->add('Controller_Formatter');
 
         // Before going further you will need to verify access
-        $auth = $this->add('SQLAuth');
+        //$auth = $this->add('SQLAuth');
+        $this->add('Auth')
+            ->usePasswordEncryption('md5')
+            ->setModel('Model_User', 'email', 'password')
+        ;
+        /*
         $auth->setSource('user', 'email', 'password')->field('id,name,is_admin');
-        $auth->usePasswordEncryption('md5');
-        $auth->allowPage('minco');
+        $auth->usePasswordEncryption('md5');*/
+        $this->auth->allowPage('minco');
 
 
-        if(isset($_REQUEST['hash'])){
-            $u=$this->add('Model_User')->getBy('hash',$_REQUEST['hash']);
-            if(!$u['id']){
+        if( (isset($_REQUEST['id'])) && (isset($_REQUEST['hash'])) ){
+            $u=$this->add('Model_User')->load($_GET["id"]);
+            if($u['hash']!=$_GET["hash"]){
                 echo json_encode("Wrong user hash");
                 $this->logVar('wrong user hash: '.$v['hash']);
                 exit;
@@ -51,12 +51,12 @@ class Colubris extends ApiFrontend {
             unset($u['password']);
             $this->api->auth->addInfo($u);
             $this->api->auth->login($u['email']);
-		}
+        }
 
 
 
-        $auth->allowPage('index');
-        if (!$auth->isPageAllowed($this->api->page))$auth->check();
+        $this->auth->allowPage('index');
+        if (!$this->auth->isPageAllowed($this->api->page))$this->auth->check();
 
         // Alternatively
         // $this->add('MVCAuth')->setController('Controller_User')->check();
@@ -69,100 +69,99 @@ class Colubris extends ApiFrontend {
         // it and place in a separate class
 
 
-        $this->template->append('logo','<h2 style="float: left">Beta</h2>');
+//        $this->template->append('logo','<h2 style="float: left">Beta</h2>');
 
         if ($this->page == 'minco'
 
             )return parent::initLayout();
 
         $m = $this->add('Menu', 'Menu', 'Menu');
-        $u = $this->getUser();
 
         // Determine page first
 
         $p = explode('_', $this->page);
         switch ($p[0]) {
             case 'client':
-                if (!$u->get('is_client') && !$u->get('is_admin')) {
+                if (!$this->api->auth->model['is_client'] && !$this->api->auth->model['is_admin']) {
                     $this->api->redirect('/');
                 }
 
-                $m->addMenuItem('Welcome', 'client/welcome');
-                $m->addMenuItem('Budgets', 'client/budgets');
-                $m->addMenuItem('Project Status', 'client/status');
-                if($u->get('is_timereport')){
-                $m->addMenuItem('Time Reports', 'client/timesheets');
+                $m->addMenuItem('client/welcome','Welcome');
+                $m->addMenuItem('client/budgets','Budgets');
+                //$m->addMenuItem('client/status','Project Status');
+                if($this->api->auth->model['is_timereport']){
+                $m->addMenuItem('client/timesheets','Time Reports');
                 }
                 break;
 
             case 'team':
-                if (!$u->get('is_developer') && !$u->get('is_admin')) {
+                if (!$this->api->auth->model['is_developer'] && !$this->api->auth->model['is_admin']) {
                     $this->api->redirect('/');
                 }
 
-                $m->addMenuItem('Welcome', 'team');
-                $m->addMenuItem('Time Entry', 'team/entry');
-                //$m->addMenuItem('Development Priorities','team/timesheets');
+                $m->addMenuItem('team','Welcome');
+                $m->addMenuItem('team/entry','Time Entry');
+                //$m->addMenuItem('team/timesheets','Development Priorities');
                 // TODO:
-                 $m->addMenuItem('Timesheets', 'team/timesheets');
-                $m->addMenuItem('Budgets', 'team/budgets');
+                 $m->addMenuItem('team/timesheets','Timesheets');
+                $m->addMenuItem('team/budgets','Budgets');
                 break;
 
             case 'manager':
-                if (!$u->get('is_manager') && !$u->get('is_admin')) {
+                if (!$this->api->auth->model['is_manager'] && !$this->api->auth->model['is_admin']) {
                     $this->api->redirect('/');
                 }
-                $m->addMenuItem('Home', 'manager');
-                $m->addMenuItem('Request For Quotation', 'manager/rfq');
-                $m->addMenuItem('Statistics', 'manager/statistics');
-                $m->addMenuItem('Reports', 'manager/reports'); // review all reports in system - temporary
-                $m->addMenuItem('Timesheets', 'manager/timesheets'); // review all reports in system - temporary
+                $m->addMenuItem('manager','Home');
+                $m->addMenuItem('manager/rfq','Request For Quotation');
+                $m->addMenuItem('manager/statistics','Statistics');
+                $m->addMenuItem('manager/reports','Reports'); // review all reports in system - temporary
+                $m->addMenuItem('manager/timesheets','Timesheets'); // review all reports in system - temporary
 
-                $m->addMenuItem('Tasks', 'manager/tasks'); // review all tasks in system - temporary
-                $m->addMenuItem('Requirements', 'manager/req'); // PM can define project requirements here and view tasks
-                $m->addMenuItem('Budgets', 'manager/budgets'); // Admin can setup projects and users here
-                $m->addMenuItem('Budgets', 'manager/budgets'); // Admin can setup projects and users here
-                $m->addMenuItem('Projects', 'manager/projects'); // Admin can setup projects and users here
-                $m->addMenuItem('Clients', 'manager/clients');
+                $m->addMenuItem('manager/tasks','Tasks'); // review all tasks in system - temporary
+                $m->addMenuItem('manager/req','Requirements'); // PM can define project requirements here and view tasks
+                $m->addMenuItem('manager/budgets','Budgets'); // Admin can setup projects and users here
+                $m->addMenuItem('manager/projects','Projects'); // Admin can setup projects and users here
+                $m->addMenuItem('manager/clients','Clients');
                 break;
             case 'admin':
-                if (!$u->get('is_admin')) {
+                if (!$this->api->auth->model['is_admin']) {
                     $this->api->redirect('/');
                 }
-                $m->addMenuItem('Users', 'admin/users');
-                $m->addMenuItem('Developers', 'admin/developers');
-                $m->addMenuItem('Files', 'admin/filestore');
+                $m->addMenuItem('admin/users','Users');
+                $m->addMenuItem('admin/developers','Developers');
+                $m->addMenuItem('admin/filestore','Files');
                 break;
 
             default:
-                $m->addMenuItem('Introduction', 'intro');
+                $m->addMenuItem('intro','Introduction');
 
                 if(!$this->auth->isLoggedIn()){
                     break;
                 }
 
-                if ($u->get('is_manager') || $u->get('is_admin')) {
-                    $m->addMenuItem('Manager', 'manager');
+                if ($this->api->auth->model['is_manager'] || $this->api->auth->model['is_admin']) {
+                    $m->addMenuItem('manager','Manager');
                 }
-                if ($u->get('is_developer') || $u->get('is_admin')) {
-                    $m->addMenuItem('Developer', 'team');
+                if ($this->api->auth->model['is_developer'] || $this->api->auth->model['is_admin']) {
+                    $m->addMenuItem('team','Developer');
                 }
-                if ($u->get('is_client') || $u->get('is_admin')) {
-                    $m->addMenuItem('Client', 'client');
+                if ($this->api->auth->model['is_client'] || $this->api->auth->model['is_admin']) {
+                    $m->addMenuItem('client','Client');
                 }
-                if ($u->get('is_admin')) {
-                    $m->addMenuItem('Admin', 'admin');
+                if ($this->api->auth->model['is_admin']) {
+                    $m->addMenuItem('admin/users','Admin');
                 }
 
-                if (!$u->get('is_client')) {
-                    $m->addMenuItem('About Colubris', 'about');
+                if (!$this->api->auth->model['is_client']) {
+                    $m->addMenuItem('about','About Colubris');
                 }
                 $m->addMenuItem('account');
 
                 break;
         }
-        if ($this->auth->isLoggedIn() && !$u->get('is_client')) {
-            $m->addMenuItem('Main Menu', '/');
+        
+        if ($this->auth->isLoggedIn() && !$this->api->auth->model['is_client']) {
+            $m->addMenuItem('/','Main Menu');
         }
         $m->addMenuItem('logout');
 
@@ -176,8 +175,8 @@ class Colubris extends ApiFrontend {
 
         $sc->add('Text')
                 ->set(
-                        $this->api->auth->get('name') . ' @ ' .
-                        'Colubris Team Manager v' . $this->getVersion() . '<br/>');// . $this->getScope());
+                        $this->api->auth->model['name'] . ' @ ' .
+                        'Colubris Team Manager v' . $this->getVersion());// . $this->getScope());
 
 
 
@@ -193,7 +192,7 @@ class Colubris extends ApiFrontend {
         
         $u = $this->getUser();
 
-        if($u->get('is_client')){
+        if($this->api->auth->model['is_client')){
             $this->api->redirect('client/budgets');
         }
         else{
@@ -267,9 +266,8 @@ class Colubris extends ApiFrontend {
 
     function getScope() {
         $sc = $this->recall('scope', array());
-        $u = $this->getUser();
-        if ($u->get('is_client')) {
-            $sc['client'] = $u->get('id');
+        if ($this->api->auth->model['is_client']) {
+            $sc['client'] = $this->api->auth->model['id'];
         }
         $t = array();
         foreach ($sc as $key => $val) {
@@ -299,22 +297,6 @@ class Colubris extends ApiFrontend {
             }
         }
         return join(', ', $t);
-    }
-
-    function getUser() {
-        return $this->add('Model_User')->loadData($this->getUserID());
-    }
-
-    function getUserID() {
-        return $this->api->auth->get('id');
-    }
-
-    function isManager() {
-        return $this->getUser()->get('is_manager');
-    }
-
-    function isDeveloper() {
-        return $this->getUser()->get('is_developer');
     }
 
     function getVersion() {
@@ -347,7 +329,7 @@ class Colubris extends ApiFrontend {
     function page_pref($p) {
 
         // This is example of how you can use form with MVC support
-        $p->frame('Preferences')->add('MVCForm')
+        $p->frame('Preferences')->add('Form')
                 ->setController('Controller_User');
     }
 

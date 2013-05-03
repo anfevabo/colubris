@@ -33,7 +33,7 @@ class Button_NewEntry extends Button {
         $this->api->stickyGET($this->name);
         $v=$this->owner->add('View',$this->short_name.'_dlg',$this->spot);
         $_GET['cut_object']=$v->name;
-        $this->form=$form=$v->add('MVCForm');
+        $this->form=$form=$v->add('Form');
         $form->setModel($this->model,$this->fields);
 
 

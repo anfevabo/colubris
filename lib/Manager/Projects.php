@@ -9,7 +9,7 @@ class Manager_Projects extends View {
 
 
         $this->add('H4')->set('1. Quotes needed');
-        $this->quotes=$grid=$this->add('MVCGrid');
+        $this->quotes=$grid=$this->add('Grid');
         $m=$grid->setModel('Budget',array('name','priority','state','deadline'));
         $m->addCondition('accepted',false);
         $m->addCondition('closed',false);
@@ -23,7 +23,7 @@ class Manager_Projects extends View {
         if($_GET[$this->name]=='supplyquote')return $this->supplyQuote();
 
         $this->add('H4')->set('2. Acceptance. Check on client');
-        $this->acceptance=$grid=$this->add('MVCGrid');
+        $this->acceptance=$grid=$this->add('Grid');
         $grid->setModel('Budget_Completed',array('name','priority','state','bugs','tasks'));
     }
     function supplyQuote(){
@@ -31,10 +31,9 @@ class Manager_Projects extends View {
         $v=$this->add('View','supplyquote');
         $_GET['cut_object']=$v->name;
 
-        $m=$this->add('Model_Budget')->loadData($_GET['id']);
+        $m=$this->add('Model_Budget')->load($_GET['id']);
 
-        $form=$v->add('MVCForm');
-        $form->addField('readonly','budget_name')->set($m->get('name'));
+        $form=$v->add('Form');
         $form->setModel($m,array('amount','state'));
         $form->getElement('amount')->js('change',
                 $form->getElement('state')->js()->val('quotereview')

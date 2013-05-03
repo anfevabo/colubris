@@ -5,7 +5,7 @@ class Manager_Deadlines extends View {
 
 
         $this->add('H4')->set('4. Project Deadlines');
-        $grid=$this->add('MVCGrid');
+        $grid=$this->add('Grid');
         $model=$grid->setModel('Budget',array('name','priority','state','deadline'));
         $model->addCondition('accepted',true);
         $model->addCondition('closed',false);

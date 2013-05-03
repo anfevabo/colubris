@@ -1,5 +1,5 @@
 <?php
-class FormAndSave extends MVCForm {
+class FormAndSave extends Form {
     function init(){
         parent::init();
 

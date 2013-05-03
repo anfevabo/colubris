@@ -15,8 +15,7 @@ class Page_index extends Page {
             $l=$form->get('email');
             $p=$form->get('password');
 
-            $enc_p = $auth->encryptPassword($p,$l);
-            if($auth->verifyCredintials($l,$enc_p)){
+            if($auth->verifyCredentials($l,$p)){
                 $auth->login($l);
                 $form->js()->univ()->redirect('home')->execute();
             }

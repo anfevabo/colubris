@@ -1,5 +1,5 @@
 <?php
-class View_WhatToDo extends MVCGrid {
+class View_WhatToDo extends Grid {
 	public $zoom=5;
 	function init(){
 		parent::init();

@@ -25,13 +25,13 @@ class page_manager_timesheets extends Page {
             $grid->last_column = 'minutes';
             $grid->makeSortable();
 
-            //$crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
-            $quicksearch->useGrid($grid)->useFields(array('title'));
+            $crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
+            //$quicksearch->useGrid($grid)->useFields(array('title'));
             //$quicksearch = $grid->addQuickSearch(array('title'), 'ReportQuickSearch');//useGrid($grid)->useFields(array('title'));
             //$quicksearch=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
 
             $this->add('H3')->set('Change Selected');
-            $f = $this->add('MVCForm')->setFormClass('horizontal');
+            $f = $this->add('Form')->setFormClass('horizontal');
             $f_sel = $f->addField('line', 'sel');
             $grid->addSelectable($f_sel);
 
@@ -104,10 +104,10 @@ class ReportQuickSearch extends QuickSearch {
 
         //$this->setFormClass('horizontal');
         $this->addField('checkbox', 'no_budget', 'n/b');
-        $this->addField('autocomplete', 'user_id', 'U: ')->setModel('Developer');
+        $this->addField('autocomplete/basic', 'user_id', 'U: ')->setModel('Developer');
         $budget=$this->add('Model_Budget');
         $budget->addCondition('closed',false);
-        $this->addField('autocomplete', 'budget_id', 'B: ')->setModel($budget);
+        $this->addField('autocomplete/basic', 'budget_id', 'B: ')->setModel($budget);
         $this->addField('DatePicker', 'from', 'Date: ')->setAttr('style', 'width: 100px');
         $this->addField('DatePicker', 'to', '-')->setAttr('style', 'width: 100px');
     }

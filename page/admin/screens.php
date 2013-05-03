@@ -15,7 +15,7 @@ class page_admin_screens extends Page_EntityManager {
 
 		// Create form for editing (or adding) task
 		$c=$this->add('Controller_Task');
-		$f=$this->add('MVCForm')->setController($c);
+		$f=$this->add('Form')->setController($c);
 		// set default values for this form
 		$f->set('screen_id',$_GET['id']);
 		$f->set('budget_id',$this->add('Controller_Screen')->loadData($_GET['id'])->get('budget_id'));
@@ -27,7 +27,7 @@ class page_admin_screens extends Page_EntityManager {
 
 		// Create list of tasks for this screen
 		$c=$this->add('Controller_Task');$c->addCondition('screen_id',$_GET['id']);
-		$g=$this->add('MVCGrid')->setController($c);
+		$g=$this->add('Grid')->setController($c);
 
 		// Add 2 extra columns for editing and deletion
 		$g->addColumnPlain('button','edit');

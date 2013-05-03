@@ -7,12 +7,12 @@ class page_manager_rfq extends Page {
 
         $form=$this->add('Form');
 
-        $client=$form->addField('autocomplete','client_id');
+        $client=$form->addField('autocomplete/basic','client_id');
         $client->setModel('Client');
         $client->add('Button_NewEntry',null,'after_field')
             ->setLabel('New Client')->setModel('Client',array('name'));
 
-        $project=$form->addField('autocomplete','project_id');
+        $project=$form->addField('autocomplete/basic','project_id');
         $project->setModel('Project');
 
     }

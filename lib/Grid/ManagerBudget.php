@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-class Grid_ManagerBudget extends MVCGrid {
+class Grid_ManagerBudget extends Grid {
     function formatRow() {
 
         $deadline=$this->current_row['deadline'];

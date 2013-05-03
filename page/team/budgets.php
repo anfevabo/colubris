@@ -6,7 +6,7 @@ class page_team_budgets extends Page {
 
     function initMainPage() {
         $model = $this->add('Model_Payment_Me');
-        $model->addCondition('user_id',$this->api->getUserID());
+        $model->addCondition('user_id',$this->api->auth->model['id']);
 
         $c = $this->add('CRUD_TeamBudgets');
         //$model->getField('days_spent')->caption('Cur Mandays');

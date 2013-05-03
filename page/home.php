@@ -5,8 +5,9 @@ class page_home extends Page {
 
 
         // Projects
-        $grid=$this->add('MVCGrid',null,'Projects');
-        $grid ->setModel('Project',array('name','descr','url'));
+        $grid=$this->add('Grid',null,'Projects');
+        $m=$this->add('Model_Project')->setOrder('name');
+        $grid->setModel($m,array('name','descr','url'));
 
     //    $grid->addButton('New Project? Request Our Quotation!');
      //   $grid->addButton('Help');
@@ -23,7 +24,7 @@ class page_home extends Page {
 
 
         // TODO
-        $grid=$this->add('MVCGrid',null,'Todo');
+        $grid=$this->add('Grid',null,'Todo');
         $grid ->setModel('Task',array('name','descr'));
 
         $grid->addColumn('button','details_todo');

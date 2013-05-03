@@ -166,7 +166,7 @@ class Export extends AbstractObject {
 	private function __getHeaderModel(){
 		return $this->__headerModel;
 	}
-    public function getDataFromMVCGrid($grid,$remove_system_fields=true, $format=true){
+    public function getDataFromGrid($grid,$remove_system_fields=true, $format=true){
         $data = $grid->getController()->getRows();
         if (!$format){
             return $data;

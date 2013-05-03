@@ -39,7 +39,7 @@ class page_manager_clients extends Page {
 
         $this->add('H2')->set('List of imported clients');
 
-        $g=$this->add('MVCGrid');
+        $g=$this->add('Grid');
         $g->setModel('Client');
         $g->dq=null;
         unset($g->columns['is_archive']);

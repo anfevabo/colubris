@@ -48,7 +48,7 @@ class page_manager_req extends Page {
 		// Rigth-column will depend on type
 		$c2=$cc->addColumn('50%');
 
-		$g=$c1->add('MVCGrid');
+		$g=$c1->add('Grid');
 		$m=$g->setModel('Requirement',array('name','type','sub_estimate','estimate','tot_estimate'));
 		$g->addColumn('button','select');
 
@@ -85,7 +85,7 @@ class page_manager_req extends Page {
 	}
     function page_add(){
         $this->api->stickyGET('new');
-        $f=$this->add('MVCForm');
+        $f=$this->add('Form');
         $f->setModel($_GET['new']);
         $f->set('budget_id',$this->bc->get('id'));
         $f->set('project_id',$this->pc->get('id'));

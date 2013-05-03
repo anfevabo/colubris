@@ -22,7 +22,7 @@ class CRUD_Export extends CRUD {
                 $this->preFetchData("csv");
                 /* format csv, export */
                 $export = $this->add("Export");
-                $data = $export->getDataFromMVCGrid($this->grid);
+                $data = $export->getDataFromGrid($this->grid);
                 $export->setHeaderModel($this->grid->getController()->getModel());
                 $export->convertToCSV($data);
                 $export->exportCSV("export.csv");
@@ -31,7 +31,7 @@ class CRUD_Export extends CRUD {
                 /* format csv, export */
                 $this->preFetchData("pdf");
                 $export = $this->add("Export");
-                $data = $export->getDataFromMVCGrid($this->grid);
+                $data = $export->getDataFromGrid($this->grid);
                 $export->setHeaderModel($this->grid->getController()->getModel());
                 $export->convertToPDF($data);
                 $export->exportPDF("export.pdf");
@@ -40,7 +40,7 @@ class CRUD_Export extends CRUD {
                 $this->preFetchData("xls");
                 /* format csv, export */
                 $export = $this->add("Export");
-                $data = $export->getDataFromMVCGrid($this->grid);
+                $data = $export->getDataFromGrid($this->grid);
                 $export->setHeaderModel($this->grid->getController()->getModel());
                 $export->setConverterTemplate("export/xls");
                 $export->convertToXLS($data);

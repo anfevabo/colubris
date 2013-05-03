@@ -3,13 +3,13 @@
 class page_team extends Page {
 
     function initMainPage() {
-        $ac_url = $this->api->locateURL('js', 'autocomplete/ui.autocomplete.css');
+        //$ac_url = $this->api->locateURL('js', 'autocomplete/ui.autocomplete.css');
 
         //$this->api->template->append('js_include',
         //       '<link rel="stylesheet" type="text/css" href="'.$ac_url.'" />');
 
 
-        $g = $this->add('ReportGrid', null, 'just_reported');
+        $g = $this->add('Grid', null, 'just_reported');
         $m = $g->setModel('Timesheet', array('user', 'budget', 'title', 'date', 'minutes'));
         //      $m->addCondition('user_id',$this->api->getUserID());
         $g->dq->order('date desc,id desc');
@@ -18,7 +18,7 @@ class page_team extends Page {
 
         /* left column data */
         $model = $this->add("Model_Timesheet");
-        $d = $this->add('Model_Developer_Stats')->loadData($this->api->getUserID());
+        $d = $this->add('Model_Developer_Stats')->loadData($this->api->auth->model['id']);
         $target = $d->get('weekly_target');
         $htd = $d->get('hours_today');
         $htw = $d->get('hours_week');
@@ -53,17 +53,18 @@ class page_team extends Page {
 
         /* end left column data */
 
-
+/*
         $m = $this->add('Model_Developer_Stats');
         $m->setDateRange(date('Y-m-d', strtotime('last monday', strtotime('sunday'))), date('Y-m-d'));
         $data = $m->getRows(array('id', 'name', 'hours_today'));
         $result = array();
         foreach ($data as $row) {
-            $row['name'] = preg_replace('/ .*/', '', $row['name']);
-            $result[$row['name']] = $row['hours_today'] + 0;
+ */
+//            $row['name'] = preg_replace('/ .*/', '', $row['name']);
+/*            $result[$row['name']] = $row['hours_today'] + 0;
         }
 
-        $d = $this->add('Model_Developer')->loadData($this->api->getUserID());
+        $d = $this->add('Model_Developer')->loadData($this->api->auth->model['id']);
         $data = $d->getTimesheets()->dsql()
                         ->field('unix_timestamp(date) d,minutes/60')
                         ->order('date')
@@ -105,6 +106,7 @@ class page_team extends Page {
         $ch->series(array('name' => 'Hours to target', 'data' => $data));
         $ch->series(array('name' => 'Baseline', 'data' => array(array($min, 100), array($max, 0))));
         $ch->series(array('name' => 'Today', 'data' => array(array(time() * 1000 - 100, 100), array(time() * 1000, 0))));
+            */
     }
 
     function page_amount() {

@@ -3,7 +3,7 @@
 class page_client_budgets extends Page {
 
     function initMainPage() {
-        $u = $this->api->getUser();
+        $u = $this->api->auth;
         $projects = $this->add('Model_Project')->getRows(array('name'));
         foreach($projects as $project){
 

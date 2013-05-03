@@ -57,7 +57,7 @@ class page_manager extends Page {
 
     function page_bugs(){
         $this->api->stickyGET('budget_id');
-        $g=$this->add('MVCGrid');
+        $g=$this->add('Grid');
         $m=$g->setModel('Task_Bug',array('name','priority','estimate','status'));
         $g->addColumn('button','info');
         $m->addCondition('budget_id',$_GET['budget_id']);
@@ -78,7 +78,7 @@ class page_manager extends Page {
         $right->add('H3')->set('Client Interaction');
 
 
-        $form=$left->add('MVCForm');
+        $form=$left->add('Form');
         $form->setModel('Task')->loadData($_GET['id']);
 
 
@@ -96,7 +96,7 @@ class page_manager extends Page {
 
     function page_userprojects() {
         $this->api->stickyGET('id');
-        $g = $this->add('MVCGrid');
+        $g = $this->add('Grid');
         $m = $g->setModel('Timesheet', array( 'budget', 'title', 'date', 'minutes'));
         $m->addCondition('user_id', $_GET['id']);
         $g->dq->where('date>now()-interval 1 month');

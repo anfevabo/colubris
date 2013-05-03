@@ -7,8 +7,8 @@ class page_team_entry extends Page {
     }
     function page_manual(){
         $m=$this->add('Model_Timesheet');
-        $m->setMasterField('user_id',$this->api->getUserID());
-        $inf=$this->add('InfiniteAddForm');
+        $m->setMasterField('user_id',$this->api->auth->model['id']);
+        $inf=$this->add('misc/InfiniteAddForm');
         $inf->setModel($m,array('title','date','minutes','budget_id'));
 
         $fld=$inf->form->getElement('date');
@@ -75,11 +75,11 @@ class page_team_entry extends Page {
         $t=$tt->addTabURL('./import','Import');
 
 
-        $url=$this->api->getDestinationURL('autotime',array('hash'=>$this->api->getUser()->get('hash')));
+        $url=$this->api->getDestinationURL('autotime',array('hash'=>$this->api->auth->model['hash']));
         $url->useAbsoluteURL();
         $v->template->trySet('url',$url);
 
-        $minco_url=$this->api->getDestinationURL('minco',array('hash'=>$this->api->getUser()->get('hash')));
+        $minco_url=$this->api->getDestinationURL('minco',array('hash'=>$this->api->auth->model['hash']));
         $minco_url->useAbsoluteURL();
         $v->template->trySet('minco_url',$minco_url);
 
