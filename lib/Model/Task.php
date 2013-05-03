@@ -1,23 +1,22 @@
 <?
 class Model_Task extends Model_Table {
-	public $entity_code='task';
-	public $table_alias='tsk';
+    public $table='task';
 
-	function init(){
-		parent::init();
+    function init(){
+        parent::init();
 
-		$this->addField('name');
-		$this->addField('priority')->datatype('int');
+        $this->addField('name');
+        $this->addField('priority')->datatype('int');
 
-		$this->addField('descr_original')->dataType('text');
+        $this->addField('descr_original')->dataType('text');
 
-		$this->addField('estimate')->dataType('money');
-		$this->addField('cur_progress')->dataType('int')->calculated(true);
+        $this->addField('estimate')->dataType('money');
+        $this->addField('cur_progress')->dataType('int')->calculated(true);
 
-		$this->addField('deviation')->dataType('text');
+        $this->addField('deviation')->dataType('text');
 
-		$this->addField('budget_id')->refModel('Model_Budget');
-		$this->addField('requirement_id')->refModel('Model_Requirement');
+        $this->addField('budget_id')->refModel('Model_Budget');
+        $this->addField('requirement_id')->refModel('Model_Requirement');
 
 
         /*

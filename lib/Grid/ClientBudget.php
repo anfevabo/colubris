@@ -1,6 +1,6 @@
 <?php
 
-class Grid_ClientBudget extends MVCGrid {
+class Grid_ClientBudget extends Grid {
 
     public $fancy = null;
 

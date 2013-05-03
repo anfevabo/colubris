@@ -1,5 +1,5 @@
 <?
-class View_Screens extends MVCLister {
+class View_Screens extends Lister {
 	function init(){
 		parent::init();
 

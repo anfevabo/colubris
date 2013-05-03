@@ -1,9 +1,7 @@
 <?
 
 class Model_Timesheet extends Model_Table {
-
-    public $entity_code = 'timesheet';
-    public $table_alias = 'T';
+public $table = 'timesheet';
 
     function init() {
         parent::init();
@@ -20,7 +18,7 @@ class Model_Timesheet extends Model_Table {
                 ->datatype('int')
                 ->calculated(true);
         if ($this->api->page != 'minco') {
-            $u = $this->api->getUser();
+            $u = $this->api->auth;
             if (!$u->get('is_admin') && !$u->get('is_client')) {
                 $this->setMasterField('user_id', $this->api->getUserID());
             }

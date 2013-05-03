@@ -13,6 +13,10 @@ class page_api extends Page {
 
         $this->response(array('success'=>$m->get('id')));
     }
+    function page_quote_list(){
+        $this->response($this->add('Model_Quote')->getRows());
+        exit;
+    }
     function page_project_list(){
         $this->response($this->add('Model_Project')->getRows());
         exit;

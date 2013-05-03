@@ -50,7 +50,7 @@ class View_RequirementDetails extends HtmlElement {
 					->setStyle('margin-bottom','-30px')
 					->addClass('clear');
 
-				$g=$this->add('MVCGrid')
+				$g=$this->add('Grid')
 					->addTotals();
 
 				$g
@@ -74,7 +74,7 @@ class View_RequirementDetails extends HtmlElement {
 					->setStyle('margin-bottom','10px')
 					->addClass('clear');
 
-				$g=$this->add('MVCGrid')
+				$g=$this->add('Grid')
 					->addTotals();
 
 				$g

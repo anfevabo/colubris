@@ -1,5 +1,5 @@
 <?php
-class FormDelete extends MVCForm {
+class FormDelete extends Form {
     function init(){
         parent::init();
         $this->add('P')->set('Are You sure you want to delete this?');

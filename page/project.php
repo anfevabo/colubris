@@ -6,7 +6,7 @@ class page_project extends Page {
 
         //$this->add('View_WhatToDo');
 
-        $p=$this->add('Model_Project')->loadData($_GET['project_id']);
+        $p=$this->add('Model_Project')->load($_GET['project_id']);
         $this->api->stickyGET('project_id');
 
         $this->template->set($p->get());

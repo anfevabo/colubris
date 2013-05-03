@@ -1,0 +1,1 @@
+ERROR 1025 (HY000) at line 4: Error on rename of './project/budget' to './project/#sql2-1618-457886' (errno: 152)

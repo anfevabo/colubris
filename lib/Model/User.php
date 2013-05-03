@@ -1,61 +1,50 @@
-<?
+<?php
 /*
    Model class defines structure and behavor of your model. You can re-define number of existing
    functions and add your own functions. 
 
    */
 class Model_User extends Model_Table {
-	public $entity_code='user';
-	public $table_alias='u';
+    public $table='user';
+    function init(){
+        parent::init(); //$this->debug();
+        if (@$this->api->auth) $this->api->auth->addEncryptionHook($this);
 
-	function init(){
-		parent::init();
+        $this->addField('email')->mandatory('required');
 
-		// Each field can have a varietty of properties. Please
-		// referr to FieldDefinition.php file for more information
+        $this->addField('name');
 
-		$this->addField('email')
-			->mandatory(true)
-			;
+        $this->addField('password')->display(array('form'=>'password'))->mandatory('required');
 
-		$this->addField('name')
-			;
+        $this->addField('client_id')
+                ->refModel('Model_Client');
 
-		$this->addField('password')
-            ->system(true)
-			;
+        $this->addField('is_admin')->datatype('boolean')
+                ->setValueList(array('Y'=>'Y','N'=>'N'));
+        $this->addField('is_manager')->datatype('boolean')
+                ->setValueList(array('Y'=>'Y','N'=>'N'));
+        $this->addField('is_developer')->datatype('boolean')
+                ->setValueList(array('Y'=>'Y','N'=>'N'));
+        $this->addField('is_timereport')->datatype('boolean')
+                ->setValueList(array('Y'=>'Y','N'=>'N'))
+                ->caption('Is Time Reports');
+        $this->addExpression('is_client')->datatype('boolean')->set(function($m,$q){
+            return $q->dsql()
+                    ->expr('if(client_id is null,false,true)');
+        });
+        
+        $this->addField('hash');
 
-		$this->addField('client_id')
-			->refModel('Model_Client');
-
-		$this->addField('is_admin')->datatype('boolean');
-		$this->addField('is_manager')->datatype('boolean');
-		$this->addField('is_developer')->datatype('boolean');
-                $this->addField('is_timereport')->datatype('boolean')->caption('Is Time Reports');
-		$this->addField('is_client')->datatype('boolean')->calculated(true);
-
-		$this->addField('hash');//->visible(false);
-
-		// You can define related tables through
-		// $this->addRelatedEntity()
-		// see function comments inside Model/Table
-
-       /* if($this->api->page!='minco' && $this->api->auth->get('is_admin')!='Y'){
-        }*/
-
-	}
+    }
     function me(){
         $this->addCondition('id',$this->api->auth->get('id'));
         return $this;
     }
-	function beforeInsert(&$d){
-		$d['hash']=md5(uniqid());
+    function beforeInsert(&$d){
+        $d['hash']=md5(uniqid());
 
-		return parent::beforeInsert($d);
-	}
-	function calculate_is_client(){
-		return 'if(client_id is null,"N","Y")';
-	}
+        return parent::beforeInsert($d);
+    }
     function resetPassword(){
 
     }

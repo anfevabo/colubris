@@ -1,5 +1,5 @@
 <?php
-class ReportGrid extends MVCGrid {
+class ReportGrid extends Grid {
     public $fancy=null;
 
     function init_timestamp(){

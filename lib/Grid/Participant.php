@@ -1,3 +1,3 @@
 <?php
-class Grid_Participant extends MVCGrid {
+class Grid_Participant extends Grid {
 }

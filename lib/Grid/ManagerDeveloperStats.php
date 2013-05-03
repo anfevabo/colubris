@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-class Grid_ManagerDeveloperStats extends MVCGrid {
+class Grid_ManagerDeveloperStats extends Grid {
 
     function formatRow() {
         parent::formatRow();

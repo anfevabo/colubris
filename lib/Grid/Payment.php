@@ -3,7 +3,7 @@
   * Payment is an item line on the budget invoice. It links to the participant in the project and groups their timesheets
   *  by the top level of specification break-down.
   */
-class Grid_Payment extends MVCGrid {
+class Grid_Payment extends Grid {
     function init(){
         parent::init();
     }

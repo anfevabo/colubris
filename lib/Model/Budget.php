@@ -1,12 +1,10 @@
 <?
 class Model_Budget extends Model_Table {
-	public $entity_code='budget';
-	public $table_alias='bu';
+    public $table='budget';
+    function init(){
+        parent::init();
 
-	function init(){
-		parent::init();
-
-		$this->addField('name')->sortable(true);
+        $this->addField('name')->sortable(true);
 
         $this->addField('priority')->type('list')->listData(array(
                     'Select...',
@@ -46,42 +44,49 @@ class Model_Budget extends Model_Table {
                     ))->defaultValue('lead')
                     ;
 
-		$this->newField('start_date')->datatype('date')->sortable(true)
+        $this->newField('start_date')->datatype('date')->sortable(true)
             ->defaultValue(date('Y-m-d',strtotime('next monday')));
 
-		$this->newField('deadline')->datatype('date')->sortable(true);
+        $this->newField('deadline')->datatype('date')->sortable(true);
 
-		$this->newField('accepted')->datatype('boolean')->sortable(true);
+        $this->newField('accepted')->datatype('boolean')
+            ->setValueList(array('Y'=>'Y','N'=>'N'))
+            ->sortable(true);
 
-		$this->newField('closed')->datatype('boolean')->sortable(true);
+        $this->newField('closed')->datatype('boolean')
+            ->setValueList(array('Y'=>'Y','N'=>'N'))
+            ->sortable(true);
 
         $this->addfield('is_moreinfo_needed')->type('boolean')
+            ->setValueList(array('Y'=>'Y','N'=>'N'))
             ->caption('Waiting for more information from client');
 
         $this->addField('is_delaying')->type('boolean')
+            ->setValueList(array('Y'=>'Y','N'=>'N'))
             ->caption('Project is behind schedule');
 
         $this->addField('is_overtime')->type('boolean')
+            ->setValueList(array('Y'=>'Y','N'=>'N'))
             ->caption('Project was underquoted');
 
 
 
 
 
-		$this->newField('amount')
+        $this->newField('amount')
             ->caption('Sell Price')
-            ->datatype('money')->sortable(true);
+            ->sortable(true);
 
         $this->addField('amount_paid')->type('money')->caption('Paid to date');
 
         $this->addField('quote_id')
             ->refModel('Model_Quote');
 
-		$this->newField('expenses')
+        $this->newField('expenses')
             ->caption('Development Cost')
             ->datatype('money')->sortable(true);
 
-		$this->newField('expenses_descr')->datatype('text')
+        $this->newField('expenses_descr')->datatype('text')
             ->caption('Notes');
 
 
@@ -96,39 +101,39 @@ class Model_Budget extends Model_Table {
             ;
 
 
-		$this->newField('success_criteria')
-			->datatype('list')
-			->listData(array(
-				1=>'Requirements completed',
-				2=>'Mandays worked',
-				3=>'Budget depleted',
-				4=>'Deadline Reached',
-			))
+        $this->newField('success_criteria')
+                ->datatype('list')
+                ->listData(array(
+                        1=>'Requirements completed',
+                        2=>'Mandays worked',
+                        3=>'Budget depleted',
+                        4=>'Deadline Reached',
+                ))
             ;
-		$this->newField('mandays')
-			->datatype('int')
+        $this->newField('mandays')
+                ->datatype('int')
             ;
-		$this->newField('cur_mandays')
-			->datatype('int')
-			->calculated(true)
+        $this->newField('cur_mandays')
+                ->datatype('int')
+                ->calculated(true)
             ;
 //                $this->newField('cur_mandays_developer')
 //			->datatype('int')
 //			->calculated(true)
 //            ;
-    $this->newField('days_spent')
+        $this->newField('days_spent')
 			->datatype('int')
 			->calculated(true)
             ;
-    $this->newField('days_spent_lastweek')
+        $this->newField('days_spent_lastweek')
 			->datatype('int')
             ->caption('Days Spent Last Week')
 			->calculated(true)
             ;
 
-		$this->newField('project_id')
+        $this->newField('project_id')
             ->sortable(true)
-			->refModel('Model_Project')
+            ->refModel('Model_Project')
             ;
         $this->addField('client')
             ->sortable(true)
@@ -146,7 +151,7 @@ class Model_Budget extends Model_Table {
 //            $this->addCondition('client_id',$u->get('client_id'));
 //        }
         $this->scopeFilter();
-	}
+    }
     function calculate_client(){
         return $this->add('Model_Client')
             ->dsql()
@@ -164,18 +169,18 @@ class Model_Budget extends Model_Table {
             ->select();
 
     }
-	function scopeFilter(){
-		if($sc=$this->api->recall('scope')){
-			if($sc['budget'])$this->addCondition('id',$sc['budget']);
-		}
-	}
-	function calculate_cur_mandays(){
-		return $this->add('Model_Timesheet')
-			->dsql()
-			->field('round(sum(T.minutes/60/8),1)')
-			->where('T.budget_id=bu.id')
-			->select();
-	}
+    function scopeFilter(){
+            if($sc=$this->api->recall('scope')){
+                    if($sc['budget'])$this->addCondition('id',$sc['budget']);
+            }
+    }
+    function calculate_cur_mandays(){
+            return $this->add('Model_Timesheet')
+                    ->dsql()
+                    ->field('round(sum(T.minutes/60/8),1)')
+                    ->where('T.budget_id=bu.id')
+                    ->select();
+    }
     function calculate_amount_spent(){
 		return $this->add('Model_Timesheet')
 			->dsql()

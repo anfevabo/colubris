@@ -18,7 +18,7 @@ class page_manager_statistics extends Page {
 
     }
     function page_daily(){
-        $g=$this->add('MVCGrid');
+        $g=$this->add('Grid');
         $g->setModel('Timesheet');
         $g->addPaginator(50);
         $g->dq->where('date(`date`)=date(now())');

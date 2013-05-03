@@ -4,17 +4,17 @@ class page_manager_reports extends Page{
 
 	function initMainPage(){
         $f=$this->add('ReportQuickSearch',null,null,array('form/quicksearch'));
-		$grid=$this->add('MVCGrid');
-		$m=$grid->setModel('Timesheet',array('title','user','budget','date'));
+        $grid=$this->add('Grid');
+        $m=$grid->setModel('Timesheet',array('title','user','budget','date'));
         $grid->addColumn('money','amount')->makeSortable();
         $grid->addPaginator(50);
-            $grid->addTotals();
-            $grid->dq->order('date desc,id desc');
-            $f->useDQ($grid->dq);
+        $grid->addTotals();
+        $grid->dq->order('date desc,id desc');
+        //$f->useDQ($grid->dq);
 
-            $grid->last_column='title';$grid->makeSortable();
-            $grid->last_column='user';$grid->makeSortable('user');
-            $grid->last_column='minutes';$grid->makeSortable();
+        $grid->last_column='title';$grid->makeSortable();
+        $grid->last_column='user';$grid->makeSortable('user');
+        $grid->last_column='minutes';$grid->makeSortable();
 
             //$crud->grid->addQuickSearch(array('title'),'ReportQuickSearch');
             //$crud->grid->dq->debug();
@@ -40,8 +40,8 @@ class ReportQuickSearch extends Filter {
         //$this->setFormClass('horizontal');
 
         $this->addField('dropdown','group')->setValueList(array('none','user_id'=>'user','date(date)'=>'date','budget_id'=>'budget'));
-        $this->addField('autocomplete','user_id')->setModel('Developer');
-        $this->addField('autocomplete','budget_id')->setModel('Budget');
+        $this->addField('autocomplete/basic','user_id')->setModel('Developer');
+        $this->addField('autocomplete/basic','budget_id')->setModel('Budget');
         $this->addField('DatePicker','from')->setAttr('style','width: 100px');
         $this->addField('DatePicker','to')->setAttr('style','width: 100px');
         $this->addSubmit();
